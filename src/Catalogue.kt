@@ -1,6 +1,6 @@
-class CatalogueEntry(val game: Game, val amount: Int = 1) {
+data class CatalogueEntry(val game: Game, val amount: Int = 1) {
     fun addGame(extra: Int = 1) = CatalogueEntry(game, amount + extra)
-    fun itemValue() = game.value;
+    fun itemValue() = game.retailValue;
     fun totalValue() = itemValue() * amount;
 }
 

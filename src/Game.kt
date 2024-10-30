@@ -4,11 +4,22 @@ import java.net.URL
 /**
  * A Game object.
  * @param title The game's title. Its name.
- * @param value The value of the game in pence.
  * @param gameCategory The game's category, either a Trick-Taker or a Variety game.
+ * @param rarity How rare the game is.
  * @param bggURL The game's url on BoardGameGeek. Used to extract its game ID.
+ * @param requiresPasteUps True if the game requires a paper manual or paste-ups.
+ * @param importCost The raw price of the item.
+ * @param retailValue The value of the game in pence.
  */
-class Game(val title: String, val value: Int, val gameCategory: GameCategory, val bggURL: URL?) {
+data class Game(
+    val title: String,
+    val gameCategory: GameCategory,
+    val rarity: GameRarity,
+    val bggURL: URL?,
+    val requiresPasteUps: Boolean,
+    val importCost: Int,
+    val retailValue: Int,
+) {
 
     /**
      * Gets the BGG game ID from the URL.
@@ -32,4 +43,7 @@ class Game(val title: String, val value: Int, val gameCategory: GameCategory, va
 
         return result.groupValues[1].toInt()
     }
+
+    val profit: Int
+        get() = retailValue - importCost;
 }

@@ -32,3 +32,35 @@ enum class ItemAddStatus {
      */
     EXCEEDS_TARGET_VALUE
 }
+
+/**
+ * The "size" of the mystery box.
+ */
+enum class MysteryBoxSize {
+    LARGE, MEDIUM, SMALL
+}
+
+enum class GameRarity(val value: Int) {
+    /**
+     * Ok Game (e.g. cat poker)
+     */
+    COMMON(1),
+
+    /**
+     * Good Game/Excellent Easy to get game (e.g. Gummi Trick)
+     */
+    UNCOMMON(2),
+
+    /**
+     * Hard to Get/Well liked Designer/Limited Print Run/Availability (e.g. Eleven)
+     */
+    RARE(3),
+
+    /**
+     * The games people try (and fail to) bribe me over,
+     * request incessantly for in their mystery box,
+     * and go generally bananas for and I probably have 2-3 copies
+     * (e.g. Of what's left, Kbernsitch), or a signed copy
+     */
+    MYTHIC(4)
+}
