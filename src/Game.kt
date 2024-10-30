@@ -28,7 +28,8 @@ data class Game(
      *
      * @return Either a number (the game id) or null if that isn't found.
      */
-    fun getBggId(): Int? {
+    val bggId: Int?
+    get() {
         if (bggURL == null) {
             return null
         }
