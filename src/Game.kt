@@ -1,0 +1,1 @@
+class Game(val title: String, val value: Int)
