@@ -9,17 +9,12 @@ class MysteryBoxList(private val catalogue: Catalogue) {
 
     // TODO: figure out how to add 0-1 trick-takers to the variety category
     // TODO: figure out how to subtract the marked games from the current stock. Should the stock be included in the Game class?
-    fun generateMysteryBox(boxSize: MysteryBoxSize, boxType: GameCategory) {
+    fun generateMysteryBox(value: Int, boxType: GameCategory) {
         val list = catalogue.gamesList.filter { it.value.game.gameCategory == boxType }.map { MarkedGame(it.value.game) }.toMutableList()
 
         val listLength = list.count();
 
-        val mysteryBox =
-            when (boxSize) {
-                MysteryBoxSize.SMALL -> SmallMysteryBox(boxType)
-                MysteryBoxSize.MEDIUM -> MediumMysteryBox(boxType)
-                else -> LargeMysteryBox(boxType)
-            }
+        val mysteryBox = MysteryBox(value, boxType)
 
         while (true) {
             val i = (Math.random() * listLength).toInt()

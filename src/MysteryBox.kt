@@ -1,7 +1,7 @@
 import kotlin.math.roundToInt
 
 // NB: targetValue is in pennies.
-open class MysteryBox(val targetValue: Int, val boxType: GameCategory, val size: MysteryBoxSize) {
+open class MysteryBox(val targetValue: Int, val boxType: GameCategory) {
     var currentValue = 0
         private set;
 
@@ -26,13 +26,3 @@ open class MysteryBox(val targetValue: Int, val boxType: GameCategory, val size:
         return ItemAddStatus.SUCCESS;
     }
 }
-
-// TODO: make these editable in config.
-class LargeMysteryBox(boxType: GameCategory)
-    : MysteryBox(13500, boxType, MysteryBoxSize.LARGE)
-
-class MediumMysteryBox(boxType: GameCategory)
-    : MysteryBox(9000, boxType, MysteryBoxSize.MEDIUM)
-
-class SmallMysteryBox(boxType: GameCategory)
-    : MysteryBox(4500, boxType, MysteryBoxSize.SMALL)

@@ -33,13 +33,6 @@ enum class ItemAddStatus {
     EXCEEDS_TARGET_VALUE
 }
 
-/**
- * The "size" of the mystery box.
- */
-enum class MysteryBoxSize {
-    LARGE, MEDIUM, SMALL
-}
-
 enum class GameRarity(val value: Int) {
     /**
      * Ok Game (e.g. cat poker)
