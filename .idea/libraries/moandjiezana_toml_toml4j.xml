@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="moandjiezana.toml.toml4j" type="repository">
+    <properties maven-id="com.moandjiezana.toml:toml4j:0.7.2" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/moandjiezana/toml/toml4j/0.7.2/toml4j-0.7.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.1/gson-2.8.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
