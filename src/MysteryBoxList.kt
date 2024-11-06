@@ -1,3 +1,5 @@
+import java.math.BigDecimal
+
 // distribution of mystery boxes: 50% large, 30% medium, 20% small.
 
 data class MarkedGame(val game: Game) {
@@ -9,7 +11,7 @@ class MysteryBoxList(private val catalogue: Catalogue) {
 
     // TODO: figure out how to add 0-1 trick-takers to the variety category
     // TODO: figure out how to subtract the marked games from the current stock. Should the stock be included in the Game class?
-    fun generateMysteryBox(value: Int, boxType: GameCategory) {
+    fun generateMysteryBox(value: BigDecimal, boxType: GameCategory) {
         val list = catalogue.gamesList.filter { it.value.game.gameCategory == boxType }.map { MarkedGame(it.value.game) }.toMutableList()
 
         val listLength = list.count();

@@ -2,6 +2,7 @@ import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 
 class ConfigTest {
     @Test fun `default config generates as expected`() {
@@ -13,9 +14,9 @@ class ConfigTest {
             |outputDirectory = "~"
             |csvDelimiter = ","
             |[mysteryBox.sizes]
-            |small = 4500
-            |medium = 9000
-            |large = 13500
+            |small = 45
+            |medium = 90
+            |large = 135
             |
         """.trimMargin()
 
@@ -27,10 +28,12 @@ class ConfigTest {
             |io = { outputDirectory = "~/foo", csvDelimiter = ";" }
             |
             |[mysteryBox]
-            |sizes = {foo = 2, bar = 3}
+            |sizes = {foo = 2.95, bar = 3.95}
         """.trimMargin()
 
-        val expected = Config(IoConfig("~/foo", ";"), MysteryBoxConfig(mapOf("foo" to 2, "bar" to 3)))
+        val expected = Config(
+            IoConfig("~/foo", ";"),
+            MysteryBoxConfig(mapOf("foo" to BigDecimal("2.95"), "bar" to BigDecimal("3.95"))))
 
         val actual = Config.fromToml(config)
 

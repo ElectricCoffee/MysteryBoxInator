@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import java.math.BigDecimal
 import java.net.URL
 
 class GameTest {
@@ -10,8 +11,8 @@ class GameTest {
             GameRarity.COMMON,
             URL("https://boardgamegeek.com/boardgame/411567/the-gang"),
             false,
-            1500,
-            2000
+            BigDecimal(15),
+            BigDecimal(20)
         )
 
         val expected = 411567

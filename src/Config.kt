@@ -1,10 +1,11 @@
 import com.moandjiezana.toml.Toml
+import java.math.BigDecimal
 import java.nio.file.Files
 import java.nio.file.Path
 
 data class IoConfig(val outputDirectory: String, val csvDelimiter: String)
 
-data class MysteryBoxConfig(val sizes: Map<String, Int>)
+data class MysteryBoxConfig(val sizes: Map<String, BigDecimal>)
 
 data class Config(val io: IoConfig, val mysteryBox: MysteryBoxConfig) {
     companion object {
@@ -22,6 +23,6 @@ data class Config(val io: IoConfig, val mysteryBox: MysteryBoxConfig) {
 val defaultConfig = Config(
     IoConfig("~", ","),
     MysteryBoxConfig(
-        mapOf("small" to 4500, "medium" to 9000, "large" to 13500)
+        mapOf("small" to BigDecimal(45), "medium" to BigDecimal(90), "large" to BigDecimal(135))
     )
 )

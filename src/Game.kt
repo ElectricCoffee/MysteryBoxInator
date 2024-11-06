@@ -1,3 +1,4 @@
+import java.math.BigDecimal
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -17,8 +18,8 @@ data class Game(
     val rarity: GameRarity,
     val bggURL: URL?,
     val requiresPasteUps: Boolean,
-    val importCost: Int,
-    val retailValue: Int,
+    val importCost: BigDecimal,
+    val retailValue: BigDecimal,
 ) {
 
     /**
@@ -45,6 +46,6 @@ data class Game(
         return result.groupValues[1].toInt()
     }
 
-    val profit: Int
+    val profit: BigDecimal
         get() = retailValue - importCost;
 }
