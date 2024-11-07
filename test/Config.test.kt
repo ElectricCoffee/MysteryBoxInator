@@ -10,17 +10,17 @@ class ConfigTest {
 
         val expected = """
             |[io]
-            |outputDirectory = "~"
+            |outputDirectory = "${System.getProperty("user.home").replace("\\", "\\\\")}"
             |csvDelimiter = ","
-            |[mysteryBox.sizes.small]
+            |[mysteryBox.small]
             |price = 45
             |percentage = 20
-            |[mysteryBox.sizes.medium]
-            |price = 90
-            |percentage = 30
-            |[mysteryBox.sizes.large]
+            |[mysteryBox.large]
             |price = 135
             |percentage = 50
+            |[mysteryBox.medium]
+            |price = 90
+            |percentage = 30
             |
         """.trimMargin()
 
@@ -32,14 +32,15 @@ class ConfigTest {
             |io = { outputDirectory = "~/foo", csvDelimiter = ";" }
             |
             |[mysteryBox]
-            |sizes = {foo = {price = 2.95, percentage = 50}, bar = {price = 3.95, percentage = 50}}
+            |foo = {price = 2.95, percentage = 50}
+            |bar = {price = 3.95, percentage = 50}
         """.trimMargin()
 
         val expected = Config(
             IoConfig("~/foo", ";"),
-            MysteryBoxConfig(mapOf(
+            mapOf(
                 "foo" to MysteryBoxAmount(BigDecimal("2.95"), BigDecimal(50)),
-                "bar" to MysteryBoxAmount(BigDecimal("3.95"), BigDecimal(50)))))
+                "bar" to MysteryBoxAmount(BigDecimal("3.95"), BigDecimal(50))))
 
         val actual = Config.fromToml(config)
 

@@ -8,9 +8,7 @@ data class IoConfig(val outputDirectory: String, val csvDelimiter: String)
 
 data class MysteryBoxAmount(val price: BigDecimal, val percentage: BigDecimal)
 
-data class MysteryBoxConfig(val sizes: Map<String, MysteryBoxAmount>)
-
-data class Config(val io: IoConfig, val mysteryBox: MysteryBoxConfig) {
+data class Config(val io: IoConfig, val mysteryBox: Map<String, MysteryBoxAmount>) {
     fun toFileString(): String {
         val writer = TomlWriter()
         return writer.write(this)
@@ -28,12 +26,33 @@ data class Config(val io: IoConfig, val mysteryBox: MysteryBoxConfig) {
     }
 }
 
-val defaultConfig = Config(
-    IoConfig("~", ","),
-    MysteryBoxConfig(
-        mapOf(
-            "small" to MysteryBoxAmount(BigDecimal(45), BigDecimal(20)),
-            "medium" to MysteryBoxAmount(BigDecimal(90), BigDecimal(30)),
-            "large" to MysteryBoxAmount(BigDecimal(135), BigDecimal(50)))
-    )
-)
+val defaultConfigString = """
+    |# NB: lines starting with # are comments, they're just there to tell you how to use the config.
+    |# Lines that have text inside [] are the various categories you can configure. 
+    |# Right now the only configurable parts are 
+    |# - "io" which controls input-output stuff, like file paths and such and 
+    |# - "mysteryBox", which sets the name for each of the box sizes you want, 
+    |[io]
+    |   # By default this is your home folder. The one with the same name as your username on the computer.
+    |   # On Windows this is usually C:\Users\<username>\.
+    |   # If you want it to be your desktop, add \Desktop to the end (within the quotes).
+    |   outputDirectory = '''${System.getProperty("user.home")}'''
+    |   
+    |   # The delimiter is what you separate the csv entries by. The default is comma (,) but you can change it to anything
+    |   csvDelimiter = ","
+    |# You can create your own categories here. 
+    |# They can be small, medium, large, whatever you want.
+    |# The only requirement is that they have a price and a percentage, and that each entry starts with "mysteryBox."
+    |[mysteryBox.small]
+    |   price = 45
+    |   percentage = 20
+    |[mysteryBox.medium]
+    |   price = 90
+    |   percentage = 30
+    |[mysteryBox.large]
+    |   price = 135
+    |   percentage = 50
+    |   
+""".trimMargin()
+
+val defaultConfig = Config.fromToml(defaultConfigString)
