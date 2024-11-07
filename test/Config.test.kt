@@ -6,17 +6,21 @@ import java.math.BigDecimal
 
 class ConfigTest {
     @Test fun `default config generates as expected`() {
-        val writer = TomlWriter()
-        val actual = writer.write(defaultConfig);
+        val actual = defaultConfig.toFileString();
 
         val expected = """
             |[io]
             |outputDirectory = "~"
             |csvDelimiter = ","
-            |[mysteryBox.sizes]
-            |small = 45
-            |medium = 90
-            |large = 135
+            |[mysteryBox.sizes.small]
+            |price = 45
+            |percentage = 20
+            |[mysteryBox.sizes.medium]
+            |price = 90
+            |percentage = 30
+            |[mysteryBox.sizes.large]
+            |price = 135
+            |percentage = 50
             |
         """.trimMargin()
 
@@ -28,12 +32,14 @@ class ConfigTest {
             |io = { outputDirectory = "~/foo", csvDelimiter = ";" }
             |
             |[mysteryBox]
-            |sizes = {foo = 2.95, bar = 3.95}
+            |sizes = {foo = {price = 2.95, percentage = 50}, bar = {price = 3.95, percentage = 50}}
         """.trimMargin()
 
         val expected = Config(
             IoConfig("~/foo", ";"),
-            MysteryBoxConfig(mapOf("foo" to BigDecimal("2.95"), "bar" to BigDecimal("3.95"))))
+            MysteryBoxConfig(mapOf(
+                "foo" to MysteryBoxAmount(BigDecimal("2.95"), BigDecimal(50)),
+                "bar" to MysteryBoxAmount(BigDecimal("3.95"), BigDecimal(50)))))
 
         val actual = Config.fromToml(config)
 

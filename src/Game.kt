@@ -35,7 +35,6 @@ data class Game(
             return null
         }
 
-
         val path = bggURL.path
 
         val re = """boardgame/(\d+)/""".toRegex()
