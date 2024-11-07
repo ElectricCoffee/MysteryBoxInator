@@ -1,10 +1,6 @@
 import java.math.BigDecimal
-
-data class CatalogueEntry(val game: Game, val amount: BigDecimal = BigDecimal.ONE) {
-    fun addGame(extra: BigDecimal = BigDecimal.ONE) = CatalogueEntry(game, amount + extra)
-    fun itemValue() = game.retailValue;
-    fun totalValue() = itemValue() * amount;
-}
+import java.nio.file.Files
+import java.nio.file.Path
 
 class Catalogue {
     val gamesList = mutableMapOf<String, CatalogueEntry>();
@@ -15,20 +11,38 @@ class Catalogue {
     }
 
     fun getGame(title: String) = gamesList[title]?.game;
-    fun getAmount(title: String) = gamesList[title]?.amount;
-    fun getIndividualValue(title: String) = gamesList[title]?.itemValue()
+    fun getQuantity(title: String) = gamesList[title]?.quantity;
+    fun getRetailValue(title: String) = gamesList[title]?.retailValue
 
     fun getTotalValue(title: String): BigDecimal {
         val entry = gamesList[title] ?: return BigDecimal.ZERO;
 
-        return entry.totalValue()
+        return entry.totalValue
     }
 
-    fun getCatalogueValue() = gamesList.values.sumOf { it.totalValue() }
+    fun getCatalogueValue() = gamesList.values.sumOf { it.totalValue }
 
     val countGames: Int
         get() = gamesList.count()
 
-    val countTotalInventory: BigDecimal
-        get() = gamesList.values.sumOf { it.amount }
+    val countTotalInventory: Int
+        get() = gamesList.values.sumOf { it.quantity }
+
+    companion object {
+        fun fromFile(delimiter: String, path: Path): Catalogue {
+            val content = Files.readAllLines(path)
+            return fromCsv(delimiter, content)
+        }
+
+        fun fromCsv(delimiter: String, lines: List<String>): Catalogue {
+            val entries = lines.map { CatalogueEntry.fromCsvLine(delimiter, it) }
+            val catalogue = Catalogue()
+
+            entries.forEach {
+                catalogue.gamesList[it.title] = it
+            }
+
+            return catalogue
+        }
+    }
 }
