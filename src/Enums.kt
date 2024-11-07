@@ -1,7 +1,10 @@
+import errors.UnknownCategoryException
+
 /**
  * The type of game to be added to the mystery box
  */
 enum class GameCategory {
+    ACCESSORY,
     /**
      * The game's a trick-taker.
      */
@@ -10,7 +13,18 @@ enum class GameCategory {
     /**
      * The game's a variety game (not a trick-taker).
      */
-    VARIETY
+    VARIETY;
+
+    companion object {
+        fun fromString(string: String): GameCategory {
+            return when (string.lowercase()[0]) {
+                'a' -> ACCESSORY
+                't' -> TRICK_TAKER
+                'v' -> VARIETY
+                else -> throw UnknownCategoryException(string)
+            }
+        }
+    }
 }
 
 /**
@@ -55,5 +69,11 @@ enum class GameRarity(val value: Int) {
      * and go generally bananas for and I probably have 2-3 copies
      * (e.g. Of what's left, Kbernsitch), or a signed copy
      */
-    MYTHIC(4)
+    MYTHIC(4);
+
+    companion object {
+        fun fromInt(int: Int): GameRarity {
+            return entries.first { it.value == int }
+        }
+    }
 }
