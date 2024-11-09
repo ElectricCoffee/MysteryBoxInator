@@ -10,6 +10,9 @@ class ConfigTest {
             |[io]
             |outputDirectory = "${System.getProperty("user.home").replace("\\", "\\\\")}"
             |csvDelimiter = ","
+            |[thresholds]
+            |upperBound = 10
+            |lowerBound = 5
             |[mysteryBox.small]
             |price = 45
             |percentage = 20
@@ -28,7 +31,7 @@ class ConfigTest {
     @Test fun `custom config is invariant to inline types`() {
         val config = """
             |io = { outputDirectory = "~/foo", csvDelimiter = ";" }
-            |
+            |thresholds = { upperBound = 10, lowerBound = 5 }
             |[mysteryBox]
             |foo = {price = 2.95, percentage = 50}
             |bar = {price = 3.95, percentage = 50}
@@ -36,6 +39,7 @@ class ConfigTest {
 
         val expected = Config(
             IoConfig("~/foo", ";"),
+            ThresholdConfig(BigDecimal(10), BigDecimal(5)),
             mapOf(
                 "foo" to MysteryBoxAmount(BigDecimal("2.95"), BigDecimal(50)),
                 "bar" to MysteryBoxAmount(BigDecimal("3.95"), BigDecimal(50))))
