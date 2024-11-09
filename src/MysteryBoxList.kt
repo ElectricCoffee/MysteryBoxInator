@@ -6,7 +6,7 @@ data class MarkedGame(val game: Game) {
     var marked = false
 }
 
-class MysteryBoxList(private val catalogue: Catalogue) {
+class MysteryBoxList(private val config: Config, private val catalogue: Catalogue) {
     val mysteryBoxes = mutableListOf<MysteryBox>()
 
     // TODO: figure out how to add 0-1 trick-takers to the variety category
@@ -16,7 +16,7 @@ class MysteryBoxList(private val catalogue: Catalogue) {
 
         val listLength = list.count();
 
-        val mysteryBox = MysteryBox(value, boxType)
+        val mysteryBox = MysteryBox(config, value, boxType)
 
         while (true) {
             val i = (Math.random() * listLength).toInt()

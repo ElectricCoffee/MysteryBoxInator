@@ -29,13 +29,13 @@ class Catalogue {
         get() = gamesList.values.sumOf { it.quantity }
 
     companion object {
-        fun fromFile(delimiter: String, path: Path): Catalogue {
+        fun fromFile(config: Config, path: Path): Catalogue {
             val content = Files.readAllLines(path)
-            return fromCsv(delimiter, content)
+            return fromCsv(config, content)
         }
 
-        fun fromCsv(delimiter: String, lines: List<String>): Catalogue {
-            val entries = lines.map { CatalogueEntry.fromCsvLine(delimiter, it) }
+        fun fromCsv(config: Config, lines: List<String>): Catalogue {
+            val entries = lines.map { CatalogueEntry.fromCsvLine(config.io.csvDelimiter, it) }
             val catalogue = Catalogue()
 
             entries.forEach {

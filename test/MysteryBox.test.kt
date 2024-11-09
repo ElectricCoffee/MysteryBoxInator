@@ -5,7 +5,7 @@ import java.net.URL
 
 class MysteryBoxTest {
     @Test fun `it successfully initialises a mystery box`() {
-        val box = MysteryBox(BigDecimal(45), GameCategory.VARIETY)
+        val box = MysteryBox(defaultConfig, BigDecimal(45), GameCategory.VARIETY)
 
         assertEquals(box.boxType, GameCategory.VARIETY, "Expected small variety box to have game category 'Variety'")
         assertEquals(box.targetValue, BigDecimal(45), "Expected small variety box to have target value of £45.00")
@@ -13,7 +13,7 @@ class MysteryBoxTest {
     }
 
     @Test fun `it successfully fails at adding too many games`() {
-        val box = MysteryBox(BigDecimal(45), GameCategory.VARIETY)
+        val box = MysteryBox(defaultConfig, BigDecimal(45), GameCategory.VARIETY)
 
         val `result 1` = box.addItem(
             Game(

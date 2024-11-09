@@ -58,7 +58,7 @@ class CatalogueTest {
             Spy Tricks, 2, Trick-Taker, 2, https://boardgamegeek.com/boardgame/195163/spy-tricks, no, 14.00, 18.00
         """.trimIndent()
 
-        val catalogue = Catalogue.fromCsv(",", csv.split("\n"))
+        val catalogue = Catalogue.fromCsv(defaultConfig, csv.split("\n"))
 
         assertEquals(2, catalogue.countGames,
             "Expected there to be two different games")
