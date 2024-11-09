@@ -1,6 +1,6 @@
 package catalogue
 
-import Config
+import config.Config
 import Game
 import java.math.BigDecimal
 import java.nio.file.Files

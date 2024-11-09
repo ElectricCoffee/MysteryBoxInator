@@ -1,3 +1,4 @@
+import config.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
@@ -42,7 +43,9 @@ class ConfigTest {
             ThresholdConfig(BigDecimal(10), BigDecimal(5)),
             mapOf(
                 "foo" to MysteryBoxAmount(BigDecimal("2.95"), BigDecimal(50)),
-                "bar" to MysteryBoxAmount(BigDecimal("3.95"), BigDecimal(50))))
+                "bar" to MysteryBoxAmount(BigDecimal("3.95"), BigDecimal(50))
+            )
+        )
 
         val actual = Config.fromToml(config)
 

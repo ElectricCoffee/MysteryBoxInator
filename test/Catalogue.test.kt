@@ -1,4 +1,5 @@
 import catalogue.Catalogue
+import config.defaultConfig
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.math.BigDecimal

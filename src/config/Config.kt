@@ -1,3 +1,5 @@
+package config
+
 import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
 import java.math.BigDecimal
@@ -43,6 +45,7 @@ data class Config(val io: IoConfig, val thresholds: ThresholdConfig, val mystery
     }
 }
 
+@JvmField
 val defaultConfigString = """
     |# NB: lines starting with # are comments, they're just there to tell you how to use the config.
     |# Lines that have text inside [] are the various categories you can configure. 
@@ -78,4 +81,5 @@ val defaultConfigString = """
     |   
 """.trimMargin()
 
+@JvmField
 val defaultConfig = Config.fromToml(defaultConfigString)

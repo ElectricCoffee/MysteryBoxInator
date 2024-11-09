@@ -1,6 +1,6 @@
 package mysteryBox
 
-import Config
+import config.Config
 import Game
 import GameCategory
 import ItemAddStatus
