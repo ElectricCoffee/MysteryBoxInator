@@ -1,3 +1,8 @@
+package catalogue
+
+import Game
+import GameCategory
+import GameRarity
 import errors.UnknownPasteUpsException
 import java.math.BigDecimal
 import java.net.URL

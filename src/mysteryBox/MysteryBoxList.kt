@@ -1,3 +1,10 @@
+package mysteryBox
+
+import Config
+import Game
+import GameCategory
+import ItemAddStatus
+import catalogue.Catalogue
 import java.math.BigDecimal
 
 // distribution of mystery boxes: 50% large, 30% medium, 20% small.
