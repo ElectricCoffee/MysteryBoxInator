@@ -16,7 +16,7 @@ class MenuBar(private val config: Config) : JMenuBar() {
         val menu = JMenu("File")
         menu.accessibleContext.accessibleDescription = "This menu handles file operations"
 
-        val loadCatalogueCsvItem = JMenuItem("Load catalogue.Catalogue CSV...")
+        val loadCatalogueCsvItem = JMenuItem("Load Catalogue CSV...")
         loadCatalogueCsvItem.accessibleContext.accessibleDescription = "Lets you load the CSV with all the games"
         menu.add(loadCatalogueCsvItem)
 
