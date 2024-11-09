@@ -2,6 +2,7 @@ package config
 
 import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
+import java.io.File
 import java.math.BigDecimal
 import java.nio.file.Files
 import java.nio.file.Path
@@ -44,6 +45,12 @@ data class Config(val io: IoConfig, val thresholds: ThresholdConfig, val mystery
         }
     }
 }
+
+@JvmField
+val configFolderPath = System.getProperty("user.home") + File.separator + ".mystery-box-inator"
+
+@JvmField
+val configFilePath = configFolderPath + File.separator + "config.toml"
 
 @JvmField
 val defaultConfigString = """

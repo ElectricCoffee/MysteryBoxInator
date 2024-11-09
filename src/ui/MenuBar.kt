@@ -1,6 +1,7 @@
 package ui
 
 import config.Config
+import config.configFolderPath
 import java.awt.Desktop
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
@@ -9,18 +10,6 @@ import java.lang.IllegalArgumentException
 import javax.swing.JMenu
 import javax.swing.JMenuBar
 import javax.swing.JMenuItem
-
-class OutputFolderListener(private val config: Config) : ActionListener {
-    override fun actionPerformed(e: ActionEvent?) {
-        try {
-            val desktop = Desktop.getDesktop()
-            desktop.open(File(config.io.outputDirectory))
-        } catch (iae: IllegalArgumentException) {
-            TODO("Implement popup")
-        }
-    }
-
-}
 
 class MenuBar(private val config: Config) : JMenuBar() {
     private fun fileMenu(): JMenu {
@@ -31,9 +20,10 @@ class MenuBar(private val config: Config) : JMenuBar() {
         loadCatalogueCsvItem.accessibleContext.accessibleDescription = "Lets you load the CSV with all the games"
         menu.add(loadCatalogueCsvItem)
 
-        val editConfigItem = JMenuItem("Edit Config File...")
+        val editConfigItem = JMenuItem("Open Config Folder...")
         editConfigItem.accessibleContext.accessibleDescription =
             "Opens the config file in your text editor of choice"
+        editConfigItem.addActionListener(ConfigFolderListener())
         menu.add(editConfigItem)
 
         val openOutputFolderItem = JMenuItem("Open Output Folder...")

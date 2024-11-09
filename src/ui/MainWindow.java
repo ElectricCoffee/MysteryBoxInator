@@ -11,8 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static config.ConfigKt.defaultConfig;
-import static config.ConfigKt.defaultConfigString;
+import static config.ConfigKt.*;
 
 public class MainWindow extends JFrame {
     private JTabbedPane tabPane;
@@ -21,8 +20,6 @@ public class MainWindow extends JFrame {
 
     Config createConfig() throws IOException {
         String homeFolder = System.getProperty("user.home");
-        String configFolderPath = homeFolder + File.separator + ".mystery-box-inator";
-        String configFilePath = configFolderPath + File.separator + "config.toml";
 
         Path configFolder = Paths.get(configFolderPath);
         Path configFile = Paths.get(configFilePath);
