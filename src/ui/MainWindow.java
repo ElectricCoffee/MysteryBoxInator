@@ -1,9 +1,11 @@
 package ui;
 
+import catalogue.Catalogue;
 import config.Config;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.catalog.Catalog;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +45,8 @@ public class MainWindow extends JFrame {
         try {
             setContentPane(mainPanel);
             Config config = createConfig();
-            setJMenuBar(new MenuBar(config));
+            Catalogue catalogue = new Catalogue(config); // for now, replace with loaded catalogue later.
+            setJMenuBar(new MenuBar(config, catalogue));
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setSize(1200, 800);
             setLocationRelativeTo(null);

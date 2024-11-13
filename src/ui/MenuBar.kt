@@ -1,5 +1,7 @@
 package ui
 
+import catalogue.Catalogue
+import catalogue.CsvLoadMode
 import config.Config
 import config.configFolderPath
 import java.awt.Desktop
@@ -10,7 +12,7 @@ import javax.swing.JMenuBar
 import javax.swing.JMenuItem
 import javax.swing.JOptionPane
 
-class MenuBar(private val config: Config) : JMenuBar() {
+class MenuBar(private val config: Config, private val catalogue: Catalogue) : JMenuBar() {
     private fun fileMenu(): JMenu {
         val menu = JMenu("File")
         menu.accessibleContext.accessibleDescription = "This menu handles file operations"
@@ -33,6 +35,7 @@ class MenuBar(private val config: Config) : JMenuBar() {
 
         return menu;
     }
+
     init {
         this.add(fileMenu())
     }
@@ -40,7 +43,19 @@ class MenuBar(private val config: Config) : JMenuBar() {
     private fun onLoadCsv() {
         // should open file dialogue, where the user can then add their csv file of choice
         val dialog = CsvDialog()
-        dialog.openDialog()
+        val result = dialog.openDialog()
+
+        if (result == CsvActionSelected.CANCEL) {
+            return
+        }
+
+        val file = dialog.selectedFile
+
+        if (result == CsvActionSelected.APPEND) {
+            catalogue.appendFromFile(file.toPath(), CsvLoadMode.APPEND) // making this explicit here so it's clear it wasn't a mistake
+        } else if (result == CsvActionSelected.OVERWRITE) {
+            catalogue.appendFromFile(file.toPath(), CsvLoadMode.OVERWERITE)
+        }
     }
 
     private fun onOpenOutputFolder(config: Config) {

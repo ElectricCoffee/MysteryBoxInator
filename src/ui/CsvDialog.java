@@ -11,6 +11,8 @@ public class CsvDialog extends JDialog {
     private JButton buttonCancel;
     private JTextField pathField;
     private JButton buttonOpen;
+    private File selectedFile;
+    private CsvActionSelected actionSelected;
 
     public CsvDialog() {
         setTitle("Load CSV File");
@@ -19,7 +21,7 @@ public class CsvDialog extends JDialog {
         getRootPane().setDefaultButton(buttonOverwrite);
         setLocationRelativeTo(null);
 
-        buttonOpen.addActionListener(e -> onOpen());
+        buttonOpen.addActionListener(e -> onFileOpen());
         buttonAppend.addActionListener(e -> onAppend());
         buttonOverwrite.addActionListener(e -> onOverwrite());
         buttonCancel.addActionListener(e -> onCancel());
@@ -39,7 +41,7 @@ public class CsvDialog extends JDialog {
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
-    private void onOpen() {
+    private void onFileOpen() {
         // TODO open file dialog, then once a file was selected, populate the file path.
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -49,28 +51,36 @@ public class CsvDialog extends JDialog {
             return;
         }
         
-        File selectedFile = chooser.getSelectedFile();
+        selectedFile = chooser.getSelectedFile();
         pathField.setText(selectedFile.getAbsolutePath());
         System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-
     }
 
     private void onAppend() {
         // TODO: Use the file path to append data to the catalogue
+        actionSelected = CsvActionSelected.APPEND;
         dispose();
     }
 
     private void onOverwrite() {
         // TODO: Use the file path to replace the catalogue
+        actionSelected = CsvActionSelected.OVERWRITE;
         dispose();
     }
 
     private void onCancel() {
+        actionSelected = CsvActionSelected.CANCEL;
         dispose();
     }
 
-    public void openDialog() {
+    public CsvActionSelected openDialog() {
         this.pack();
         this.setVisible(true);
+
+        return actionSelected;
+    }
+
+    public File getSelectedFile() {
+        return selectedFile;
     }
 }

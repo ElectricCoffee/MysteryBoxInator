@@ -6,7 +6,11 @@ import java.math.BigDecimal
 import java.nio.file.Files
 import java.nio.file.Path
 
-class Catalogue {
+enum class CsvLoadMode {
+    OVERWERITE, APPEND
+}
+
+class Catalogue(private val config: Config) {
     val gamesList = mutableMapOf<String, CatalogueEntry>();
 
     fun addGame(game: Game) {
@@ -32,19 +36,36 @@ class Catalogue {
     val countTotalInventory: Int
         get() = gamesList.values.sumOf { it.quantity }
 
+    fun appendFromFile(path: Path, loadMode: CsvLoadMode = CsvLoadMode.APPEND) {
+        val content = Files.readAllLines(path)
+        appendCsv(content, loadMode)
+    }
+
+    fun appendCsv(lines: List<String>, loadMode: CsvLoadMode = CsvLoadMode.APPEND) {
+        val entries = lines.map { CatalogueEntry.fromCsvLine(config.io.csvDelimiter, it) }
+
+        if (loadMode == CsvLoadMode.OVERWERITE) {
+            gamesList.clear()
+        }
+
+        entries.forEach {
+            gamesList[it.title] = it
+        }
+    }
+
     companion object {
         fun fromFile(config: Config, path: Path): Catalogue {
-            val content = Files.readAllLines(path)
-            return fromCsv(config, content)
+            val catalogue = Catalogue(config)
+
+            catalogue.appendFromFile(path)
+
+            return catalogue
         }
 
         fun fromCsv(config: Config, lines: List<String>): Catalogue {
-            val entries = lines.map { CatalogueEntry.fromCsvLine(config.io.csvDelimiter, it) }
-            val catalogue = Catalogue()
+            val catalogue = Catalogue(config)
 
-            entries.forEach {
-                catalogue.gamesList[it.title] = it
-            }
+            catalogue.appendCsv(lines)
 
             return catalogue
         }

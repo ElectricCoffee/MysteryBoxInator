@@ -7,7 +7,7 @@ import java.net.URL
 
 class CatalogueTest {
     @Test fun `Can add games to catalogue`() {
-        val catalogue = Catalogue()
+        val catalogue = Catalogue(defaultConfig)
 
         catalogue.addGame(Game(
             "The Gang",
