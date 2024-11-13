@@ -21,7 +21,7 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
 
     companion object {
         fun fromCsvLine(delimiter: String, line: String): CatalogueEntry {
-            val chunks = line.split(delimiter, limit = 8).map { it.trim() }
+            val chunks = line.split(delimiter).map { it.trim() }
             val name = chunks[0]
             val quantity = chunks[1].toInt()
             val type = GameCategory.fromString(chunks[2])
