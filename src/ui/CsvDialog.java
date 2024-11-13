@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.File;
 
 public class CsvDialog extends JDialog {
     private JPanel contentPane;
@@ -40,6 +41,18 @@ public class CsvDialog extends JDialog {
 
     private void onOpen() {
         // TODO open file dialog, then once a file was selected, populate the file path.
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = chooser.showOpenDialog(this);
+
+        if (result != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        
+        File selectedFile = chooser.getSelectedFile();
+        pathField.setText(selectedFile.getAbsolutePath());
+        System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+
     }
 
     private void onAppend() {

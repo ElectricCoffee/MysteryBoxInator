@@ -8,6 +8,7 @@ import java.lang.IllegalArgumentException
 import javax.swing.JMenu
 import javax.swing.JMenuBar
 import javax.swing.JMenuItem
+import javax.swing.JOptionPane
 
 class MenuBar(private val config: Config) : JMenuBar() {
     private fun fileMenu(): JMenu {
@@ -47,7 +48,7 @@ class MenuBar(private val config: Config) : JMenuBar() {
             val desktop = Desktop.getDesktop()
             desktop.open(File(config.io.outputDirectory))
         } catch (iae: IllegalArgumentException) {
-            TODO("Implement popup")
+            openErrorDialog(iae)
         }
     }
 
@@ -56,7 +57,11 @@ class MenuBar(private val config: Config) : JMenuBar() {
             val desktop = Desktop.getDesktop()
             desktop.open(File(configFolderPath))
         } catch (iae: IllegalArgumentException) {
-            TODO("Implement popup")
+            openErrorDialog(iae)
         }
+    }
+
+    private fun openErrorDialog(iae: IllegalArgumentException) {
+        JOptionPane.showMessageDialog(this, iae.message, "Error", JOptionPane.ERROR_MESSAGE)
     }
 }
