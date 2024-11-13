@@ -7,7 +7,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 enum class CsvLoadMode {
-    OVERWERITE, APPEND
+    OVERWRITE, APPEND
 }
 
 class Catalogue(private val config: Config) {
@@ -36,15 +36,17 @@ class Catalogue(private val config: Config) {
     val countTotalInventory: Int
         get() = gamesList.values.sumOf { it.quantity }
 
-    fun appendFromFile(path: Path, loadMode: CsvLoadMode = CsvLoadMode.APPEND) {
+    fun appendFromFile(path: Path, loadMode: CsvLoadMode = CsvLoadMode.APPEND, startIndex: Int = 0) {
         val content = Files.readAllLines(path)
-        appendCsv(content, loadMode)
+        appendCsv(content, loadMode, startIndex)
     }
 
-    fun appendCsv(lines: List<String>, loadMode: CsvLoadMode = CsvLoadMode.APPEND) {
-        val entries = lines.map { CatalogueEntry.fromCsvLine(config.io.csvDelimiter, it) }
+    fun appendCsv(lines: List<String>, loadMode: CsvLoadMode = CsvLoadMode.APPEND, startIndex: Int = 0) {
+        val entries = lines
+            .subList(startIndex, lines.size)
+            .map { CatalogueEntry.fromCsvLine(config.io.csvDelimiter, it) }
 
-        if (loadMode == CsvLoadMode.OVERWERITE) {
+        if (loadMode == CsvLoadMode.OVERWRITE) {
             gamesList.clear()
         }
 
@@ -54,18 +56,18 @@ class Catalogue(private val config: Config) {
     }
 
     companion object {
-        fun fromFile(config: Config, path: Path): Catalogue {
+        fun fromFile(config: Config, path: Path, startIndex: Int = 0): Catalogue {
             val catalogue = Catalogue(config)
 
-            catalogue.appendFromFile(path)
+            catalogue.appendFromFile(path, startIndex = startIndex)
 
             return catalogue
         }
 
-        fun fromCsv(config: Config, lines: List<String>): Catalogue {
+        fun fromCsv(config: Config, lines: List<String>, startIndex: Int = 0): Catalogue {
             val catalogue = Catalogue(config)
 
-            catalogue.appendCsv(lines)
+            catalogue.appendCsv(lines, startIndex = startIndex)
 
             return catalogue
         }

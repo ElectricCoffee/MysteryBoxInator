@@ -54,7 +54,7 @@ class MenuBar(private val config: Config, private val catalogue: Catalogue) : JM
         if (result == CsvActionSelected.APPEND) {
             catalogue.appendFromFile(file.toPath(), CsvLoadMode.APPEND) // making this explicit here so it's clear it wasn't a mistake
         } else if (result == CsvActionSelected.OVERWRITE) {
-            catalogue.appendFromFile(file.toPath(), CsvLoadMode.OVERWERITE)
+            catalogue.appendFromFile(file.toPath(), CsvLoadMode.OVERWRITE)
         }
     }
 
