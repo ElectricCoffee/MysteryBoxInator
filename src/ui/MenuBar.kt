@@ -37,8 +37,25 @@ class MenuBar(private val config: Config, private val catalogue: Catalogue, priv
         return menu;
     }
 
+    private fun helpMenu(): JMenu {
+        val menu = JMenu("Help")
+        menu.accessibleContext.accessibleDescription = "This menu showcases info for the user"
+
+        val aboutItem = JMenuItem("About")
+        aboutItem.accessibleContext.accessibleDescription = "Info about the software"
+        aboutItem.addActionListener { onLoadAbout() }
+        menu.add(aboutItem)
+
+        return menu;
+    }
+
+    private fun onLoadAbout() {
+        InfoDialog.openDialog();
+    }
+
     init {
         this.add(fileMenu())
+        this.add(helpMenu())
     }
 
     private fun onLoadCsv() {
@@ -96,7 +113,8 @@ class MenuBar(private val config: Config, private val catalogue: Catalogue, priv
                     game.bggURL?.toString() ?: "N/A",
                     if (game.requiresPasteUps) "Yes" else "No",
                     "£" + game.importCost.setScale(2, RoundingMode.HALF_UP).toString(),
-                    "£" + game.retailValue.setScale(2, RoundingMode.HALF_UP).toString()
+                    "£" + game.retailValue.setScale(2, RoundingMode.HALF_UP).toString(),
+                    "£" + (game.retailValue - game.importCost).setScale(2, RoundingMode.HALF_UP).toString()
                 )
             )
         }
