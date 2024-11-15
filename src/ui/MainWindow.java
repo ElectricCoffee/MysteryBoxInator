@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 
 import java.awt.dnd.*;
 import java.io.IOException;
+import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -17,6 +18,8 @@ public class MainWindow extends JFrame {
     private JTabbedPane tabPane;
     private JTable productTable;
     private JPanel mainPanel;
+    private JButton button1;
+    private JLabel totalProfitLabel;
 
     public MainWindow() {
         super("Mystery-Box-Inator");
@@ -33,6 +36,9 @@ public class MainWindow extends JFrame {
             productTable.setModel(dtm);
 
             new DropTarget(this, new CsvDropListener(this, catalogue, dtm));
+            dtm.addTableModelListener((e) -> {
+                totalProfitLabel.setText("£" + catalogue.getCatalogueProfit().setScale(2, RoundingMode.HALF_UP).toString());
+            });
         } catch (IOException ioe) {
             JOptionPane.showMessageDialog(this, ioe.getMessage(), "File Error!", JOptionPane.ERROR_MESSAGE);
         }
@@ -56,6 +62,6 @@ public class MainWindow extends JFrame {
     }
 
     DefaultTableModel configTable() {
-        return new DefaultTableModel(null, new Object[]{"Name", "Quantity", "Type", "Rarity", "Url", "Paste-Ups?", "Raw Cost", "Retail Price", "Profit"});
+        return new DefaultTableModel(null, new Object[]{"Name", "Quantity", "Type", "Rarity", "Url", "Paste-Ups?", "Raw Cost", "Retail Price", "Item Profit", "Total Profit"});
     }
 }
