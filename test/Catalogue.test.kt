@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.math.BigDecimal
 import java.net.URL
+import java.nio.file.InvalidPathException
+import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class CatalogueTest {
     @Test fun `Can add games to catalogue`() {
@@ -74,5 +77,15 @@ class CatalogueTest {
             "Expected the retail value of 'The Gang' to be 20.00")
         assertEquals(BigDecimal("59.85"), catalogue.getTotalValue("The Gang"),
             "Expected the total retail value of 'The Gang' to be 59.85")
+    }
+
+    @Test fun `can load the csv from file`() {
+        val uri = javaClass.getResource("/test-data.csv")?.toURI() ?: throw Exception("couldn't find the file")
+        val path = Paths.get(uri)
+        val catalogue = Catalogue.fromFile(defaultConfig, path, startIndex = 1)
+
+        val expectedEntries = 61
+
+        assertEquals(expectedEntries, catalogue.countGames, "Expect the total inventory to contain $expectedEntries entries.")
     }
 }
