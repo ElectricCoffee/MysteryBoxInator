@@ -53,6 +53,6 @@ public class MainWindow extends JFrame {
     }
 
     DefaultTableModel configTable() {
-        return new DefaultTableModel(null, new Object[]{"Name", "Quantity", "Type", "Rarity", "Url", "Requires Paste-Ups", "Raw Cost", "Retail Price"});
+        return new DefaultTableModel(null, new Object[]{"Name", "Quantity", "Type", "Rarity", "Url", "Paste-Ups?", "Raw Cost", "Retail Price", "Profit"});
     }
 }
