@@ -18,8 +18,14 @@ public class MainWindow extends JFrame {
     private JTabbedPane tabPane;
     private JTable productTable;
     private JPanel mainPanel;
-    private JButton button1;
+    private JButton generateMysteriesButton;
     private JLabel totalProfitLabel;
+    private JTable mysteryBoxTable;
+    private JPanel catalogueTab;
+    private JPanel mysteryBoxTab;
+    private JButton exportBtn;
+    private JLabel numberOfGamesLoaded;
+    private JLabel totalStockLabel;
 
     public MainWindow() {
         super("Mystery-Box-Inator");
@@ -37,7 +43,9 @@ public class MainWindow extends JFrame {
 
             new DropTarget(this, new CsvDropListener(this, catalogue, dtm));
             dtm.addTableModelListener((e) -> {
-                totalProfitLabel.setText("£" + catalogue.getCatalogueProfit().setScale(2, RoundingMode.HALF_UP).toString());
+                numberOfGamesLoaded.setText(Integer.toString(catalogue.getCountGames()));
+                totalStockLabel.setText(Integer.toString(catalogue.getCountTotalInventory()));
+                totalProfitLabel.setText("£" + catalogue.getCatalogueProfit().setScale(2, RoundingMode.HALF_UP));
             });
         } catch (IOException ioe) {
             JOptionPane.showMessageDialog(this, ioe.getMessage(), "File Error!", JOptionPane.ERROR_MESSAGE);
