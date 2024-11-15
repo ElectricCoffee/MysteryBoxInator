@@ -15,6 +15,15 @@ enum class GameCategory {
      */
     VARIETY;
 
+    override fun toString(): String {
+        return when (this.name) {
+            "ACCESSORY" -> "Accessory"
+            "TRICK_TAKER" -> "Trick-Taker"
+            "VARIETY" -> "Variety"
+            else -> this.name // default case just returns the raw name un-prettified.
+        }
+    }
+
     companion object {
         fun fromString(string: String): GameCategory {
             return when (string.lowercase()[0]) {
@@ -70,6 +79,16 @@ enum class GameRarity(val value: Int) {
      * (e.g. Of what's left, Kbernsitch), or a signed copy
      */
     MYTHIC(4);
+
+    override fun toString(): String {
+        return when (this.name) {
+            "COMMON" -> "Common (${this.value})"
+            "UNCOMMON" -> "Uncommon (${this.value})"
+            "RARE" -> "Rare (${this.value})"
+            "MYTHIC" -> "Mythic (${this.value})"
+            else -> "${this.name} (${this.value})"
+        }
+    }
 
     companion object {
         fun fromInt(int: Int): GameRarity {
