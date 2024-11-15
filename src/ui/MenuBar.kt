@@ -6,13 +6,14 @@ import config.Config
 import config.configFolderPath
 import java.awt.Desktop
 import java.io.File
-import java.lang.IllegalArgumentException
+import java.math.RoundingMode
 import javax.swing.JMenu
 import javax.swing.JMenuBar
 import javax.swing.JMenuItem
 import javax.swing.JOptionPane
+import javax.swing.table.DefaultTableModel
 
-class MenuBar(private val config: Config, private val catalogue: Catalogue) : JMenuBar() {
+class MenuBar(private val config: Config, private val catalogue: Catalogue, private val dtm: DefaultTableModel) : JMenuBar() {
     private fun fileMenu(): JMenu {
         val menu = JMenu("File")
         menu.accessibleContext.accessibleDescription = "This menu handles file operations"
@@ -52,10 +53,12 @@ class MenuBar(private val config: Config, private val catalogue: Catalogue) : JM
         val file = dialog.selectedFile
 
         if (result == CsvActionSelected.APPEND) {
-            catalogue.appendFromFile(file.toPath(), CsvLoadMode.APPEND) // making this explicit here so it's clear it wasn't a mistake
+            catalogue.appendFromFile(file.toPath(), CsvLoadMode.APPEND, 1) // making this explicit here so it's clear it wasn't a mistake
         } else if (result == CsvActionSelected.OVERWRITE) {
-            catalogue.appendFromFile(file.toPath(), CsvLoadMode.OVERWRITE)
+            catalogue.appendFromFile(file.toPath(), CsvLoadMode.OVERWRITE, 1)
         }
+
+        populateTable(catalogue, dtm)
     }
 
     private fun onOpenOutputFolder(config: Config) {
@@ -78,5 +81,24 @@ class MenuBar(private val config: Config, private val catalogue: Catalogue) : JM
 
     private fun openErrorDialog(iae: IllegalArgumentException) {
         JOptionPane.showMessageDialog(this, iae.message, "Error", JOptionPane.ERROR_MESSAGE)
+    }
+
+    private fun populateTable(catalogue: Catalogue, dtm: DefaultTableModel) {
+        dtm.dataVector.removeAllElements() // clear table before inserting
+
+        for ((game, quan) in catalogue.gamesList.values) {
+            dtm.addRow(
+                arrayOf<Any>(
+                    game.title,
+                    quan.toString(),
+                    game.gameCategory.toString(),
+                    game.rarity.toString(),
+                    game.bggURL?.toString() ?: "N/A",
+                    if (game.requiresPasteUps) "Yes" else "No",
+                    "£" + game.importCost.setScale(2, RoundingMode.HALF_UP).toString(),
+                    "£" + game.retailValue.setScale(2, RoundingMode.HALF_UP).toString()
+                )
+            )
+        }
     }
 }
