@@ -2,6 +2,7 @@ import catalogue.Catalogue
 import config.defaultConfig
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import java.math.BigDecimal
 import java.net.URL
 import java.nio.file.InvalidPathException
@@ -85,7 +86,14 @@ class CatalogueTest {
         val catalogue = Catalogue.fromFile(defaultConfig, path, startIndex = 1)
 
         val expectedEntries = 61
+        val expectedTrickTakers = 23
 
         assertEquals(expectedEntries, catalogue.countGames, "Expect the total inventory to contain $expectedEntries entries.")
+        assertTrue(catalogue.countTotalInventory > 61, "Expect there to be more total product than $expectedEntries.")
+        assertEquals(
+            expectedTrickTakers,
+            catalogue.gamesList.filterValues { it.game.gameCategory == GameCategory.TRICK_TAKER }.count(),
+            "Expect there to be $expectedTrickTakers games classified as 'Trick-Taker'."
+        )
     }
 }
