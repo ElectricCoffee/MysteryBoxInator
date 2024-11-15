@@ -4,6 +4,7 @@ import catalogue.Catalogue
 import catalogue.CsvLoadMode
 import config.Config
 import config.configFolderPath
+import ui.util.CsvUtils
 import java.awt.Desktop
 import java.io.File
 import java.math.RoundingMode
@@ -75,7 +76,7 @@ class MenuBar(private val config: Config, private val catalogue: Catalogue, priv
             catalogue.appendFromFile(file.toPath(), CsvLoadMode.OVERWRITE, 1)
         }
 
-        populateTable(catalogue, dtm)
+        CsvUtils.populateTable(catalogue, dtm)
     }
 
     private fun onOpenOutputFolder(config: Config) {
@@ -98,25 +99,5 @@ class MenuBar(private val config: Config, private val catalogue: Catalogue, priv
 
     private fun openErrorDialog(iae: IllegalArgumentException) {
         JOptionPane.showMessageDialog(this, iae.message, "Error", JOptionPane.ERROR_MESSAGE)
-    }
-
-    private fun populateTable(catalogue: Catalogue, dtm: DefaultTableModel) {
-        dtm.dataVector.removeAllElements() // clear table before inserting
-
-        for ((game, quan) in catalogue.gamesList.values) {
-            dtm.addRow(
-                arrayOf<Any>(
-                    game.title,
-                    quan.toString(),
-                    game.gameCategory.toString(),
-                    game.rarity.toString(),
-                    game.bggURL?.toString() ?: "N/A",
-                    if (game.requiresPasteUps) "Yes" else "No",
-                    "£" + game.importCost.setScale(2, RoundingMode.HALF_UP).toString(),
-                    "£" + game.retailValue.setScale(2, RoundingMode.HALF_UP).toString(),
-                    "£" + (game.retailValue - game.importCost).setScale(2, RoundingMode.HALF_UP).toString()
-                )
-            )
-        }
     }
 }

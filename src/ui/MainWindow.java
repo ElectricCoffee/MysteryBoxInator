@@ -6,6 +6,7 @@ import config.Config;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.dnd.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -30,6 +31,8 @@ public class MainWindow extends JFrame {
             setSize(1200, 800);
             setLocationRelativeTo(null);
             productTable.setModel(dtm);
+
+            new DropTarget(this, new CsvDropListener(this, catalogue, dtm));
         } catch (IOException ioe) {
             JOptionPane.showMessageDialog(this, ioe.getMessage(), "File Error!", JOptionPane.ERROR_MESSAGE);
         }
