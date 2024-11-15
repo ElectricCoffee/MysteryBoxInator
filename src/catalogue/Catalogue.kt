@@ -22,11 +22,25 @@ class Catalogue(private val config: Config) {
     fun getQuantity(title: String) = gamesList[title]?.quantity;
     fun getRetailValue(title: String) = gamesList[title]?.retailValue
 
+    fun getProfit(title: String): BigDecimal {
+        val entry = gamesList[title] ?: return BigDecimal.ZERO
+
+        return entry.profit
+    }
+
     fun getTotalValue(title: String): BigDecimal {
         val entry = gamesList[title] ?: return BigDecimal.ZERO;
 
         return entry.totalValue
     }
+
+    fun getTotalProfit(title: String): BigDecimal {
+        val entry = gamesList[title] ?: return BigDecimal.ZERO;
+
+        return entry.totalProfit
+    }
+
+    fun getCatalogueProfit() = gamesList.values.sumOf { it.totalProfit }
 
     fun getCatalogueValue() = gamesList.values.sumOf { it.totalValue }
 
@@ -51,7 +65,12 @@ class Catalogue(private val config: Config) {
         }
 
         entries.forEach {
-            gamesList[it.title] = it
+            if (gamesList.containsKey(it.title)) {
+                val old = gamesList[it.title]
+                gamesList[it.title] = CatalogueEntry(it.game, old!!.quantity + it.quantity)
+            } else {
+                gamesList[it.title] = it
+            }
         }
     }
 

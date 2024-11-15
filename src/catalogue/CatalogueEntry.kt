@@ -14,8 +14,14 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
     val retailValue: BigDecimal
         get() = game.retailValue
 
+    val profit: BigDecimal
+        get() = retailValue - game.importCost
+
     val totalValue: BigDecimal
         get() = retailValue * quantity.toBigDecimal()
+
+    val totalProfit: BigDecimal
+        get() = profit * quantity.toBigDecimal()
 
     fun addGame(extra: Int = 1) = CatalogueEntry(game, quantity + extra)
 
