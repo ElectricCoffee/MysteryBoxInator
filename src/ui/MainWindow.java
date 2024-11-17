@@ -59,7 +59,9 @@ public class MainWindow extends JFrame {
             });
 
             // populate the table with the catalogue's contents
-            CsvUtils.Companion.populateTable(config, catalogue, dtm);
+            if (!catalogue.getGamesList().isEmpty()) {
+                CsvUtils.Companion.populateTable(config, catalogue, dtm);
+            }
 
         } catch (IOException ioe) {
             showErrorDialog(ioe.getMessage(), "File Error!");
