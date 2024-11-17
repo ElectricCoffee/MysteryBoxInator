@@ -96,4 +96,24 @@ class CatalogueTest {
             "Expect there to be $expectedTrickTakers games classified as 'Trick-Taker'."
         )
     }
+
+    @Test fun `can output a csv list`() {
+        val uri = javaClass.getResource("/test-data.csv")?.toURI() ?: throw Exception("couldn't find the file")
+        val path = Paths.get(uri)
+        val catalogue = Catalogue.fromFile(defaultConfig, path, startIndex = 1)
+
+        val output = catalogue.toCsv()
+
+        assertEquals(
+            "game name,quantity,type,rarity,url,pasteups and paper rules,raw cost,retail price",
+            output[0],
+            "Expect the first line of the output to be the header"
+        )
+
+        assertEquals(
+            "1%: A Game of Strategic Chance,1,V,1,,FALSE,10.00,20.00",
+            output[1],
+            "Expect the first line of games to be '1%: A Game of Strategic Chance'"
+        )
+    }
 }

@@ -7,9 +7,9 @@ import java.math.BigDecimal
 import java.nio.file.Files
 import java.nio.file.Path
 
-class CatalogueConfig(val deleteProductWhenZeroInventory: Boolean)
+data class CatalogueConfig(val deleteProductWhenZeroInventory: Boolean)
 
-class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecimal) {
+data class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecimal) {
     /**
      * Converts the percentage to a decimal number between 0 and 1
      */
@@ -23,11 +23,11 @@ class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecimal) {
         get() = upperBound / BigDecimal(100)
 }
 
-class IoConfig(val outputDirectory: String, val csvDelimiter: String)
+data class IoConfig(val outputDirectory: String, val csvDelimiter: String)
 
-class MysteryBoxAmount(val price: BigDecimal)
+data class MysteryBoxAmount(val price: BigDecimal)
 
-class Config(val io: IoConfig, val thresholds: ThresholdConfig, val catalogue: CatalogueConfig, val mysteryBox: Map<String, MysteryBoxAmount>) {
+data class Config(val io: IoConfig, val thresholds: ThresholdConfig, val catalogue: CatalogueConfig, val mysteryBox: Map<String, MysteryBoxAmount>) {
     fun toFileString(): String {
         val writer = TomlWriter()
         return writer.write(this)
