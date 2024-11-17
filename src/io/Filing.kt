@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter
 
 class Filing {
     companion object {
+        @JvmStatic
         @Throws(IOException::class)
         fun ensureConfigDir() {
             val configFolder: Path = Paths.get(configFolderPath)
@@ -26,6 +27,7 @@ class Filing {
             }
         }
 
+        @JvmStatic
         @Throws(IOException::class)
         fun ensureOutputDir(config: Config) {
             val outputFolder: Path = Paths.get(config.io.outputDirectory)
@@ -35,6 +37,7 @@ class Filing {
             }
         }
 
+        @JvmStatic
         @Throws(IOException::class)
         fun createConfig(): Config {
             val configFile: Path = Paths.get(configFilePath)
@@ -50,6 +53,7 @@ class Filing {
             return fromFile(configFile)
         }
 
+        @JvmStatic
         @Throws(IOException::class)
         fun backupCatalogue(config: Config, catalogue: Catalogue) {
             val outputDir: Path = Paths.get(config.io.outputDirectory)
@@ -64,6 +68,7 @@ class Filing {
             Files.write(outputFile, catalogue.toCsv(true), StandardOpenOption.CREATE)
         }
 
+        @JvmStatic
         @Throws(IOException::class)
         fun writeWorkingCopy(config: Config, catalogue: Catalogue) {
             val outputDir: Path = Paths.get(config.io.outputDirectory)

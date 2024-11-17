@@ -40,7 +40,7 @@ public class MainWindow extends JFrame {
 
         try {
             setContentPane(mainPanel);
-            Config config = Filing.Companion.createConfig();
+            Config config = Filing.createConfig();
             Catalogue catalogue = new Catalogue(config); // for now, replace with loaded catalogue later.
             var dtm = configTable();
             setJMenuBar(new MenuBar(config, catalogue, dtm));
