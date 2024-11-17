@@ -7,10 +7,17 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.dnd.*;
+import java.io.File;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 
 import static config.ConfigKt.*;
 
@@ -26,14 +33,16 @@ public class MainWindow extends JFrame {
     private JButton exportBtn;
     private JLabel numberOfGamesLoaded;
     private JLabel totalStockLabel;
+    private Config config;
+    private Catalogue catalogue;
 
     public MainWindow() {
         super("Mystery-Box-Inator");
 
         try {
             setContentPane(mainPanel);
-            var config = createConfig();
-            var catalogue = new Catalogue(config); // for now, replace with loaded catalogue later.
+            config = createConfig();
+            catalogue = new Catalogue(config); // for now, replace with loaded catalogue later.
             var dtm = configTable();
             setJMenuBar(new MenuBar(config, catalogue, dtm));
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,6 +76,21 @@ public class MainWindow extends JFrame {
         }
 
         return Config.Companion.fromFile(configFile);
+    }
+
+    void backupCatalogue() throws IOException {
+        var outputDir = Paths.get(config.getIo().getOutputDirectory());
+
+        var date = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+        var outputFile = Paths.get(outputDir + File.separator + "catalogue-" + date + ".backup.csv");
+
+        if (!Files.exists(outputDir)) {
+            Files.createDirectory(outputDir);
+        }
+
+        // writes a timestamped backup of the current catalogue
+        Files.write(outputFile, catalogue.toCsv(), StandardOpenOption.CREATE);
     }
 
     DefaultTableModel configTable() {
