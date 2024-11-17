@@ -7,6 +7,8 @@ import java.math.BigDecimal
 import java.nio.file.Files
 import java.nio.file.Path
 
+data class CatalogueConfig(val deleteProductWhenZeroInventory: Boolean)
+
 data class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecimal) {
     /**
      * Converts the percentage to a decimal number between 0 and 1
@@ -23,12 +25,9 @@ data class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecima
 
 data class IoConfig(val outputDirectory: String, val csvDelimiter: String)
 
-data class MysteryBoxAmount(val price: BigDecimal, val percentage: BigDecimal) {
-    val percentageAsFraction: BigDecimal
-        get() = percentage / BigDecimal(100)
-}
+data class MysteryBoxAmount(val price: BigDecimal)
 
-data class Config(val io: IoConfig, val thresholds: ThresholdConfig, val mysteryBox: Map<String, MysteryBoxAmount>) {
+data class Config(val io: IoConfig, val thresholds: ThresholdConfig, val catalogue: CatalogueConfig, val mysteryBox: Map<String, MysteryBoxAmount>) {
     fun toFileString(): String {
         val writer = TomlWriter()
         return writer.write(this)
@@ -73,18 +72,19 @@ val defaultConfigString = """
     |   upperBound = 10
     |   lowerBound = 5
     |   
+    |[catalogue]
+    |   # if true, the program will remove a product entry entirely when the stock reaches zero
+    |   deleteProductWhenZeroInventory = false
+    |   
     |# You can create your own categories here. 
     |# They can be small, medium, large, whatever you want.
-    |# The only requirement is that they have a price and a percentage, and that each entry starts with "mysteryBox."
+    |# The only requirement is that they have a price, and that each entry starts with "mysteryBox."
     |[mysteryBox.small]
     |   price = 45
-    |   percentage = 20
     |[mysteryBox.medium]
     |   price = 90
-    |   percentage = 30
     |[mysteryBox.large]
     |   price = 135
-    |   percentage = 50
     |   
 """.trimMargin()
 

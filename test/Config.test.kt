@@ -14,15 +14,14 @@ class ConfigTest {
             |[thresholds]
             |upperBound = 10
             |lowerBound = 5
+            |[catalogue]
+            |deleteProductWhenZeroInventory = false
             |[mysteryBox.small]
             |price = 45
-            |percentage = 20
             |[mysteryBox.large]
             |price = 135
-            |percentage = 50
             |[mysteryBox.medium]
             |price = 90
-            |percentage = 30
             |
         """.trimMargin()
 
@@ -33,6 +32,7 @@ class ConfigTest {
         val config = """
             |io = { outputDirectory = "~/foo", csvDelimiter = ";" }
             |thresholds = { upperBound = 10, lowerBound = 5 }
+            |catalogue = { deleteProductWhenZeroInventory = true }
             |[mysteryBox]
             |foo = {price = 2.95, percentage = 50}
             |bar = {price = 3.95, percentage = 50}
@@ -41,9 +41,10 @@ class ConfigTest {
         val expected = Config(
             IoConfig("~/foo", ";"),
             ThresholdConfig(BigDecimal(10), BigDecimal(5)),
+            CatalogueConfig(true),
             mapOf(
-                "foo" to MysteryBoxAmount(BigDecimal("2.95"), BigDecimal(50)),
-                "bar" to MysteryBoxAmount(BigDecimal("3.95"), BigDecimal(50))
+                "foo" to MysteryBoxAmount(BigDecimal("2.95")),
+                "bar" to MysteryBoxAmount(BigDecimal("3.95"))
             )
         )
 
