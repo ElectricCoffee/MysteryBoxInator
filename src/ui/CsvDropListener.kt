@@ -2,6 +2,7 @@ package ui
 
 import catalogue.Catalogue
 import catalogue.CsvLoadMode
+import config.Config
 import ui.util.CsvUtils
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.*
@@ -12,7 +13,7 @@ import javax.swing.JOptionPane
 import javax.swing.table.DefaultTableModel
 import kotlin.io.path.Path
 
-class CsvDropListener(private val parent: JFrame, private val catalogue: Catalogue, private val dtm: DefaultTableModel) : DropTargetListener {
+class CsvDropListener(private val parent: JFrame, private val config: Config, private val catalogue: Catalogue, private val dtm: DefaultTableModel) : DropTargetListener {
     override fun dragEnter(dtde: DropTargetDragEvent?) {}
 
     override fun dragOver(dtde: DropTargetDragEvent?) {}
@@ -42,7 +43,7 @@ class CsvDropListener(private val parent: JFrame, private val catalogue: Catalog
                             else -> break
                         }
                         catalogue.appendFromFile(Path(filePath), loadMode, startIndex = 1)
-                        CsvUtils.populateTable(catalogue, dtm)
+                        CsvUtils.populateTable(config, catalogue, dtm)
                     } else {
                         JOptionPane.showMessageDialog(
                             null,

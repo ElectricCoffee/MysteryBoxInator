@@ -76,7 +76,7 @@ class MenuBar(private val config: Config, private val catalogue: Catalogue, priv
             catalogue.appendFromFile(file.toPath(), CsvLoadMode.OVERWRITE, 1)
         }
 
-        CsvUtils.populateTable(catalogue, dtm)
+        CsvUtils.populateTable(config, catalogue, dtm)
     }
 
     private fun onOpenOutputFolder(config: Config) {

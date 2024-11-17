@@ -2,7 +2,9 @@ package ui;
 
 import catalogue.Catalogue;
 import config.Config;
+import errors.CsvParsingException;
 import io.Filing;
+import ui.util.CsvUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -41,7 +43,7 @@ public class MainWindow extends JFrame {
         try {
             setContentPane(mainPanel);
             Config config = Filing.createConfig();
-            Catalogue catalogue = new Catalogue(config); // for now, replace with loaded catalogue later.
+            Catalogue catalogue = Filing.readWorkingCopy(config);
             var dtm = configTable();
             setJMenuBar(new MenuBar(config, catalogue, dtm));
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,15 +51,26 @@ public class MainWindow extends JFrame {
             setLocationRelativeTo(null);
             productTable.setModel(dtm);
 
-            new DropTarget(this, new CsvDropListener(this, catalogue, dtm));
+            new DropTarget(this, new CsvDropListener(this, config, catalogue, dtm));
             dtm.addTableModelListener((e) -> {
                 numberOfGamesLoaded.setText(Integer.toString(catalogue.getCountGames()));
                 totalStockLabel.setText(Integer.toString(catalogue.getCountTotalInventory()));
                 totalProfitLabel.setText("£" + catalogue.getCatalogueProfit().setScale(2, RoundingMode.HALF_UP));
             });
+
+            // populate the table with the catalogue's contents
+            CsvUtils.Companion.populateTable(config, catalogue, dtm);
+
         } catch (IOException ioe) {
-            JOptionPane.showMessageDialog(this, ioe.getMessage(), "File Error!", JOptionPane.ERROR_MESSAGE);
+            showErrorDialog(ioe.getMessage(), "File Error!");
+        } catch (Exception e) {
+            showErrorDialog(e.getMessage(), "Error!");
         }
+    }
+
+    void showErrorDialog(String message, String title) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+
     }
 
     DefaultTableModel configTable() {

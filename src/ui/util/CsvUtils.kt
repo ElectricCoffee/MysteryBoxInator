@@ -1,13 +1,15 @@
 package ui.util
 
 import catalogue.Catalogue
+import config.Config
+import io.Filing
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.swing.table.DefaultTableModel
 
 class CsvUtils {
     companion object {
-        fun populateTable(catalogue: Catalogue, dtm: DefaultTableModel) {
+        fun populateTable(config: Config, catalogue: Catalogue, dtm: DefaultTableModel) {
             dtm.dataVector.removeAllElements() // clear table before inserting
 
             for ((game, quan) in catalogue.gamesList.values) {
@@ -27,6 +29,9 @@ class CsvUtils {
                     )
                 )
             }
+
+            // after the table populates, update the working copy
+            Filing.writeWorkingCopy(config, catalogue)
         }
     }
 }

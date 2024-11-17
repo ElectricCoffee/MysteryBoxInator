@@ -1,6 +1,7 @@
 package io
 
 import catalogue.Catalogue
+import catalogue.CsvLoadMode
 import config.Config
 import config.Config.Companion.fromFile
 import config.configFilePath
@@ -68,19 +69,34 @@ class Filing {
             Files.write(outputFile, catalogue.toCsv(true), StandardOpenOption.CREATE)
         }
 
+        private fun workingCopyFile(config:Config) = Paths.get(config.io.outputDirectory + File.separator + "catalogue.working-copy.csv")
+
+
+        @JvmStatic
+        @Throws(IOException::class)
+        fun readWorkingCopy(config: Config): Catalogue {
+            val inputFile = workingCopyFile(config)
+
+            val catalogue = Catalogue(config)
+
+            if (Files.exists(inputFile)) {
+                catalogue.appendFromFile(inputFile, CsvLoadMode.OVERWRITE)
+            }
+
+            return catalogue
+        }
+
         @JvmStatic
         @Throws(IOException::class)
         fun writeWorkingCopy(config: Config, catalogue: Catalogue) {
-            val outputDir: Path = Paths.get(config.io.outputDirectory)
-
-            val outputFile = Paths.get(outputDir.toString() + File.separator + "catalogue.working-copy.csv")
+            val outputFile = workingCopyFile(config)
 
             ensureOutputDir(config)
 
             // writes a timestamped backup of the current catalogue
             Files.write(
                 outputFile,
-                catalogue.toCsv(true),
+                catalogue.toCsv(false),
                 StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING
             )
