@@ -5,6 +5,7 @@ import GameCategory
 import GameRarity
 import errors.UnknownPasteUpsException
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.net.URL
 
 data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
@@ -24,6 +25,18 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
         get() = profit * quantity.toBigDecimal()
 
     fun addGame(extra: Int = 1) = CatalogueEntry(game, quantity + extra)
+
+    fun toStringArray(): Array<String> =
+        arrayOf(
+            game.title,
+            quantity.toString(),
+            game.gameCategory.toShortString(),
+            game.rarity.value.toString(),
+            game.bggURL?.toString() ?: "",
+            if (game.requiresPasteUps) "TRUE" else "FALSE",
+            game.importCost.setScale(2, RoundingMode.HALF_UP).toString(),
+            game.retailValue.setScale(2, RoundingMode.HALF_UP).toString()
+        )
 
     companion object {
         fun fromCsvLine(delimiter: String, line: String): CatalogueEntry {

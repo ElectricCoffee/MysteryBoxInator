@@ -74,6 +74,18 @@ class Catalogue(private val config: Config) {
         }
     }
 
+    // note to self: we're exporting a list here because I don't want to deal with system dependent line endings.
+    fun toCsv(outputPath: Path): List<String> {
+        val lst = mutableListOf<String>()
+
+        lst.add("game name,quantity,type,rarity,url,pasteups and paper rules,raw cost,retail price")
+        gamesList.values.forEach {
+            lst.add(it.toStringArray().joinToString(config.io.csvDelimiter))
+        }
+
+        return lst
+    }
+
     companion object {
         fun fromFile(config: Config, path: Path, startIndex: Int = 0): Catalogue {
             val catalogue = Catalogue(config)

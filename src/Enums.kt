@@ -24,6 +24,15 @@ enum class GameCategory {
         }
     }
 
+    fun toShortString(): String {
+        return when (this.name) {
+            "ACCESSORY" -> "A"
+            "TRICK_TAKER" -> "TT"
+            "VARIETY" -> "V"
+            else -> this.name // default case just returns the raw name un-prettified.
+        }
+    }
+
     companion object {
         fun fromString(string: String): GameCategory {
             return when (string.lowercase()[0]) {
