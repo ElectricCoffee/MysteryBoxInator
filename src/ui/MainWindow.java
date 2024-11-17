@@ -2,6 +2,7 @@ package ui;
 
 import catalogue.Catalogue;
 import config.Config;
+import io.Filing;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -33,16 +34,14 @@ public class MainWindow extends JFrame {
     private JButton exportBtn;
     private JLabel numberOfGamesLoaded;
     private JLabel totalStockLabel;
-    private Config config;
-    private Catalogue catalogue;
 
     public MainWindow() {
         super("Mystery-Box-Inator");
 
         try {
             setContentPane(mainPanel);
-            config = createConfig();
-            catalogue = new Catalogue(config); // for now, replace with loaded catalogue later.
+            Config config = Filing.Companion.createConfig();
+            Catalogue catalogue = new Catalogue(config); // for now, replace with loaded catalogue later.
             var dtm = configTable();
             setJMenuBar(new MenuBar(config, catalogue, dtm));
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,38 +58,6 @@ public class MainWindow extends JFrame {
         } catch (IOException ioe) {
             JOptionPane.showMessageDialog(this, ioe.getMessage(), "File Error!", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    Config createConfig() throws IOException {
-        var configFolder = Paths.get(configFolderPath);
-        var configFile = Paths.get(configFilePath);
-
-        if (!Files.exists(configFolder)) {
-            Files.createDirectory(configFolder);
-        }
-
-        if (!Files.exists(configFile)) {
-            Files.createFile(configFile);
-
-            Files.write(configFile, defaultConfigString.getBytes());
-        }
-
-        return Config.Companion.fromFile(configFile);
-    }
-
-    void backupCatalogue() throws IOException {
-        var outputDir = Paths.get(config.getIo().getOutputDirectory());
-
-        var date = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-
-        var outputFile = Paths.get(outputDir + File.separator + "catalogue-" + date + ".backup.csv");
-
-        if (!Files.exists(outputDir)) {
-            Files.createDirectory(outputDir);
-        }
-
-        // writes a timestamped backup of the current catalogue
-        Files.write(outputFile, catalogue.toCsv(), StandardOpenOption.CREATE);
     }
 
     DefaultTableModel configTable() {

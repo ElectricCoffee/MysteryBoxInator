@@ -102,7 +102,7 @@ class CatalogueTest {
         val path = Paths.get(uri)
         val catalogue = Catalogue.fromFile(defaultConfig, path, startIndex = 1)
 
-        val output = catalogue.toCsv()
+        val output = catalogue.toCsv(true)
 
         assertEquals(
             "game name,quantity,type,rarity,url,pasteups and paper rules,raw cost,retail price",

@@ -75,9 +75,15 @@ class Catalogue(private val config: Config) {
     }
 
     // note to self: we're exporting a list here because I don't want to deal with system dependent line endings.
-    fun toCsv(): List<String> {
-        return listOf("game name,quantity,type,rarity,url,pasteups and paper rules,raw cost,retail price") + gamesList.values.map {
+    fun toCsv(includeHeader: Boolean): List<String> {
+        val data = gamesList.values.map {
             it.toStringArray().joinToString(config.io.csvDelimiter)
+        }
+
+        return if(includeHeader) {
+            listOf("game name,quantity,type,rarity,url,pasteups and paper rules,raw cost,retail price") + data
+        } else {
+            data
         }
     }
 
