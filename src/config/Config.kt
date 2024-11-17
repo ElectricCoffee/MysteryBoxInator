@@ -52,6 +52,9 @@ val configFolderPath = System.getProperty("user.home") + File.separator + ".myst
 val configFilePath = configFolderPath + File.separator + "config.toml"
 
 @JvmField
+val defaultOutputDir = System.getProperty("user.home") + File.separator + "MysteryBoxInator"
+
+@JvmField
 val defaultConfigString = """
     |# NB: lines starting with # are comments, they're just there to tell you how to use the config.
     |# Lines that have text inside [] are the various categories you can configure. 
@@ -62,7 +65,7 @@ val defaultConfigString = """
     |   # By default this is your home folder. The one with the same name as your username on the computer.
     |   # On Windows this is usually C:\Users\<username>\.
     |   # If you want it to be your desktop, add \Desktop to the end (within the quotes).
-    |   outputDirectory = '''${System.getProperty("user.home")}'''
+    |   outputDirectory = '''$defaultOutputDir'''
     |   
     |   # The delimiter is what you separate the csv entries by. The default is comma (,) but you can change it to anything
     |   csvDelimiter = ","

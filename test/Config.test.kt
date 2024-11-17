@@ -9,7 +9,7 @@ class ConfigTest {
 
         val expected = """
             |[io]
-            |outputDirectory = "${System.getProperty("user.home").replace("\\", "\\\\")}"
+            |outputDirectory = "${defaultOutputDir.replace("\\", "\\\\")}"
             |csvDelimiter = ","
             |[thresholds]
             |upperBound = 10
