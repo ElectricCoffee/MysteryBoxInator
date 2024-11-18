@@ -2,14 +2,12 @@ package util
 
 import kotlin.random.Random
 
-object ListUtils {
+object RandUtils {
     // todo: make a random picker util
-    fun <A>pickRandom(lst: List<A>): Pair<A, List<A>> {
+    fun <A>pickRandom(lst: List<A>): A {
         val len = lst.count()
         val index = Random.nextInt(len)
         val outputValue = lst[index]
-        val outputList = lst.filterIndexed { i, _ -> i != index }
-
-        return Pair(outputValue, outputList)
+        return outputValue
     }
 }
