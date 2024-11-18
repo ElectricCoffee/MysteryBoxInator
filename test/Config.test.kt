@@ -16,6 +16,10 @@ class ConfigTest {
             |lowerBound = 5
             |[catalogue]
             |deleteProductWhenZeroInventory = false
+            |[rarityRatio]
+            |common = 33.33
+            |uncommon = 33.33
+            |rare = 33.33
             |[mysteryBox.small]
             |price = 45
             |[mysteryBox.large]
@@ -33,6 +37,7 @@ class ConfigTest {
             |io = { outputDirectory = "~/foo", csvDelimiter = ";" }
             |thresholds = { upperBound = 10, lowerBound = 5 }
             |catalogue = { deleteProductWhenZeroInventory = true }
+            |rarityRatio = { common = 10, uncommon = 20, rare = 70 }
             |[mysteryBox]
             |foo = {price = 2.95, percentage = 50}
             |bar = {price = 3.95, percentage = 50}
@@ -42,6 +47,7 @@ class ConfigTest {
             IoConfig("~/foo", ";"),
             ThresholdConfig(BigDecimal(10), BigDecimal(5)),
             CatalogueConfig(true),
+            RarityRatio(BigDecimal(10), BigDecimal(20), BigDecimal(70)),
             mapOf(
                 "foo" to MysteryBoxAmount(BigDecimal("2.95")),
                 "bar" to MysteryBoxAmount(BigDecimal("3.95"))

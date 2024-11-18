@@ -7,6 +7,9 @@ import java.math.BigDecimal
 import java.nio.file.Files
 import java.nio.file.Path
 
+// Converts a number between 0 and 100 to a number between 0 and 1
+fun toFraction(bigDecimal: BigDecimal) = bigDecimal / BigDecimal(100)
+
 data class CatalogueConfig(val deleteProductWhenZeroInventory: Boolean)
 
 data class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecimal) {
@@ -14,20 +17,37 @@ data class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecima
      * Converts the percentage to a decimal number between 0 and 1
      */
     val lowerAsFraction: BigDecimal
-        get() = lowerBound / BigDecimal(100)
+        get() = toFraction(lowerBound)
 
     /**
      * Converts the percentage to a decimal number between 0 and 1
      */
     val upperAsFraction: BigDecimal
-        get() = upperBound / BigDecimal(100)
+        get() = toFraction(upperBound)
 }
 
 data class IoConfig(val outputDirectory: String, val csvDelimiter: String)
 
 data class MysteryBoxAmount(val price: BigDecimal)
 
-data class Config(val io: IoConfig, val thresholds: ThresholdConfig, val catalogue: CatalogueConfig, val mysteryBox: Map<String, MysteryBoxAmount>) {
+data class RarityRatio(val common: BigDecimal, val uncommon: BigDecimal, val rare: BigDecimal) {
+    val commonAsFraction: BigDecimal
+        get() = toFraction(common)
+
+    val uncommonAsFraction: BigDecimal
+        get() = toFraction(uncommon)
+
+    val rareAsFraction: BigDecimal
+        get() = toFraction(rare)
+}
+
+data class Config(
+    val io: IoConfig,
+    val thresholds: ThresholdConfig,
+    val catalogue: CatalogueConfig,
+    val rarityRatio: RarityRatio,
+    val mysteryBox: Map<String, MysteryBoxAmount>
+) {
     fun toFileString(): String {
         val writer = TomlWriter()
         return writer.write(this)
@@ -78,6 +98,12 @@ val defaultConfigString = """
     |[catalogue]
     |   # if true, the program will remove a product entry entirely when the stock reaches zero
     |   deleteProductWhenZeroInventory = false
+    |   
+    |[rarityRatio]
+    |   # sets the distribution of each of the various rarities. By default they're all at 33.33% (about 1/3)
+    |   common = 33.33
+    |   uncommon = 33.33
+    |   rare = 33.33
     |   
     |# You can create your own categories here. 
     |# They can be small, medium, large, whatever you want.
