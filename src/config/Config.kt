@@ -62,8 +62,8 @@ val defaultConfigString = """
     |# - "io" which controls input-output stuff, like file paths and such and 
     |# - "mysteryBox", which sets the name for each of the box sizes you want, 
     |[io]
-    |   # By default this is your home folder. The one with the same name as your username on the computer.
-    |   # On Windows this is usually C:\Users\<username>\.
+    |   # By default this is the MysteryBoxInator folder inside your your home folder.
+    |   # On Windows the home folder is C:\Users\<username>\.
     |   # If you want it to be your desktop, add \Desktop to the end (within the quotes).
     |   outputDirectory = '''$defaultOutputDir'''
     |   
