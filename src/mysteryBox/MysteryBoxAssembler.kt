@@ -140,8 +140,9 @@ abstract class MysteryBoxAssembler(protected val config: Config, private val cat
         val uncommon = Pair(GameRarity.UNCOMMON, pctUncommon - ratio.uncommonAsFraction)
         val rare = Pair(GameRarity.RARE, pctRare - ratio.rareAsFraction)
 
+        // cursed and nsfw implementation of minimum because the built-in doesn't do what I want.
         return listOf(common, uncommon, rare)
-            .fold(Pair(GameRarity.COMMON, Double.POSITIVE_INFINITY)) {a, b -> if (a.second <= b.second) a else b }
+            .fold(Pair(GameRarity.COMMON, Double.POSITIVE_INFINITY)) {a, b -> if (a.second < b.second) a else b }
                 .first
     }
 
