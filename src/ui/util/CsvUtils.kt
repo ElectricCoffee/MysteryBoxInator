@@ -8,6 +8,7 @@ import java.math.RoundingMode
 import javax.swing.table.DefaultTableModel
 
 object CsvUtils {
+    @JvmStatic
     fun populateTable(config: Config, catalogue: Catalogue, dtm: DefaultTableModel) {
         dtm.dataVector.removeAllElements() // clear table before inserting
 
