@@ -16,90 +16,88 @@ import java.nio.file.StandardOpenOption
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class Filing {
-    companion object {
-        @JvmStatic
-        @Throws(IOException::class)
-        fun ensureConfigDir() {
-            val configFolder: Path = Paths.get(configFolderPath)
+object Filing {
+    @JvmStatic
+    @Throws(IOException::class)
+    fun ensureConfigDir() {
+        val configFolder: Path = Paths.get(configFolderPath)
 
-            if (!Files.exists(configFolder)) {
-                Files.createDirectory(configFolder)
-            }
+        if (!Files.exists(configFolder)) {
+            Files.createDirectory(configFolder)
+        }
+    }
+
+    @JvmStatic
+    @Throws(IOException::class)
+    fun ensureOutputDir(config: Config) {
+        val outputFolder: Path = Paths.get(config.io.outputDirectory)
+
+        if (!Files.exists(outputFolder)) {
+            Files.createDirectory(outputFolder)
+        }
+    }
+
+    @JvmStatic
+    @Throws(IOException::class)
+    fun createConfig(): Config {
+        val configFile: Path = Paths.get(configFilePath)
+
+        ensureConfigDir()
+
+        if (!Files.exists(configFile)) {
+            Files.createFile(configFile)
+
+            Files.write(configFile, defaultConfigString.toByteArray())
         }
 
-        @JvmStatic
-        @Throws(IOException::class)
-        fun ensureOutputDir(config: Config) {
-            val outputFolder: Path = Paths.get(config.io.outputDirectory)
+        return fromFile(configFile)
+    }
 
-            if (!Files.exists(outputFolder)) {
-                Files.createDirectory(outputFolder)
-            }
+    @JvmStatic
+    @Throws(IOException::class)
+    fun backupCatalogue(config: Config, catalogue: Catalogue) {
+        val outputDir: Path = Paths.get(config.io.outputDirectory)
+
+        val date = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+
+        val outputFile = Paths.get(outputDir.toString() + File.separator + "catalogue-" + date + ".backup.csv")
+
+        ensureOutputDir(config)
+
+        // writes a timestamped backup of the current catalogue
+        Files.write(outputFile, catalogue.toCsv(true), StandardOpenOption.CREATE)
+    }
+
+    private fun workingCopyFile(config:Config) = Paths.get(config.io.outputDirectory + File.separator + "catalogue.working-copy.csv")
+
+
+    @JvmStatic
+    @Throws(IOException::class)
+    fun readWorkingCopy(config: Config): Catalogue {
+        val inputFile = workingCopyFile(config)
+
+        val catalogue = Catalogue(config)
+
+        if (Files.exists(inputFile)) {
+            catalogue.appendFromFile(inputFile, CsvLoadMode.OVERWRITE)
         }
 
-        @JvmStatic
-        @Throws(IOException::class)
-        fun createConfig(): Config {
-            val configFile: Path = Paths.get(configFilePath)
+        return catalogue
+    }
 
-            ensureConfigDir()
+    @JvmStatic
+    @Throws(IOException::class)
+    fun writeWorkingCopy(config: Config, catalogue: Catalogue) {
+        val outputFile = workingCopyFile(config)
 
-            if (!Files.exists(configFile)) {
-                Files.createFile(configFile)
+        ensureOutputDir(config)
 
-                Files.write(configFile, defaultConfigString.toByteArray())
-            }
-
-            return fromFile(configFile)
-        }
-
-        @JvmStatic
-        @Throws(IOException::class)
-        fun backupCatalogue(config: Config, catalogue: Catalogue) {
-            val outputDir: Path = Paths.get(config.io.outputDirectory)
-
-            val date = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-
-            val outputFile = Paths.get(outputDir.toString() + File.separator + "catalogue-" + date + ".backup.csv")
-
-            ensureOutputDir(config)
-
-            // writes a timestamped backup of the current catalogue
-            Files.write(outputFile, catalogue.toCsv(true), StandardOpenOption.CREATE)
-        }
-
-        private fun workingCopyFile(config:Config) = Paths.get(config.io.outputDirectory + File.separator + "catalogue.working-copy.csv")
-
-
-        @JvmStatic
-        @Throws(IOException::class)
-        fun readWorkingCopy(config: Config): Catalogue {
-            val inputFile = workingCopyFile(config)
-
-            val catalogue = Catalogue(config)
-
-            if (Files.exists(inputFile)) {
-                catalogue.appendFromFile(inputFile, CsvLoadMode.OVERWRITE)
-            }
-
-            return catalogue
-        }
-
-        @JvmStatic
-        @Throws(IOException::class)
-        fun writeWorkingCopy(config: Config, catalogue: Catalogue) {
-            val outputFile = workingCopyFile(config)
-
-            ensureOutputDir(config)
-
-            // writes a timestamped backup of the current catalogue
-            Files.write(
-                outputFile,
-                catalogue.toCsv(false),
-                StandardOpenOption.CREATE,
-                StandardOpenOption.TRUNCATE_EXISTING
-            )
-        }
+        // writes a timestamped backup of the current catalogue
+        Files.write(
+            outputFile,
+            catalogue.toCsv(false),
+            StandardOpenOption.CREATE,
+            StandardOpenOption.TRUNCATE_EXISTING
+        )
     }
 }
