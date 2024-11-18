@@ -2,13 +2,12 @@ package config
 
 import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
+import util.NumUtils
 import java.io.File
 import java.math.BigDecimal
 import java.nio.file.Files
 import java.nio.file.Path
 
-// Converts a number between 0 and 100 to a number between 0 and 1
-fun toFraction(bigDecimal: BigDecimal) = bigDecimal / BigDecimal(100)
 
 data class CatalogueConfig(val deleteProductWhenZeroInventory: Boolean)
 
@@ -17,28 +16,28 @@ data class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecima
      * Converts the percentage to a decimal number between 0 and 1
      */
     val lowerAsFraction: BigDecimal
-        get() = toFraction(lowerBound)
+        get() = NumUtils.toFraction(lowerBound)
 
     /**
      * Converts the percentage to a decimal number between 0 and 1
      */
     val upperAsFraction: BigDecimal
-        get() = toFraction(upperBound)
+        get() = NumUtils.toFraction(upperBound)
 }
 
 data class IoConfig(val outputDirectory: String, val csvDelimiter: String)
 
 data class MysteryBoxAmount(val price: BigDecimal)
 
-data class RarityRatio(val common: BigDecimal, val uncommon: BigDecimal, val rare: BigDecimal) {
-    val commonAsFraction: BigDecimal
-        get() = toFraction(common)
+data class RarityRatio(val common: Double, val uncommon: Double, val rare: Double) {
+    val commonAsFraction: Double
+        get() = common / 100
 
-    val uncommonAsFraction: BigDecimal
-        get() = toFraction(uncommon)
+    val uncommonAsFraction: Double
+        get() = uncommon / 100
 
-    val rareAsFraction: BigDecimal
-        get() = toFraction(rare)
+    val rareAsFraction: Double
+        get() = rare / 100
 }
 
 data class Config(
