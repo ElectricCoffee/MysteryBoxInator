@@ -1,7 +1,9 @@
 package mysteryBox
 
+import Budget
 import Game
 import GameRarity
+import ItemPickStatus
 import catalogue.Catalogue
 import config.Config
 import util.RandUtils
@@ -13,14 +15,7 @@ import kotlin.random.Random
 // then we have three child classes that each uniquely handle the assembly of a mystery box
 // these child classes have local variables that keep track of things like number of boxes pulled, the target price, and the thresholds
 
-enum class AssemblerState {
-    START,
-    PICK_VARIETY,
-    PICK_TRICK_TAKER,
-    PICK_ACCESSORY,
-}
-
-abstract class MysteryBoxAssembler(protected val config: Config, private val catalogue: Catalogue, protected val value: BigDecimal) {
+abstract class MysteryBoxAssembler(protected val config: Config, private val catalogue: Catalogue, protected val budget: BigDecimal) {
     protected val accessories: MutableList<Game> = mutableListOf()
     protected val trickTakers: MutableList<Game> = mutableListOf()
     protected val varieties: MutableList<Game> = mutableListOf()
@@ -31,15 +26,18 @@ abstract class MysteryBoxAssembler(protected val config: Config, private val cat
     protected var hasPickedMythic = false
 
     protected val upperLimit: BigDecimal
-        get() = (config.thresholds.upperAsFraction + (1).toBigDecimal()) * value
+        get() = (config.thresholds.upperAsFraction + (1).toBigDecimal()) * budget
 
     protected val lowerLimit: BigDecimal
-        get() = config.thresholds.lowerAsFraction * value
+        get() = budget - (config.thresholds.lowerAsFraction * budget)
 
     protected val pickedItems = mutableListOf<Game>()
 
     protected val moneyLeft: BigDecimal
-        get() = value - moneySpent
+        get() = budget - moneySpent
+
+    protected val moneyLeftUpper: BigDecimal
+        get() = upperLimit - moneySpent
 
     // nb: is a number between 0 and 1
     protected val pctCommon: Double
@@ -52,71 +50,81 @@ abstract class MysteryBoxAssembler(protected val config: Config, private val cat
     protected val pctRare: Double
         get() = pickedItems.count { it.rarity == GameRarity.RARE || it.rarity == GameRarity.MYTHIC }.toDouble() / pickedItems.count().toDouble()
 
-    private fun pickHelper(items: MutableList<Game>, filter: (Game) -> Boolean = { true }) {
-        if (items.isEmpty()) return;
-        val item = RandUtils.pickRandom(items.filter { filter(it) && it.retailValue <= moneyLeft })
+    private fun withinBudget(value: BigDecimal, checkUpperLimit: Boolean) = if (!checkUpperLimit) value <= moneyLeft else value <= moneyLeftUpper
+
+    private fun pickHelper(items: MutableList<Game>, checkUpperLimit: Boolean = false, filter: (Game) -> Boolean = { true }): ItemPickStatus {
+        if (items.isEmpty()) return ItemPickStatus.FAILURE_NO_ITEMS;
+        val item = RandUtils.pickRandom(items.filter { filter(it) && withinBudget(it.retailValue, checkUpperLimit) }) ?: return ItemPickStatus.FAILURE_NOTHING_AFFORDABLE_AT_NORMAL_BUDGET
 
         pickedItems.add(item)
         items.remove(item)
         moneySpent += item.retailValue
+        return ItemPickStatus.SUCCESS
     }
 
-    protected fun pickTrickTaker() = pickHelper(trickTakers)
+    protected fun pickTrickTaker(checkUpperLimit: Boolean = false) =
+        pickHelper(trickTakers, checkUpperLimit)
 
-    protected fun pickAccessory() = pickHelper(accessories)
+    protected fun pickAccessory(checkUpperLimit: Boolean = false) =
+        pickHelper(accessories, checkUpperLimit)
 
-    protected fun pickVariety() = pickHelper(varieties)
+    protected fun pickVariety(checkUpperLimit: Boolean = false) =
+        pickHelper(varieties, checkUpperLimit)
 
-    protected fun pickMythic(items: MutableList<Game>) = pickHelper(items) { it.rarity == GameRarity.MYTHIC }
+    protected fun pickMythic(items: MutableList<Game>, checkUpperLimit: Boolean = false) =
+        pickHelper(items, checkUpperLimit) { it.rarity == GameRarity.MYTHIC }
 
-    protected fun pickRare(items: MutableList<Game>) = pickHelper(items) { it.rarity == GameRarity.RARE }
+    protected fun pickRare(items: MutableList<Game>, checkUpperLimit: Boolean = false) =
+        pickHelper(items, checkUpperLimit) { it.rarity == GameRarity.RARE }
 
-    protected fun pickUncommon(items: MutableList<Game>) = pickHelper(items) { it.rarity == GameRarity.UNCOMMON }
+    protected fun pickUncommon(items: MutableList<Game>, checkUpperLimit: Boolean = false) =
+        pickHelper(items, checkUpperLimit) { it.rarity == GameRarity.UNCOMMON }
 
-    protected fun pickCommon(items: MutableList<Game>) = pickHelper(items) { it.rarity == GameRarity.COMMON }
+    protected fun pickCommon(items: MutableList<Game>, checkUpperLimit: Boolean = false) =
+        pickHelper(items, checkUpperLimit) { it.rarity == GameRarity.COMMON }
 
-    protected fun pickSpecialMythic(items: MutableList<Game>) {
+    protected fun pickSpecialMythic(items: MutableList<Game>, checkUpperLimit: Boolean = false) {
             if (!hasPickedMythic && includeSpecial()) {
-                pickMythic(items)
+                pickMythic(items, checkUpperLimit)
             }
             hasPickedMythic = true
     }
 
-    protected fun pickSpecialTrickTaker() {
+    protected fun pickSpecialTrickTaker(checkUpperLimit: Boolean = false) {
         try {
             if (!hasPickedTrickTaker && trickTakers.isEmpty()) {
                 return;
             }
 
             if (!hasPickedTrickTaker && includeSpecial()) {
-                pickTrickTaker()
+                pickTrickTaker(checkUpperLimit)
             }
         } finally {
             hasPickedTrickTaker = true
         }
     }
-    protected fun pickSpecialVariety() {
+    protected fun pickSpecialVariety(checkUpperLimit: Boolean = false) {
         try {
             if (!hasPickedVariety && accessories.isEmpty()) {
                 return
             }
 
             if (!hasPickedVariety && includeSpecial()) {
-                pickAccessory()
+                pickAccessory(checkUpperLimit)
             }
 
         } finally {
             hasPickedVariety = true
         }
     }
-    protected fun pickSpecialAccessory() {
+    protected fun pickSpecialAccessory(checkUpperLimit: Boolean = false) {
         try {
             if (!hasPickedAccessory && accessories.isEmpty()) {
                 return
             }
 
             if (!hasPickedAccessory && includeSpecial()) {
-                pickAccessory()
+                pickAccessory(checkUpperLimit)
             }
 
         } finally {
@@ -142,7 +150,7 @@ abstract class MysteryBoxAssembler(protected val config: Config, private val cat
 
         // cursed and nsfw implementation of minimum because the built-in doesn't do what I want.
         return listOf(common, uncommon, rare)
-            .fold(Pair(GameRarity.COMMON, Double.POSITIVE_INFINITY)) {a, b -> if (a.second < b.second) a else b }
+            .fold(Pair(GameRarity.COMMON, Double.POSITIVE_INFINITY)) { a, b -> if (a.second < b.second) a else b }
                 .first
     }
 
@@ -156,6 +164,16 @@ abstract class MysteryBoxAssembler(protected val config: Config, private val cat
         }
     }
 
+    protected fun budgetStatus(): Budget {
+        return if (moneySpent <= lowerLimit) {
+            Budget.UnderBudget(moneySpent / budget)
+        } else if (moneySpent >= upperLimit) {
+            Budget.OverBudget(moneySpent / budget)
+        } else {
+            Budget.OnBudget
+        }
+    }
+
     abstract fun generateBox(): MysteryBox
 }
 
@@ -166,7 +184,7 @@ class VarietyBoxAssembler(config: Config, catalogue: Catalogue, value: BigDecima
         hasPickedTrickTaker = excludeTrickTaker
     }
 
-    fun pickSpecials() {
+    private fun pickSpecials() {
         pickSpecialMythic(varieties)
         pickSpecialTrickTaker()
         pickSpecialAccessory()
@@ -175,11 +193,28 @@ class VarietyBoxAssembler(config: Config, catalogue: Catalogue, value: BigDecima
     override fun generateBox(): MysteryBox {
         pickSpecials()
 
-        when (pickNext()) {
-            GameRarity.COMMON -> pickCommon(varieties)
-            GameRarity.UNCOMMON -> pickUncommon(varieties)
-            GameRarity.RARE, GameRarity.MYTHIC -> pickRare(varieties)
+        var tryAgainOverBudget = false
+
+        while(true) {
+            val result = when (pickNext()) {
+                GameRarity.COMMON -> pickCommon(varieties, tryAgainOverBudget)
+                GameRarity.UNCOMMON -> pickUncommon(varieties, tryAgainOverBudget)
+                GameRarity.RARE, GameRarity.MYTHIC -> pickRare(varieties, tryAgainOverBudget)
+            }
+
+            when (result) {
+                ItemPickStatus.SUCCESS -> continue
+                ItemPickStatus.FAILURE_NO_ITEMS -> break
+                ItemPickStatus.FAILURE_NOTHING_AFFORDABLE_AT_NORMAL_BUDGET -> {
+                    tryAgainOverBudget = true
+                    continue
+                }
+                ItemPickStatus.FAILURE_NOTHING_AVAILABLE_AT_RAISED_BUDGET -> {
+                    break
+                }
+            }
         }
-        TODO("Not yet implemented")
+
+        return MysteryBox(budget, GameCategory.VARIETY, budgetStatus())
     }
 }
