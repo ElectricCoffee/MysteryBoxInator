@@ -47,7 +47,7 @@ class ConfigTest {
             IoConfig("~/foo", ";"),
             ThresholdConfig(BigDecimal(10), BigDecimal(5)),
             CatalogueConfig(true),
-            RarityRatio(BigDecimal(10), BigDecimal(20), BigDecimal(70)),
+            RarityRatio(10.0, 20.0, 70.0),
             mapOf(
                 "foo" to MysteryBoxAmount(BigDecimal("2.95")),
                 "bar" to MysteryBoxAmount(BigDecimal("3.95"))
