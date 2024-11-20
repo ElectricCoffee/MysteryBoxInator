@@ -1,4 +1,4 @@
-package mysteryBox
+package mysteryBox.assembler
 
 import Budget
 import Game
@@ -6,6 +6,7 @@ import GameRarity
 import ItemPickStatus
 import catalogue.Catalogue
 import config.Config
+import mysteryBox.MysteryBox
 import util.RandUtils
 import java.math.BigDecimal
 import kotlin.random.Random
@@ -15,7 +16,8 @@ import kotlin.random.Random
 // then we have three child classes that each uniquely handle the assembly of a mystery box
 // these child classes have local variables that keep track of things like number of boxes pulled, the target price, and the thresholds
 
-abstract class MysteryBoxAssembler(protected val config: Config, private val catalogue: Catalogue, protected val budget: BigDecimal) {
+// ABC short for Abstract Base Class
+abstract class MysteryBoxAssemblerABC(protected val config: Config, private val catalogue: Catalogue, protected val budget: BigDecimal) {
     protected val accessories: MutableList<Game> = mutableListOf()
     protected val trickTakers: MutableList<Game> = mutableListOf()
     protected val varieties: MutableList<Game> = mutableListOf()
@@ -175,46 +177,4 @@ abstract class MysteryBoxAssembler(protected val config: Config, private val cat
     }
 
     abstract fun generateBox(): MysteryBox
-}
-
-class VarietyBoxAssembler(config: Config, catalogue: Catalogue, value: BigDecimal, excludeTrickTaker: Boolean = false)
-    : MysteryBoxAssembler(config, catalogue, value) {
-
-    init {
-        hasPickedTrickTaker = excludeTrickTaker
-    }
-
-    private fun pickSpecials() {
-        pickSpecialMythic(varieties)
-        pickSpecialTrickTaker()
-        pickSpecialAccessory()
-    }
-
-    override fun generateBox(): MysteryBox {
-        pickSpecials()
-
-        var tryAgainOverBudget = false
-
-        while(true) {
-            val result = when (pickNext()) {
-                GameRarity.COMMON -> pickCommon(varieties, tryAgainOverBudget)
-                GameRarity.UNCOMMON -> pickUncommon(varieties, tryAgainOverBudget)
-                GameRarity.RARE, GameRarity.MYTHIC -> pickRare(varieties, tryAgainOverBudget)
-            }
-
-            when (result) {
-                ItemPickStatus.SUCCESS -> continue
-                ItemPickStatus.FAILURE_NO_ITEMS -> break
-                ItemPickStatus.FAILURE_NOTHING_AFFORDABLE_AT_NORMAL_BUDGET -> {
-                    tryAgainOverBudget = true
-                    continue
-                }
-                ItemPickStatus.FAILURE_NOTHING_AVAILABLE_AT_RAISED_BUDGET -> {
-                    break
-                }
-            }
-        }
-
-        return MysteryBox(pickedItems, budget, GameCategory.VARIETY, budgetStatus())
-    }
 }
