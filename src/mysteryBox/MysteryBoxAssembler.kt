@@ -215,6 +215,6 @@ class VarietyBoxAssembler(config: Config, catalogue: Catalogue, value: BigDecima
             }
         }
 
-        return MysteryBox(budget, GameCategory.VARIETY, budgetStatus())
+        return MysteryBox(pickedItems, budget, GameCategory.VARIETY, budgetStatus())
     }
 }
