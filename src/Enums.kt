@@ -1,4 +1,5 @@
 import errors.UnknownCategoryException
+import java.math.BigDecimal
 
 /**
  * The type of game to be added to the mystery box
@@ -45,24 +46,21 @@ enum class GameCategory {
     }
 }
 
-/**
- * The status for adding a game to the mystery box
- */
-enum class ItemAddStatus {
-    /**
-     * Adding was successful!
-     */
+enum class ItemPickStatus {
     SUCCESS,
+    FAILURE_NO_ITEMS,
+    FAILURE_NOTHING_AFFORDABLE_AT_NORMAL_BUDGET,
+    FAILURE_NOTHING_AVAILABLE_AT_RAISED_BUDGET
+}
 
-    /**
-     * The adding was successful, but it's a special case (a rare game or a trick-taker)
-     */
-    SUCCESS_SPECIAL,
+sealed class Budget(val amount: BigDecimal) {
+    class OverBudget(amount: BigDecimal) : Budget(amount)
+    class UnderBudget(amount: BigDecimal) : Budget(amount)
+    data object OnBudget : Budget(BigDecimal.ZERO)
 
-    /**
-     * We tried to add the game, but its value would exceed the mystery box' target total.
-     */
-    EXCEEDS_TARGET_VALUE
+    fun amountAsPercentage(): BigDecimal {
+        return amount * (100).toBigDecimal()
+    }
 }
 
 enum class GameRarity(val value: Int) {
