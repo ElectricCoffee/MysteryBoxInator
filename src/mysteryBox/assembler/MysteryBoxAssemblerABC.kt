@@ -52,11 +52,25 @@ abstract class MysteryBoxAssemblerABC(protected val config: Config, private val 
     protected val pctRare: Double
         get() = pickedItems.count { it.rarity == GameRarity.RARE || it.rarity == GameRarity.MYTHIC }.toDouble() / pickedItems.count().toDouble()
 
-    private fun withinBudget(value: BigDecimal, checkUpperLimit: Boolean) = if (!checkUpperLimit) value <= moneyLeft else value <= moneyLeftUpper
+    /**
+     * Checks if the value we want to pick is within budget
+     * @param value the value of the item we wish to check
+     * @param checkUpperLimit if true, we check the money left adjusted for the n% upper limit
+     */
+    private fun withinBudget(value: BigDecimal, checkUpperLimit: Boolean) =
+        if (!checkUpperLimit) value <= moneyLeft else value <= moneyLeftUpper
 
+    /**
+     * Picks an item from the list of games, making sure it stays within budget
+     * @param items is the list of items to be fetched from
+     * @param checkUpperLimit causes the function to use the moneyLeftUpper property instead of moneyLeft in its calculations
+     * @param filter if used, cause it to filter not only on the money left in budget, but also this one extra filter
+     * @return an ItemPickStatus depending on the state of the items provided
+     */
     private fun pickHelper(items: MutableList<Game>, checkUpperLimit: Boolean = false, filter: (Game) -> Boolean = { true }): ItemPickStatus {
         if (items.isEmpty()) return ItemPickStatus.FAILURE_NO_ITEMS;
-        val item = RandUtils.pickRandom(items.filter { filter(it) && withinBudget(it.retailValue, checkUpperLimit) }) ?: return ItemPickStatus.FAILURE_NOTHING_AFFORDABLE_AT_NORMAL_BUDGET
+        val item = RandUtils.pickRandom(items.filter { filter(it) && withinBudget(it.retailValue, checkUpperLimit) })
+            ?: return ItemPickStatus.FAILURE_NOTHING_AFFORDABLE_AT_NORMAL_BUDGET
 
         pickedItems.add(item)
         items.remove(item)
