@@ -3,6 +3,7 @@ package ui;
 import catalogue.Catalogue;
 import config.Config;
 import io.Filing;
+import ui.menu.MenuBar;
 import ui.util.CsvUtils;
 
 import javax.swing.*;
@@ -13,15 +14,10 @@ import java.io.IOException;
 import java.math.RoundingMode;
 
 public class MainWindow extends JFrame {
-    private JTabbedPane tabPane;
     private JTable productTable;
     private JPanel mainPanel;
-    private JButton generateMysteriesButton;
     private JLabel totalProfitLabel;
     private JTable mysteryBoxTable;
-    private JPanel catalogueTab;
-    private JPanel mysteryBoxTab;
-    private JButton exportBtn;
     private JLabel numberOfGamesLoaded;
     private JLabel totalStockLabel;
 
@@ -29,8 +25,8 @@ public class MainWindow extends JFrame {
         super("Mystery-Box-Inator");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setSize(1200, 800);
+        setLocationRelativeTo(null);
 
         try {
             Config config = Filing.createConfig();
