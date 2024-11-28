@@ -58,7 +58,7 @@ object Filing {
     fun backupCatalogue(config: Config, catalogue: Catalogue) {
         val outputDir: Path = Paths.get(config.io.outputDirectory)
 
-        val date = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH.mm.ss"))
 
         val outputFile = Paths.get(outputDir.toString() + File.separator + "catalogue-" + date + ".backup.csv")
 
@@ -70,6 +70,11 @@ object Filing {
 
     private fun workingCopyFile(config:Config) = Paths.get(config.io.outputDirectory + File.separator + "catalogue.working-copy.csv")
 
+    @JvmStatic
+    @Throws(IOException::class)
+    fun deleteWorkingCopy(config: Config) {
+        Files.delete(workingCopyFile(config))
+    }
 
     @JvmStatic
     @Throws(IOException::class)
