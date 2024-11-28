@@ -20,6 +20,11 @@ public class MainWindow extends JFrame {
     private JTable mysteryBoxTable;
     private JLabel numberOfGamesLoaded;
     private JLabel totalStockLabel;
+    private JTabbedPane tabPane;
+    private JPanel catalogueTab;
+    private JPanel mysteryBoxTab;
+    private JButton generateMysteriesButton;
+    private JButton exportBtn;
 
     public MainWindow() {
         super("Mystery-Box-Inator");
