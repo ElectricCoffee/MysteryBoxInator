@@ -13,6 +13,16 @@ enum class CsvLoadMode {
 class Catalogue(private val config: Config) {
     val gamesList = mutableMapOf<String, CatalogueEntry>();
 
+    constructor(config: Config, games: List<Game>) : this(config) {
+        addGames(games)
+    }
+
+    fun addGames(games: List<Game>) {
+        for (game in games) {
+            this.addGame(game)
+        }
+    }
+
     fun addGame(game: Game) {
         val title = game.title;
         gamesList[title] = gamesList[title]?.addGame() ?: CatalogueEntry(game)
