@@ -27,6 +27,9 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
 
     fun addGame(extra: Int = 1) = CatalogueEntry(game, quantity + extra)
 
+    /**
+     * Creates the sort of array you want to see in the output csv
+     */
     fun toStringArray(): Array<String> =
         arrayOf(
             game.title,
@@ -38,6 +41,24 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
             game.importCost.setScale(2, RoundingMode.HALF_UP).toString(),
             game.retailValue.setScale(2, RoundingMode.HALF_UP).toString()
         )
+
+    /**
+     * Creates the sort of array you'd expect to be used in the table.
+     */
+    fun toTableArray(): Array<Any> {
+        return arrayOf(
+            game.title,
+            quantity.toString(),
+            game.gameCategory.toString(),
+            game.rarity.toString(),
+            game.bggId ?: "N/A",
+            if (game.requiresPasteUps) "Yes" else "No",
+            "£" + game.importCost.setScale(2, RoundingMode.HALF_UP).toString(),
+            "£" + game.retailValue.setScale(2, RoundingMode.HALF_UP).toString(),
+            "£" + game.profit.setScale(2, RoundingMode.HALF_UP).toString(),
+            "£" + totalProfit.setScale(2, RoundingMode.HALF_UP).toString()
+        )
+    }
 
     companion object {
         @Throws(CsvParsingException::class)

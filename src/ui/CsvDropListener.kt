@@ -3,7 +3,7 @@ package ui
 import catalogue.Catalogue
 import catalogue.CsvLoadMode
 import config.Config
-import ui.util.CsvUtils
+import ui.util.TableUtils
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.*
 import java.io.File
@@ -43,7 +43,7 @@ class CsvDropListener(private val parent: JFrame, private val config: Config, pr
                             else -> break
                         }
                         catalogue.appendFromFile(Path(filePath), loadMode, startIndex = 1)
-                        CsvUtils.populateTable(config, catalogue, dtm)
+                        TableUtils.populateTable(config, catalogue, dtm)
                     } else {
                         JOptionPane.showMessageDialog(
                             null,

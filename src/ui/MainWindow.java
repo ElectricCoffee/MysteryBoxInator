@@ -4,7 +4,8 @@ import catalogue.Catalogue;
 import config.Config;
 import io.Filing;
 import ui.menu.MenuBar;
-import ui.util.CsvUtils;
+import ui.util.TableUtils;
+import ui.util.ErrorDialog;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -36,31 +37,30 @@ public class MainWindow extends JFrame {
         try {
             Config config = Filing.createConfig();
             Catalogue catalogue = Filing.readWorkingCopy(config);
-            var configDtm = configCatalogueTable(config, catalogue);
+            var catalogueDtm = configCatalogueTable(config, catalogue);
+            var mysteryDtm = configMysteryBoxTable();
+
             configMysteryBoxTable();
-            setJMenuBar(new MenuBar(config, catalogue, configDtm));
+            setJMenuBar(new MenuBar(config, catalogue, catalogueDtm));
+
+            productTable.setModel(catalogueDtm);
+            mysteryBoxTable.setModel(mysteryDtm);
 
             // populate the table with the catalogue's contents
             if (!catalogue.getGamesList().isEmpty()) {
-                CsvUtils.populateTable(config, catalogue, configDtm);
+                TableUtils.populateTable(config, catalogue, catalogueDtm);
             }
 
         } catch (IOException ioe) {
-            showErrorDialog(ioe.getMessage(), "File Error!");
+            new ErrorDialog(this).open(ioe.getMessage(), "File Error!");
         } catch (Exception e) {
-            showErrorDialog(e.getMessage(), "Error!");
+            new ErrorDialog(this).open(e.getMessage(), "Error!");
         }
-    }
-
-    void showErrorDialog(String message, String title) {
-        JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
     DefaultTableModel configCatalogueTable(Config config, Catalogue catalogue) {
         var dtm = new DefaultTableModel(null,
-                new Object[]{"Name", "Quantity", "Type", "Rarity", "Url", "Paste-Ups?", "Raw Cost", "Retail Price", "Item Profit", "Total Profit"});
-
-        productTable.setModel(dtm);
+                new Object[]{"Name", "Quantity", "Type", "Rarity", "BGG ID", "Paste-Ups?", "Raw Cost", "Retail Price", "Item Profit", "Total Profit"});
 
         new DropTarget(this, new CsvDropListener(this, config, catalogue, dtm));
         dtm.addTableModelListener((e) -> {
@@ -76,7 +76,7 @@ public class MainWindow extends JFrame {
         var dtm = new DefaultTableModel(null,
                 new Object[] {"Id", "Items", "Type", "Sell Price", "Budget", "Budget Status"});
 
-        mysteryBoxTable.setModel(dtm);
+        dtm.addTableModelListener((e) -> {}); // to be filled
 
         return dtm;
     }

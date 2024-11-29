@@ -5,7 +5,7 @@ import catalogue.CsvLoadMode
 import config.Config
 import ui.CsvActionSelected
 import ui.CsvDialog
-import ui.util.CsvUtils
+import ui.util.TableUtils
 import javax.swing.JMenuItem
 import javax.swing.table.DefaultTableModel
 
@@ -33,6 +33,6 @@ class LoadCatalogueCsv(private val config: Config, private val catalogue: Catalo
             catalogue.appendFromFile(file.toPath(), CsvLoadMode.OVERWRITE, 1)
         }
 
-        CsvUtils.populateTable(config, catalogue, dtm)
+        TableUtils.populateTable(config, catalogue, dtm)
     }
 }
