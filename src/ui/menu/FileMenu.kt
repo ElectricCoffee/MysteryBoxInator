@@ -16,7 +16,7 @@ class FileMenu(config: Config, catalogue: Catalogue, dtm: DefaultTableModel) : J
             add(LoadCatalogueCsv(config, catalogue, dtm))
             add(EditConfigItem())
             add(OpenOutputFolderItem(config))
-            add(ClearCatalogueItem())
+            add(ClearCatalogueItem(config, catalogue, dtm))
         } catch (e: Exception) {
             e.printStackTrace()
         }
