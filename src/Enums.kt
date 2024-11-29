@@ -61,6 +61,14 @@ sealed class Budget(val amount: BigDecimal) {
     fun amountAsPercentage(): BigDecimal {
         return amount * (100).toBigDecimal()
     }
+
+    fun toPercentString(): String {
+        return when (this) {
+            is OverBudget -> "+${amountAsPercentage().setScale(1)}%"
+            is UnderBudget -> "-${amountAsPercentage().setScale(1)}%"
+            is OnBudget -> "0%"
+        }
+    }
 }
 
 enum class GameRarity(val value: Int) {
