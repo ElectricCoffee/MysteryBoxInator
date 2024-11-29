@@ -3,7 +3,7 @@ package mysteryBox
 import config.Config
 import java.util.UUID
 
-class MysteryBoxList(config: Config) {
+class MysteryBoxList() {
     val mysteryBoxes = mutableMapOf<UUID, MysteryBox>()
 
     fun addBox(box: MysteryBox) {

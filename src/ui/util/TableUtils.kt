@@ -22,5 +22,10 @@ object TableUtils {
 
     fun populateMysteryBoxTable(config: Config, mysteryBoxes: MysteryBoxList, dtm: DefaultTableModel) {
         dtm.dataVector.clear()
+        for (e in mysteryBoxes.mysteryBoxes.values) {
+            dtm.addRow(e.toTableArray())
+        }
+
+        Filing.writeWorkingCopy(config, mysteryBoxes)
     }
 }

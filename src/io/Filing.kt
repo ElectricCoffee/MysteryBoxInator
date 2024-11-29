@@ -2,11 +2,14 @@ package io
 
 import catalogue.Catalogue
 import catalogue.CsvLoadMode
+import com.moandjiezana.toml.Toml
+import com.moandjiezana.toml.TomlWriter
 import config.Config
 import config.Config.Companion.fromFile
 import config.configFilePath
 import config.configFolderPath
 import config.defaultConfigString
+import mysteryBox.MysteryBoxList
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -69,6 +72,7 @@ object Filing {
     }
 
     private fun catalogueWorkingCopyFile(config:Config) = Paths.get(config.io.outputDirectory + File.separator + "catalogue.working-copy.csv")
+    private fun mysteryBoxWorkingCopyFile(config:Config) = Paths.get(config.io.outputDirectory + File.separator + "mystery-box.working-copy.toml")
 
     @JvmStatic
     @Throws(IOException::class)
@@ -97,12 +101,40 @@ object Filing {
 
         ensureOutputDir(config)
 
-        // writes a timestamped backup of the current catalogue
         Files.write(
             outputFile,
             catalogue.toCsv(false),
             StandardOpenOption.CREATE,
             StandardOpenOption.TRUNCATE_EXISTING
         )
+    }
+
+    @JvmStatic
+    @Throws(IOException::class)
+    fun writeWorkingCopy(config: Config, mysteryBoxList: MysteryBoxList) {
+        val outputFile = mysteryBoxWorkingCopyFile(config)
+
+        ensureOutputDir(config)
+
+        val toml = TomlWriter().write(mysteryBoxList)
+
+        Files.write(
+            outputFile,
+            toml.toByteArray(),
+            StandardOpenOption.CREATE,
+            StandardOpenOption.TRUNCATE_EXISTING
+        )
+    }
+
+    @JvmStatic
+    @Throws(IOException::class)
+    fun readMysteryBoxWorkingCopy(config: Config): MysteryBoxList {
+        val inputFile = mysteryBoxWorkingCopyFile(config)
+
+        if (Files.exists(inputFile)) {
+            return Toml().read(inputFile.toFile()).to(MysteryBoxList::class.java)
+        }
+
+        return MysteryBoxList()
     }
 }
