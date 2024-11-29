@@ -5,6 +5,7 @@ import GameCategory
 import GameRarity
 import errors.CsvParsingException
 import errors.UnknownPasteUpsException
+import util.NumUtils
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.net.URL
@@ -53,10 +54,10 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
             game.rarity.toString(),
             game.bggId ?: "N/A",
             if (game.requiresPasteUps) "Yes" else "No",
-            "£" + game.importCost.setScale(2, RoundingMode.HALF_UP).toString(),
-            "£" + game.retailValue.setScale(2, RoundingMode.HALF_UP).toString(),
-            "£" + game.profit.setScale(2, RoundingMode.HALF_UP).toString(),
-            "£" + totalProfit.setScale(2, RoundingMode.HALF_UP).toString()
+            NumUtils.asPrice(game.importCost),
+            NumUtils.asPrice(game.retailValue),
+            NumUtils.asPrice(game.profit),
+            NumUtils.asPrice(totalProfit),
         )
     }
 
