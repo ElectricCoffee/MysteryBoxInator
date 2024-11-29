@@ -43,7 +43,7 @@ class CsvDropListener(private val parent: JFrame, private val config: Config, pr
                             else -> break
                         }
                         catalogue.appendFromFile(Path(filePath), loadMode, startIndex = 1)
-                        TableUtils.populateTable(config, catalogue, dtm)
+                        TableUtils.populateCatalogueTable(config, catalogue, dtm)
                     } else {
                         JOptionPane.showMessageDialog(
                             null,

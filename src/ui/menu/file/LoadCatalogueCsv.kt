@@ -33,6 +33,6 @@ class LoadCatalogueCsv(private val config: Config, private val catalogue: Catalo
             catalogue.appendFromFile(file.toPath(), CsvLoadMode.OVERWRITE, 1)
         }
 
-        TableUtils.populateTable(config, catalogue, dtm)
+        TableUtils.populateCatalogueTable(config, catalogue, dtm)
     }
 }
