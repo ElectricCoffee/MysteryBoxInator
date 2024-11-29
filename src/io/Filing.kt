@@ -68,18 +68,18 @@ object Filing {
         Files.write(outputFile, catalogue.toCsv(true), StandardOpenOption.CREATE)
     }
 
-    private fun workingCopyFile(config:Config) = Paths.get(config.io.outputDirectory + File.separator + "catalogue.working-copy.csv")
+    private fun catalogueWorkingCopyFile(config:Config) = Paths.get(config.io.outputDirectory + File.separator + "catalogue.working-copy.csv")
 
     @JvmStatic
     @Throws(IOException::class)
     fun deleteWorkingCopy(config: Config) {
-        Files.delete(workingCopyFile(config))
+        Files.delete(catalogueWorkingCopyFile(config))
     }
 
     @JvmStatic
     @Throws(IOException::class)
     fun readWorkingCopy(config: Config): Catalogue {
-        val inputFile = workingCopyFile(config)
+        val inputFile = catalogueWorkingCopyFile(config)
 
         val catalogue = Catalogue(config)
 
@@ -93,7 +93,7 @@ object Filing {
     @JvmStatic
     @Throws(IOException::class)
     fun writeWorkingCopy(config: Config, catalogue: Catalogue) {
-        val outputFile = workingCopyFile(config)
+        val outputFile = catalogueWorkingCopyFile(config)
 
         ensureOutputDir(config)
 
