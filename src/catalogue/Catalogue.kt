@@ -28,8 +28,9 @@ class Catalogue(private val config: Config) {
         gamesList[title] = gamesList[title]?.addGame() ?: CatalogueEntry(game)
     }
 
-    fun getGame(title: String) = gamesList[title]?.game;
-    fun getQuantity(title: String) = gamesList[title]?.quantity;
+    fun getEntry(title: String) = gamesList[title]
+    fun getGame(title: String) = gamesList[title]?.game
+    fun getQuantity(title: String) = gamesList[title]?.quantity
     fun getRetailValue(title: String) = gamesList[title]?.retailValue
 
     fun getProfit(title: String): BigDecimal {

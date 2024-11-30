@@ -33,8 +33,6 @@ class TrickTakingBoxAssembler(config: Config, catalogue: Catalogue, value: BigDe
                 GameRarity.RARE, GameRarity.MYTHIC -> pickRare(trickTakers, tryAgainOverBudget)
             }
 
-//            println("$result, go over budget? $tryAgainOverBudget, budget: $budget, spent: $moneySpent, left: $moneyLeft")
-
             when (result) {
                 ItemPickStatus.SUCCESS -> continue
                 ItemPickStatus.FAILURE_NO_ITEMS -> break

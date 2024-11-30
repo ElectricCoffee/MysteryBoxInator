@@ -4,7 +4,6 @@ import catalogue.Catalogue;
 import config.Config;
 import io.Filing;
 import mysteryBox.assembler.MysteryBoxAssemblerFactory;
-import mysteryBox.assembler.TrickTakingBoxAssembler;
 import ui.menu.MenuBar;
 import ui.util.TableUtils;
 import ui.util.ErrorDialog;
@@ -36,6 +35,7 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
+        editButton.setEnabled(false); // have it be grayed out at first
 
         try {
             Config config = Filing.createConfig();
@@ -54,7 +54,12 @@ public class MainWindow extends JFrame {
                 TableUtils.populateCatalogueTable(config, catalogue, catalogueDtm);
             }
 
-            editButton.addActionListener((e) -> EditItemDialog.openDialog(null)); // TODO: replace null with actual code
+            editButton.addActionListener((e) -> {
+                var i = productTable.getSelectedRow();
+                var title = (String)catalogueDtm.getValueAt(i, 0); // the 0th column is the title
+                var item = catalogue.getEntry(title);
+                EditItemDialog.openDialog(item);
+            });
             generateMysteriesButton.addActionListener((e) -> {
                 var result = GenerateMysteryBoxDialog.openDialog(config, catalogue);
                 if (result == null) {
@@ -81,6 +86,10 @@ public class MainWindow extends JFrame {
             numberOfGamesLoaded.setText(Integer.toString(catalogue.getCountGames()));
             totalStockLabel.setText(Integer.toString(catalogue.getCountTotalInventory()));
             totalProfitLabel.setText("£" + catalogue.getCatalogueProfit().setScale(2, RoundingMode.HALF_UP));
+        });
+
+        productTable.getSelectionModel().addListSelectionListener((e) -> {
+            editButton.setEnabled(true);
         });
 
         return dtm;
