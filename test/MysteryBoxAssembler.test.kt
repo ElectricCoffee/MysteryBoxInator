@@ -1,32 +1,20 @@
-import catalogue.Catalogue
 import common.GameCategory
 import common.GameRarity
 import config.defaultConfig
-import mysteryBox.MysteryBox
-import mysteryBox.assembler.MysteryBoxAssemblerABC
+import mysteryBox.assembler.TrickTakingBoxAssembler
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
-// inheriting from the base class should let me get access to the protected members and test on them directly... in theory
-class MysteryBoxAssemblerTestHelper(catalogue: Catalogue, budget: BigDecimal) : MysteryBoxAssemblerABC(defaultConfig, catalogue, budget) {
-    // god, how do I even unit test something random?
-    override fun generateBox(): MysteryBox {
-        TODO("Not yet implemented")
-    }
-
-    fun PickTrickTaker(upperLimit: Boolean) = pickTrickTaker(upperLimit)
-}
-
 class MysteryBoxAssemblerTest {
     // todo: check various item picker logics
-    @Test fun `can pick an item`() {
-        val games = listOf(
-            Game("foo", GameCategory.TRICK_TAKER, GameRarity.COMMON, null, true, BigDecimal(10), BigDecimal(15)),
-            Game("bar", GameCategory.VARIETY, GameRarity.COMMON, null, true, BigDecimal(10), BigDecimal(15))
-        )
+    @Test fun `can create a mystery box`() {
+        val catalogue = ResourceHelper.getTestCatalogue()
+        val assembler = TrickTakingBoxAssembler(defaultConfig, catalogue, BigDecimal("45.00"))
+        val box = assembler.generateBox()
 
-        val catalogue = Catalogue(defaultConfig, games)
-
-        val assembler = MysteryBoxAssemblerTestHelper(catalogue, BigDecimal(20))
+        Assertions.assertEquals(box.boxType, GameCategory.TRICK_TAKER, "The box type should be Trick Taker")
+        Assertions.assertTrue(box.items.count { it.gameCategory == GameCategory.VARIETY } < 2, "There should be 0-1 variety games in this box")
+        Assertions.assertTrue(box.items.count { it.rarity == GameRarity.MYTHIC } < 2, "There should be 0-1 mythic games in the box")
     }
 }
