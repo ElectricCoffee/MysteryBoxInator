@@ -2,6 +2,7 @@ package common
 
 import errors.UnknownCategoryException
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 /**
  * The type of game to be added to the mystery box
@@ -66,9 +67,9 @@ sealed class Budget(val amount: BigDecimal) {
 
     fun toPercentString(): String {
         return when (this) {
-            is OverBudget -> "+${amountAsPercentage().setScale(1)}%"
-            is UnderBudget -> "-${amountAsPercentage().setScale(1)}%"
-            is OnBudget -> "0%"
+            is OverBudget -> "Over (+${amountAsPercentage().setScale(2, RoundingMode.HALF_UP)}%)"
+            is UnderBudget -> "Under (${amountAsPercentage().setScale(2, RoundingMode.HALF_UP)}%)"
+            is OnBudget -> "OK (0%)"
         }
     }
 }

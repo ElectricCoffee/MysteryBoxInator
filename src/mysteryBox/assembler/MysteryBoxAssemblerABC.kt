@@ -205,10 +205,11 @@ abstract class MysteryBoxAssemblerABC(protected val config: Config, private val 
     }
 
     protected fun budgetStatus(): Budget {
+        val calc = (moneySpent / budget) - BigDecimal(1)
         return if (moneySpent <= lowerLimit) {
-            Budget.UnderBudget(moneySpent / budget)
+            Budget.UnderBudget(calc)
         } else if (moneySpent >= upperLimit) {
-            Budget.OverBudget(moneySpent / budget)
+            Budget.OverBudget(calc)
         } else {
             Budget.OnBudget
         }
