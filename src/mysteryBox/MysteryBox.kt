@@ -1,7 +1,7 @@
 package mysteryBox
 
 import common.Budget
-import Game
+import game.Game
 import common.GameCategory
 import util.NumUtils
 import java.math.BigDecimal

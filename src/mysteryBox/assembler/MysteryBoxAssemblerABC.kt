@@ -1,7 +1,7 @@
 package mysteryBox.assembler
 
 import common.Budget
-import Game
+import game.Game
 import common.GameRarity
 import common.ItemPickStatus
 import catalogue.Catalogue

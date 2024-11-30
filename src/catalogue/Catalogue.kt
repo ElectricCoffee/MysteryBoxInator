@@ -1,7 +1,7 @@
 package catalogue
 
 import config.Config
-import Game
+import game.Game
 import java.math.BigDecimal
 import java.nio.file.Files
 import java.nio.file.Path

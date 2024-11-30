@@ -1,3 +1,5 @@
+package game
+
 import common.GameCategory
 import common.GameRarity
 import java.math.BigDecimal
@@ -46,6 +48,8 @@ data class Game(
 
         return result.groupValues[1].toInt()
     }
+
+    val safeBggUrl: String = bggURL?.toString() ?: "";
 
     val profit: BigDecimal
         get() = retailValue - importCost;

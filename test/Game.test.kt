@@ -1,5 +1,6 @@
 import common.GameCategory
 import common.GameRarity
+import game.Game
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.math.BigDecimal

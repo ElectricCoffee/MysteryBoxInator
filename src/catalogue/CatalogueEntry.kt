@@ -1,6 +1,6 @@
 package catalogue
 
-import Game
+import game.Game
 import common.GameCategory
 import common.GameRarity
 import errors.CsvParsingException
