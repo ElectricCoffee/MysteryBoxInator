@@ -71,7 +71,14 @@ abstract class MysteryBoxAssemblerABC(protected val config: Config, private val 
     private fun pickHelper(items: MutableList<Game>, checkUpperLimit: Boolean = false, filter: (Game) -> Boolean = { true }): ItemPickStatus {
         if (items.isEmpty()) return ItemPickStatus.FAILURE_NO_ITEMS;
         val item = RandUtils.pickRandom(items.filter { filter(it) && withinBudget(it.retailValue, checkUpperLimit) })
-            ?: return ItemPickStatus.FAILURE_NOTHING_AFFORDABLE_AT_NORMAL_BUDGET
+
+        if (item == null) {
+            return if (checkUpperLimit) {
+                ItemPickStatus.FAILURE_NOTHING_AVAILABLE_AT_RAISED_BUDGET
+            } else {
+                ItemPickStatus.FAILURE_NOTHING_AFFORDABLE_AT_NORMAL_BUDGET
+            }
+        }
 
         pickedItems.add(item)
         items.remove(item)
