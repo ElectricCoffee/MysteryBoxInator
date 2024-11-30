@@ -8,11 +8,11 @@ import config.Config
 import mysteryBox.MysteryBox
 import java.math.BigDecimal
 
-class TrickTakingBoxAssembler(config: Config, catalogue: Catalogue, value: BigDecimal, excludeTrickTaker: Boolean = false)
+class TrickTakingBoxAssembler(config: Config, catalogue: Catalogue, value: BigDecimal, excludeVariety: Boolean = false)
     : MysteryBoxAssemblerABC(config, catalogue, value) {
 
     init {
-        hasPickedTrickTaker = excludeTrickTaker
+        hasPickedVariety = excludeVariety
     }
 
     private fun pickSpecials() {
@@ -32,6 +32,8 @@ class TrickTakingBoxAssembler(config: Config, catalogue: Catalogue, value: BigDe
                 GameRarity.UNCOMMON -> pickUncommon(trickTakers, tryAgainOverBudget)
                 GameRarity.RARE, GameRarity.MYTHIC -> pickRare(trickTakers, tryAgainOverBudget)
             }
+
+            println("$result, $tryAgainOverBudget")
 
             when (result) {
                 ItemPickStatus.SUCCESS -> continue
