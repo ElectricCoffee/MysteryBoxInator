@@ -3,13 +3,9 @@ package ui;
 import catalogue.Catalogue;
 import common.GameCategory;
 import config.Config;
-import kotlin.Pair;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Comparator;
 
 public class GenerateMysteryBoxDialog extends JDialog {
@@ -18,6 +14,8 @@ public class GenerateMysteryBoxDialog extends JDialog {
     private JButton buttonCancel;
     private JComboBox<MysteryBoxDialogOption> sizeCombo;
     private JComboBox<String> typeCombo;
+    private JLabel gameTypeLabel;
+    private JComboBox<String> excludeBox;
     private MysteryBoxDialogResult output;
 
     public GenerateMysteryBoxDialog(Config config, Catalogue catalogue) {
@@ -28,6 +26,7 @@ public class GenerateMysteryBoxDialog extends JDialog {
 
         setupSizeCombo(config);
         setupTypeCombo();
+        setupExcludeCombo();
 
         buttonOK.addActionListener(e -> onOK());
         buttonCancel.addActionListener(e -> onCancel());
@@ -62,11 +61,29 @@ public class GenerateMysteryBoxDialog extends JDialog {
     }
 
     private void setupTypeCombo() {
-        for (var i : new String[] { "Trick-Taker", "Variety" }) {
+        var labels = new String[] { "Trick-Taker", "Variety" };
+        for (var i : labels) {
             typeCombo.addItem(i);
         }
 
+        typeCombo.addActionListener((e) -> {
+            var src = (JComboBox<String>)e.getSource();
+            if (src.getSelectedIndex() == 0) {
+                gameTypeLabel.setText("Exclude Variety Game?");
+            } else {
+                gameTypeLabel.setText("Exclude Trick-Taker?");
+            }
+        });
+
         typeCombo.setSelectedIndex(0);
+    }
+
+    private void setupExcludeCombo() {
+        for (var i : new String[] { "No", "Yes" }) {
+            excludeBox.addItem(i);
+        }
+
+        excludeBox.setSelectedIndex(0);
     }
 
     private void onOK() {
@@ -77,8 +94,10 @@ public class GenerateMysteryBoxDialog extends JDialog {
                 ? GameCategory.TRICK_TAKER
                 : (selected.startsWith("V") ? GameCategory.VARIETY : null);
 
+        var excludeOption = excludeBox.getSelectedIndex() == 1;
+
         assert sizeOption != null;
-        output = new MysteryBoxDialogResult(sizeOption.getPrice(), typeOption, false);
+        output = new MysteryBoxDialogResult(sizeOption.getPrice(), typeOption, excludeOption);
 
         dispose();
     }
