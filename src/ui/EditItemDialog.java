@@ -4,6 +4,7 @@ import catalogue.CatalogueEntry;
 import common.GameCategory;
 import common.GameRarity;
 import game.Game;
+import ui.util.ErrorDialog;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.Objects;
 
 public class EditItemDialog extends JDialog {
     private JPanel contentPane;
@@ -40,16 +41,7 @@ public class EditItemDialog extends JDialog {
         setupRawCostField();
         setupRetailPriceField();
 
-        var game = catalogueEntry.getGame();
-
-        titleField.setText(catalogueEntry.getTitle());
-        quantitySpinner.setValue(catalogueEntry.getQuantity());
-        typeCombo.setSelectedItem(game.getGameCategory());
-        rarityCombo.setSelectedItem(game.getRarity());
-        urlField.setText(game.getSafeBggUrl());
-        pasteUpsCombo.setSelectedIndex(game.getRequiresPasteUps() ? 0 : 1);
-        rawCostField.setText(game.getImportCost().setScale(2, RoundingMode.HALF_UP).toString());
-        retailPriceField.setText(game.getRetailValue().setScale(2, RoundingMode.HALF_UP).toString());
+        populateFields(catalogueEntry);
 
         buttonOK.addActionListener(e -> onOK());
 
@@ -68,6 +60,19 @@ public class EditItemDialog extends JDialog {
                 e -> onCancel(),
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
+
+    private void populateFields(CatalogueEntry catalogueEntry) {
+        var game = catalogueEntry.getGame();
+
+        titleField.setText(catalogueEntry.getTitle());
+        quantitySpinner.setValue(catalogueEntry.getQuantity());
+        typeCombo.setSelectedItem(game.getGameCategory());
+        rarityCombo.setSelectedItem(game.getRarity());
+        urlField.setText(game.getSafeBggUrl());
+        pasteUpsCombo.setSelectedIndex(game.getRequiresPasteUps() ? 0 : 1);
+        rawCostField.setText(game.getImportCost().setScale(2, RoundingMode.HALF_UP).toString());
+        retailPriceField.setText(game.getRetailValue().setScale(2, RoundingMode.HALF_UP).toString());
     }
 
     private void setupQuantitySpinner() {
@@ -103,36 +108,44 @@ public class EditItemDialog extends JDialog {
         doc.setDocumentFilter(new DecimalDocumentFilter());
     }
 
-    private void onOK() throws MalformedURLException {
+    private void onOK() {
         // add your code here
-        URL url;
-        if (urlField.getText().isEmpty()) {
-            url = null;
-        } else {
-            url = new URL(urlField.getText());
-        }
+        try {
+            URL url;
+            if (urlField.getText().isEmpty()) {
+                url = null;
+            } else {
+                url = new URL(urlField.getText());
+            }
 
-        var game = new Game(
-                titleField.getText(),
-                (GameCategory) typeCombo.getSelectedItem(),
-                (GameRarity) rarityCombo.getSelectedItem(),
-                url,
-                pasteUpsCombo.getSelectedIndex() == 0,
-                new BigDecimal(rawCostField.getText()),
-                new BigDecimal(retailPriceField.getText())
-        );
-        newEntry = new CatalogueEntry(game, (Integer)quantitySpinner.getValue());
-        dispose();
+            var game = new Game(
+                    titleField.getText(),
+                    (GameCategory) Objects.requireNonNull(typeCombo.getSelectedItem()),
+                    (GameRarity) Objects.requireNonNull(rarityCombo.getSelectedItem()),
+                    url,
+                    pasteUpsCombo.getSelectedIndex() == 0,
+                    new BigDecimal(rawCostField.getText()),
+                    new BigDecimal(retailPriceField.getText())
+            );
+            newEntry = new CatalogueEntry(game, (Integer) quantitySpinner.getValue());
+            dispose();
+        } catch (MalformedURLException mue) {
+            new ErrorDialog(this).open(mue.getMessage(), "Invalid URL");
+        } catch (NullPointerException npe) {
+            new ErrorDialog(this).open(npe.getMessage(), "Invalid Combo Box");
+        }
     }
 
     private void onCancel() {
-        // add your code here if necessary
+        newEntry = null;
         dispose();
     }
 
-    public static void openDialog(CatalogueEntry c) {
+    public static CatalogueEntry openDialog(CatalogueEntry c) {
         EditItemDialog dialog = new EditItemDialog(c);
         dialog.pack();
         dialog.setVisible(true);
+
+        return dialog.newEntry;
     }
 }
