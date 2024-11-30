@@ -1,8 +1,8 @@
 package catalogue
 
 import Game
-import GameCategory
-import GameRarity
+import common.GameCategory
+import common.GameRarity
 import errors.CsvParsingException
 import errors.UnknownPasteUpsException
 import util.NumUtils

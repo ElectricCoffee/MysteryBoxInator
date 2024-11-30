@@ -1,6 +1,9 @@
 package mysteryBox.assembler
 
 import catalogue.Catalogue
+import common.GameCategory
+import common.GameRarity
+import common.ItemPickStatus
 import config.Config
 import mysteryBox.MysteryBox
 import java.math.BigDecimal

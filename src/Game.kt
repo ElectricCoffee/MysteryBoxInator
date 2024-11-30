@@ -1,3 +1,5 @@
+import common.GameCategory
+import common.GameRarity
 import java.math.BigDecimal
 import java.net.MalformedURLException
 import java.net.URL

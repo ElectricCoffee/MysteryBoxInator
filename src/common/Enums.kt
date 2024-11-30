@@ -1,3 +1,5 @@
+package common
+
 import errors.UnknownCategoryException
 import java.math.BigDecimal
 

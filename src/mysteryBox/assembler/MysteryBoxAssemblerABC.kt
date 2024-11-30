@@ -1,10 +1,11 @@
 package mysteryBox.assembler
 
-import Budget
+import common.Budget
 import Game
-import GameRarity
-import ItemPickStatus
+import common.GameRarity
+import common.ItemPickStatus
 import catalogue.Catalogue
+import common.GameCategory
 import config.Config
 import mysteryBox.MysteryBox
 import util.RandUtils

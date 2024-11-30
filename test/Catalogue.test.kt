@@ -1,13 +1,13 @@
 import catalogue.Catalogue
+import common.GameCategory
+import common.GameRarity
 import config.defaultConfig
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import java.math.BigDecimal
 import java.net.URL
-import java.nio.file.InvalidPathException
 import java.nio.file.Paths
-import kotlin.io.path.Path
 
 class CatalogueTest {
     @Test fun `Can add games to catalogue`() {

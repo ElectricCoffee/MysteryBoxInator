@@ -1,4 +1,6 @@
 import catalogue.Catalogue
+import common.GameCategory
+import common.GameRarity
 import config.defaultConfig
 import mysteryBox.MysteryBox
 import mysteryBox.assembler.MysteryBoxAssemblerABC
