@@ -3,6 +3,8 @@ package ui;
 import catalogue.Catalogue;
 import config.Config;
 import io.Filing;
+import mysteryBox.assembler.MysteryBoxAssemblerFactory;
+import mysteryBox.assembler.TrickTakingBoxAssembler;
 import ui.menu.MenuBar;
 import ui.util.TableUtils;
 import ui.util.ErrorDialog;
@@ -53,7 +55,12 @@ public class MainWindow extends JFrame {
             }
 
             editButton.addActionListener((e) -> EditItemDialog.openDialog(null)); // TODO: replace null with actual code
-            generateMysteriesButton.addActionListener((e) -> GenerateMysteryBoxDialog.openDialog(config, catalogue));
+            generateMysteriesButton.addActionListener((e) -> {
+                var result = GenerateMysteryBoxDialog.openDialog(config, catalogue);
+                var assembler = MysteryBoxAssemblerFactory.create(config, catalogue, result);
+                var mysteryBox = assembler.generateBox();
+                mysteryDtm.addRow(mysteryBox.toTableArray());
+            });
 
         } catch (IOException ioe) {
             new ErrorDialog(this).open(ioe.getMessage(), "File Error!");
