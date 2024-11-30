@@ -81,8 +81,7 @@ class CatalogueTest {
     }
 
     @Test fun `can load the csv from file`() {
-        val uri = javaClass.getResource("/test-data.csv")?.toURI() ?: throw Exception("couldn't find the file")
-        val path = Paths.get(uri)
+        val path = ResourceHelper.getTestDataPath()
         val catalogue = Catalogue.fromFile(defaultConfig, path, startIndex = 1)
 
         val expectedEntries = 61
@@ -98,9 +97,7 @@ class CatalogueTest {
     }
 
     @Test fun `can output a csv list`() {
-        val uri = javaClass.getResource("/test-data.csv")?.toURI() ?: throw Exception("couldn't find the file")
-        val path = Paths.get(uri)
-        val catalogue = Catalogue.fromFile(defaultConfig, path, startIndex = 1)
+        val catalogue = ResourceHelper.getTestCatalogue()
 
         val output = catalogue.toCsv(true)
 
