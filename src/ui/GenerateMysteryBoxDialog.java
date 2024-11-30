@@ -4,9 +4,11 @@ import catalogue.Catalogue;
 import common.GameCategory;
 import config.Config;
 import kotlin.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.math.BigDecimal;
 
 public class GenerateMysteryBoxDialog extends JDialog {
     private JPanel contentPane;
@@ -14,8 +16,7 @@ public class GenerateMysteryBoxDialog extends JDialog {
     private JButton buttonCancel;
     private JComboBox<MysteryBoxDialogOption> sizeCombo;
     private JComboBox<String> typeCombo;
-    private MysteryBoxDialogOption sizeOption;
-    private GameCategory typeOption;
+    private Pair<BigDecimal, GameCategory> output;
 
     public GenerateMysteryBoxDialog(Config config, Catalogue catalogue) {
         setTitle("Choose what mystery box to generate");
@@ -51,11 +52,7 @@ public class GenerateMysteryBoxDialog extends JDialog {
             sizeCombo.addItem(new MysteryBoxDialogOption(k, v))
         );
 
-        sizeCombo.addActionListener((e) -> {
-            @SuppressWarnings("unchecked")
-            var src = (JComboBox<MysteryBoxDialogOption>)e.getSource();
-            sizeOption = (MysteryBoxDialogOption)src.getSelectedItem();
-        });
+        sizeCombo.setSelectedIndex(0);
     }
 
     private void setupTypeCombo() {
@@ -63,35 +60,34 @@ public class GenerateMysteryBoxDialog extends JDialog {
             typeCombo.addItem(i);
         }
 
-        typeCombo.addActionListener((e) -> {
-            @SuppressWarnings("unchecked")
-            var src = (JComboBox<String>)e.getSource(); // god this is ugly... thanks Java
-            var selected = (String)src.getSelectedItem();
-            assert selected != null;
-            if (selected.startsWith("T")) {
-                typeOption = GameCategory.TRICK_TAKER;
-            } else if (selected.startsWith("V")) {
-                typeOption = GameCategory.VARIETY;
-            } else {
-                typeOption = null;
-            }
-        });
+        typeCombo.setSelectedIndex(0);
     }
 
     private void onOK() {
-        // add your code here
+        var sizeOption = (MysteryBoxDialogOption)sizeCombo.getSelectedItem();
+        var selected = (String)typeCombo.getSelectedItem();
+        assert selected != null;
+        var typeOption = selected.startsWith("T")
+                ? GameCategory.TRICK_TAKER
+                : (selected.startsWith("V") ? GameCategory.VARIETY : null);
+
+        assert sizeOption != null;
+        output = new Pair<>(sizeOption.getPrice(), typeOption);
+
         dispose();
     }
 
     private void onCancel() {
         // add your code here if necessary
+        output = null;
         dispose();
     }
 
-    public static void openDialog(Config config, Catalogue catalogue) {
+    public static Pair<BigDecimal, GameCategory> openDialog(Config config, Catalogue catalogue) {
         GenerateMysteryBoxDialog dialog = new GenerateMysteryBoxDialog(config, catalogue);
         dialog.pack();
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
+        return dialog.output;
     }
 }
