@@ -88,7 +88,7 @@ public class MainWindow extends JFrame {
 
     DefaultTableModel configMysteryBoxTable() {
         var dtm = new DefaultTableModel(null,
-                new Object[] {"Id", "Units", "Items", "Type", "Total Item Value", "Box Price", "Price Deviance"});
+                new Object[] {"Id", "Units", "Items", "Type", "Total Item Value", "Box Price", "Price Deviance", "Sold?"});
 
         dtm.addTableModelListener((e) -> {}); // to be filled
 

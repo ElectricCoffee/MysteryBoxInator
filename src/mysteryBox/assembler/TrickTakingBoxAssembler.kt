@@ -48,6 +48,6 @@ class TrickTakingBoxAssembler(config: Config, catalogue: Catalogue, value: BigDe
             }
         }
 
-        return MysteryBox(pickedItems, budget, GameCategory.TRICK_TAKER, budgetStatus())
+        return MysteryBox(pickedItems, budget, GameCategory.TRICK_TAKER, budgetStatus(), false)
     }
 }

@@ -7,9 +7,9 @@ import util.NumUtils
 import java.math.BigDecimal
 import java.util.*
 
-data class MysteryBox(val id: UUID, val items: List<Game>, val targetValue: BigDecimal, val boxType: GameCategory, val budgetStatus: Budget = Budget.OnBudget) {
-    constructor(items: List<Game>, targetValue: BigDecimal, boxType: GameCategory, budgetStatus: Budget)
-            : this(UUID.randomUUID(), items, targetValue, boxType, budgetStatus)
+data class MysteryBox(val id: UUID, val items: List<Game>, val targetValue: BigDecimal, val boxType: GameCategory, val budgetStatus: Budget = Budget.OnBudget, val sold: Boolean = false) {
+    constructor(items: List<Game>, targetValue: BigDecimal, boxType: GameCategory, budgetStatus: Budget, sold: Boolean)
+            : this(UUID.randomUUID(), items, targetValue, boxType, budgetStatus, sold)
 
     val totalValue: BigDecimal
         get() = items.sumOf { it.retailValue }
@@ -29,7 +29,8 @@ data class MysteryBox(val id: UUID, val items: List<Game>, val targetValue: BigD
             boxType.toString(),
             NumUtils.asPrice(totalRetailValue),
             NumUtils.asPrice(targetValue),
-            "Off by ${NumUtils.asPrice(targetValue - totalRetailValue)} (${budgetStatus.toPercentString()})"
+            "Off by ${NumUtils.asPrice(targetValue - totalRetailValue)} (${budgetStatus.toPercentString()})",
+            if (sold) "Yes" else "No"
         )
     }
 }
