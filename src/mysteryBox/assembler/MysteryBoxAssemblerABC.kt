@@ -76,7 +76,7 @@ abstract class MysteryBoxAssemblerABC(protected val config: Config, private val 
     private fun pickHelper(items: MutableList<Game>, checkUpperLimit: Boolean = false, filter: (Game) -> Boolean = { true }): ItemPickStatus {
         if (items.isEmpty()) return ItemPickStatus.FAILURE_NO_ITEMS;
         val filteredList = items.filter { filter(it) && withinBudget(it.retailValue, checkUpperLimit) }
-        println(filteredList.map { "${it.title} ${it.rarity}" })
+//        println(filteredList.map { "${it.title} ${it.rarity}" })
         val item = RandUtils.pickRandom(filteredList)
 
         if (item == null) {
@@ -184,13 +184,13 @@ abstract class MysteryBoxAssemblerABC(protected val config: Config, private val 
         val uncommon = Pair(GameRarity.UNCOMMON, calcMetric(::countUncommon, lst) { pctUncommon - ratio.uncommonAsFraction })
         val rare = Pair(GameRarity.RARE, calcMetric(::countRare, lst) { pctRare - ratio.rareAsFraction })
 
-        println("metrics: $common, $uncommon, $rare, ${Double.POSITIVE_INFINITY}")
+//        println("metrics: $common, $uncommon, $rare, ${Double.POSITIVE_INFINITY}")
 
         // cursed and nsfw implementation of minimum because the built-in doesn't do what I want.
         val result = listOf(common, uncommon, rare)
             .fold(Pair(GameRarity.COMMON, Double.POSITIVE_INFINITY)) { a, b -> if (a.second < b.second) a else b }
                 .first
-        println("Picking $result")
+//        println("Picking $result")
         return result
     }
 
