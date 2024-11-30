@@ -27,7 +27,7 @@ class VarietyBoxAssembler(config: Config, catalogue: Catalogue, value: BigDecima
         var tryAgainOverBudget = false
 
         while(true) {
-            val result = when (pickNext()) {
+            val result = when (pickNext(varieties)) {
                 GameRarity.COMMON -> pickCommon(varieties, tryAgainOverBudget)
                 GameRarity.UNCOMMON -> pickUncommon(varieties, tryAgainOverBudget)
                 GameRarity.RARE, GameRarity.MYTHIC -> pickRare(varieties, tryAgainOverBudget)

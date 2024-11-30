@@ -27,13 +27,13 @@ class TrickTakingBoxAssembler(config: Config, catalogue: Catalogue, value: BigDe
         var tryAgainOverBudget = false
 
         while(true) {
-            val result = when (pickNext()) {
+            val result = when (pickNext(trickTakers)) {
                 GameRarity.COMMON -> pickCommon(trickTakers, tryAgainOverBudget)
                 GameRarity.UNCOMMON -> pickUncommon(trickTakers, tryAgainOverBudget)
                 GameRarity.RARE, GameRarity.MYTHIC -> pickRare(trickTakers, tryAgainOverBudget)
             }
 
-            println("$result, $tryAgainOverBudget")
+            println("$result, go over budget? $tryAgainOverBudget, budget: $budget, spent: $moneySpent, left: $moneyLeft")
 
             when (result) {
                 ItemPickStatus.SUCCESS -> continue

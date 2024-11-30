@@ -43,15 +43,20 @@ abstract class MysteryBoxAssemblerABC(protected val config: Config, private val 
         get() = upperLimit - moneySpent
 
     // nb: is a number between 0 and 1
-    protected val pctCommon: Double
+    private val pctCommon: Double
         get() = pickedItems.count { it.rarity == GameRarity.COMMON }.toDouble() / pickedItems.count().toDouble()
 
-    protected val pctUncommon: Double
+    private val pctUncommon: Double
         get() = pickedItems.count { it.rarity == GameRarity.UNCOMMON }.toDouble() / pickedItems.count().toDouble()
 
     // nb: we're counting mythics as rare here
-    protected val pctRare: Double
+    private val pctRare: Double
         get() = pickedItems.count { it.rarity == GameRarity.RARE || it.rarity == GameRarity.MYTHIC }.toDouble() / pickedItems.count().toDouble()
+
+    private fun countCommon(games: List<Game>) = games.count { it.rarity == GameRarity.COMMON }
+    private fun countUncommon(games: List<Game>) = games.count { it.rarity == GameRarity.UNCOMMON }
+    private fun countRare(games: List<Game>) = games.count { it.rarity == GameRarity.RARE }
+    private fun countMythic(games: List<Game>) = games.count { it.rarity == GameRarity.MYTHIC }
 
     /**
      * Checks if the value we want to pick is within budget
@@ -70,7 +75,9 @@ abstract class MysteryBoxAssemblerABC(protected val config: Config, private val 
      */
     private fun pickHelper(items: MutableList<Game>, checkUpperLimit: Boolean = false, filter: (Game) -> Boolean = { true }): ItemPickStatus {
         if (items.isEmpty()) return ItemPickStatus.FAILURE_NO_ITEMS;
-        val item = RandUtils.pickRandom(items.filter { filter(it) && withinBudget(it.retailValue, checkUpperLimit) })
+        val filteredList = items.filter { filter(it) && withinBudget(it.retailValue, checkUpperLimit) }
+        println(filteredList.map { "${it.title} ${it.rarity}" })
+        val item = RandUtils.pickRandom(filteredList)
 
         if (item == null) {
             return if (checkUpperLimit) {
@@ -164,18 +171,27 @@ abstract class MysteryBoxAssemblerABC(protected val config: Config, private val 
      * The way it does this is by comparing the current box percentage with the expected percentage and subtracts the two numbers.
      * If the number is positive, then we have "too many" of that item in the box. If the number is negative we have "too few".
      * We then figure out the minimum value amongst the percentages.
+     *
+     * If a given category has no items remaining, we set that metric to infinity, thus making it so it's never picked
      */
-    protected fun pickNext(): GameRarity {
+    protected fun pickNext(lst: List<Game>): GameRarity {
         val ratio = config.rarityRatio
+        // if the count is 0, set the metric to +∞, else calculate the metric as normal
+        fun calcMetric(counter: (g: List<Game>) -> Int, lst: List<Game>, calc: () -> Double) = if (counter(lst) > 0) calc() else Double.POSITIVE_INFINITY
+
         // nb: if the values are positive, it means we are above the desired ratio, and if negative it means we are under
-        val common = Pair(GameRarity.COMMON, pctCommon - ratio.commonAsFraction)
-        val uncommon = Pair(GameRarity.UNCOMMON, pctUncommon - ratio.uncommonAsFraction)
-        val rare = Pair(GameRarity.RARE, pctRare - ratio.rareAsFraction)
+        val common = Pair(GameRarity.COMMON, calcMetric(::countCommon, lst) { pctCommon - ratio.commonAsFraction })
+        val uncommon = Pair(GameRarity.UNCOMMON, calcMetric(::countUncommon, lst) { pctUncommon - ratio.uncommonAsFraction })
+        val rare = Pair(GameRarity.RARE, calcMetric(::countRare, lst) { pctRare - ratio.rareAsFraction })
+
+        println("metrics: $common, $uncommon, $rare, ${Double.POSITIVE_INFINITY}")
 
         // cursed and nsfw implementation of minimum because the built-in doesn't do what I want.
-        return listOf(common, uncommon, rare)
+        val result = listOf(common, uncommon, rare)
             .fold(Pair(GameRarity.COMMON, Double.POSITIVE_INFINITY)) { a, b -> if (a.second < b.second) a else b }
                 .first
+        println("Picking $result")
+        return result
     }
 
     init {
