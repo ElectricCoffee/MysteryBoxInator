@@ -16,7 +16,7 @@ public class GenerateMysteryBoxDialog extends JDialog {
     private JButton buttonCancel;
     private JComboBox<MysteryBoxDialogOption> sizeCombo;
     private JComboBox<String> typeCombo;
-    private Pair<BigDecimal, GameCategory> output;
+    private MysteryBoxDialogResult output;
 
     public GenerateMysteryBoxDialog(Config config, Catalogue catalogue) {
         setTitle("Choose what mystery box to generate");
@@ -72,7 +72,7 @@ public class GenerateMysteryBoxDialog extends JDialog {
                 : (selected.startsWith("V") ? GameCategory.VARIETY : null);
 
         assert sizeOption != null;
-        output = new Pair<>(sizeOption.getPrice(), typeOption);
+        output = new MysteryBoxDialogResult(sizeOption.getPrice(), typeOption, false);
 
         dispose();
     }
@@ -83,7 +83,7 @@ public class GenerateMysteryBoxDialog extends JDialog {
         dispose();
     }
 
-    public static Pair<BigDecimal, GameCategory> openDialog(Config config, Catalogue catalogue) {
+    public static MysteryBoxDialogResult openDialog(Config config, Catalogue catalogue) {
         GenerateMysteryBoxDialog dialog = new GenerateMysteryBoxDialog(config, catalogue);
         dialog.pack();
         dialog.setLocationRelativeTo(null);
