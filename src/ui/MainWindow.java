@@ -24,8 +24,9 @@ public class MainWindow extends JFrame {
     private JTabbedPane tabPane;
     private JPanel catalogueTab;
     private JPanel mysteryBoxTab;
-    private JButton generateMysteriesButton;
+    private JButton editButton;
     private JButton exportBtn;
+    private JButton generateMysteriesButton;
 
     public MainWindow() {
         super("Mystery-Box-Inator");
@@ -50,6 +51,9 @@ public class MainWindow extends JFrame {
             if (!catalogue.getGamesList().isEmpty()) {
                 TableUtils.populateCatalogueTable(config, catalogue, catalogueDtm);
             }
+
+            editButton.addActionListener((e) -> EditItemDialog.openDialog(null)); // TODO: replace null with actual code
+            generateMysteriesButton.addActionListener((e) -> GenerateMysteryBoxDialog.openDialog(config, catalogue));
 
         } catch (IOException ioe) {
             new ErrorDialog(this).open(ioe.getMessage(), "File Error!");
