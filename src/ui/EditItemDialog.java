@@ -1,19 +1,55 @@
 package ui;
 
 import catalogue.CatalogueEntry;
+import common.GameCategory;
+import common.GameRarity;
+import game.Game;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
 import java.awt.event.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
 
 public class EditItemDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
+    private JTextField titleField;
+    private JSpinner quantitySpinner;
+    private JComboBox<GameCategory> typeCombo;
+    private JComboBox<GameRarity> rarityCombo;
+    private JTextField urlField;
+    private JComboBox<String> pasteUpsCombo;
+    private JTextField rawCostField;
+    private JTextField retailPriceField;
+    private CatalogueEntry newEntry;
 
     public EditItemDialog(CatalogueEntry catalogueEntry) {
+        setTitle("Edit game.Game/Accessory");
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+        setupQuantitySpinner();
+        setupTypeCombo();
+        setupRarityCombo();
+        setupPasteUpsCombo();
+        setupRawCostField();
+        setupRetailPriceField();
+
+        var game = catalogueEntry.getGame();
+
+        titleField.setText(catalogueEntry.getTitle());
+        quantitySpinner.setValue(catalogueEntry.getQuantity());
+        typeCombo.setSelectedItem(game.getGameCategory());
+        rarityCombo.setSelectedItem(game.getRarity());
+        urlField.setText(game.getSafeBggUrl());
+        pasteUpsCombo.setSelectedIndex(game.getRequiresPasteUps() ? 0 : 1);
+        rawCostField.setText(game.getImportCost().setScale(2, RoundingMode.HALF_UP).toString());
+        retailPriceField.setText(game.getRetailValue().setScale(2, RoundingMode.HALF_UP).toString());
 
         buttonOK.addActionListener(e -> onOK());
 
@@ -34,8 +70,58 @@ public class EditItemDialog extends JDialog {
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
-    private void onOK() {
+    private void setupQuantitySpinner() {
+        var editor = (JSpinner.DefaultEditor)quantitySpinner.getEditor();
+        editor.getTextField().setHorizontalAlignment(SwingConstants.LEFT);
+    }
+
+    private void setupTypeCombo() {
+        GameCategory.getEntries().forEach((e) -> {
+            typeCombo.addItem(e);
+        });
+    }
+
+    private void setupRarityCombo() {
+        GameRarity.getEntries().forEach(e -> {
+            rarityCombo.addItem(e);
+        });
+    }
+
+    private void setupPasteUpsCombo() {
+        for (var e : new String[] { "Yes", "No" }) {
+            pasteUpsCombo.addItem(e);
+        }
+    }
+
+    private void setupRawCostField() {
+        var doc = (AbstractDocument)rawCostField.getDocument();
+        doc.setDocumentFilter(new DecimalDocumentFilter());
+    }
+
+    private void setupRetailPriceField() {
+        var doc = (AbstractDocument)retailPriceField.getDocument();
+        doc.setDocumentFilter(new DecimalDocumentFilter());
+    }
+
+    private void onOK() throws MalformedURLException {
         // add your code here
+        URL url;
+        if (urlField.getText().isEmpty()) {
+            url = null;
+        } else {
+            url = new URL(urlField.getText());
+        }
+
+        var game = new Game(
+                titleField.getText(),
+                (GameCategory) typeCombo.getSelectedItem(),
+                (GameRarity) rarityCombo.getSelectedItem(),
+                url,
+                pasteUpsCombo.getSelectedIndex() == 0,
+                new BigDecimal(rawCostField.getText()),
+                new BigDecimal(retailPriceField.getText())
+        );
+        newEntry = new CatalogueEntry(game, (Integer)quantitySpinner.getValue());
         dispose();
     }
 
