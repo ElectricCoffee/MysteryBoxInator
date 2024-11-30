@@ -67,9 +67,9 @@ sealed class Budget(val amount: BigDecimal) {
 
     fun toPercentString(): String {
         return when (this) {
-            is OverBudget -> "Over (+${amountAsPercentage().setScale(2, RoundingMode.HALF_UP)}%)"
-            is UnderBudget -> "Under (${amountAsPercentage().setScale(2, RoundingMode.HALF_UP)}%)"
-            is OnBudget -> "OK (0%)"
+            is OverBudget -> "+${amountAsPercentage().setScale(2, RoundingMode.HALF_UP)}%"
+            is UnderBudget -> "${amountAsPercentage().setScale(2, RoundingMode.HALF_UP)}%"
+            is OnBudget -> "0%"
         }
     }
 }

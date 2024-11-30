@@ -57,6 +57,9 @@ public class MainWindow extends JFrame {
             editButton.addActionListener((e) -> EditItemDialog.openDialog(null)); // TODO: replace null with actual code
             generateMysteriesButton.addActionListener((e) -> {
                 var result = GenerateMysteryBoxDialog.openDialog(config, catalogue);
+                if (result == null) {
+                    return;
+                }
                 var assembler = MysteryBoxAssemblerFactory.create(config, catalogue, result);
                 var mysteryBox = assembler.generateBox();
                 mysteryDtm.addRow(mysteryBox.toTableArray());
@@ -85,7 +88,7 @@ public class MainWindow extends JFrame {
 
     DefaultTableModel configMysteryBoxTable() {
         var dtm = new DefaultTableModel(null,
-                new Object[] {"Id", "Items", "Type", "Sell Price", "Budget", "Budget Status"});
+                new Object[] {"Id", "Units", "Items", "Type", "Total Item Value", "Box Price", "Price Deviance"});
 
         dtm.addTableModelListener((e) -> {}); // to be filled
 

@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.awt.event.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class GenerateMysteryBoxDialog extends JDialog {
     private JPanel contentPane;
@@ -48,8 +50,12 @@ public class GenerateMysteryBoxDialog extends JDialog {
     private void setupSizeCombo(Config config) {
         var mysteryBoxAmountMap = config.component5();
 
-        mysteryBoxAmountMap.forEach((k, v) ->
-            sizeCombo.addItem(new MysteryBoxDialogOption(k, v))
+        mysteryBoxAmountMap
+                .entrySet()
+                .stream()
+                .sorted(Comparator.comparing(a -> a.getValue().component1()))
+                .forEach((e) ->
+            sizeCombo.addItem(new MysteryBoxDialogOption(e.getKey(), e.getValue()))
         );
 
         sizeCombo.setSelectedIndex(0);

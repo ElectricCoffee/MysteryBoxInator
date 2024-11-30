@@ -20,13 +20,16 @@ data class MysteryBox(val id: UUID, val items: List<Game>, val targetValue: BigD
     fun toTableArray(): Array<Any> {
 //        arrayOf<Any>("Id", "Items", "Type", "Sell Price", "Budget", "Budget Status"));
 
+        val totalRetailValue = items.sumOf { it.retailValue }
+
         return arrayOf(
             id.toString(),
+            items.count(),
             items.joinToString(", ") { it.title },
             boxType.toString(),
-            NumUtils.asPrice(items.sumOf { it.retailValue }),
+            NumUtils.asPrice(totalRetailValue),
             NumUtils.asPrice(targetValue),
-            budgetStatus.toPercentString()
+            "Off by ${NumUtils.asPrice(targetValue - totalRetailValue)} (${budgetStatus.toPercentString()})"
         )
     }
 }
