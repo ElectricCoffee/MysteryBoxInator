@@ -9,6 +9,7 @@ import util.NumUtils
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.net.URL
+import java.util.Vector
 
 data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
     val title: String
@@ -59,6 +60,10 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
             NumUtils.asPrice(game.profit),
             NumUtils.asPrice(totalProfit),
         )
+    }
+
+    fun toTableVector(): Vector<Any> {
+        return Vector(toTableArray().toList())
     }
 
     companion object {

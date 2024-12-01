@@ -28,7 +28,7 @@ class CatalogueEditButtonActionListener(private val config: Config, private val 
             catalogue.deleteEntry(title)
         }
 
-        catalogueDtm.dataVector[i] = Vector(newCatalogueItem.toTableArray().toList())
+        catalogueDtm.dataVector[i] = newCatalogueItem.toTableVector()
 
         writeWorkingCopy(config, catalogue)
         catalogueDtm.fireTableDataChanged()
