@@ -55,6 +55,14 @@ class Catalogue(private val config: Config) {
 
     fun getCatalogueValue() = gamesList.values.sumOf { it.totalValue }
 
+    fun setEntry(title: String, catalogueEntry: CatalogueEntry) {
+        gamesList[title] = catalogueEntry
+    }
+
+    fun deleteEntry(title: String) {
+        gamesList.remove(title)
+    }
+
     val countGames: Int
         get() = gamesList.count()
 

@@ -12,6 +12,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.dnd.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.math.RoundingMode;
 
@@ -54,12 +56,7 @@ public class MainWindow extends JFrame {
                 TableUtils.populateCatalogueTable(config, catalogue, catalogueDtm);
             }
 
-            editButton.addActionListener((e) -> {
-                var i = productTable.getSelectedRow();
-                var title = (String)catalogueDtm.getValueAt(i, 0); // the 0th column is the title
-                var item = catalogue.getEntry(title);
-                EditItemDialog.openDialog(item);
-            });
+            editButton.addActionListener(new CatalogueEditButtonActionListener(config, catalogue, productTable));
             generateMysteriesButton.addActionListener((e) -> {
                 var result = GenerateMysteryBoxDialog.openDialog(config, catalogue);
                 if (result == null) {
