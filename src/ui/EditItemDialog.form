@@ -64,7 +64,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="game.Game Title"/>
+              <text value="Game Title*"/>
             </properties>
           </component>
           <component id="5ba3c" class="javax.swing.JTextField" binding="titleField">
@@ -82,7 +82,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="Quantity"/>
+              <text value="Quantity*"/>
             </properties>
           </component>
           <component id="52ddb" class="javax.swing.JSpinner" binding="quantitySpinner">
@@ -98,7 +98,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="Type"/>
+              <text value="Type*"/>
             </properties>
           </component>
           <component id="b00eb" class="javax.swing.JComboBox" binding="typeCombo">
@@ -114,7 +114,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="Rarity"/>
+              <text value="Rarity*"/>
             </properties>
           </component>
           <component id="18ef4" class="javax.swing.JComboBox" binding="rarityCombo">
@@ -148,7 +148,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="Requires Paste-Ups?"/>
+              <text value="Requires Paste-Ups?*"/>
             </properties>
           </component>
           <component id="b410c" class="javax.swing.JComboBox" binding="pasteUpsCombo">
@@ -164,7 +164,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="Raw Cost"/>
+              <text value="Raw Cost*"/>
             </properties>
           </component>
           <component id="1a8b9" class="javax.swing.JTextField" binding="rawCostField">
@@ -182,7 +182,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="Retail Price"/>
+              <text value="Retail Price*"/>
             </properties>
           </component>
           <component id="e27a" class="javax.swing.JLabel">

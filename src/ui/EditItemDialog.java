@@ -30,7 +30,11 @@ public class EditItemDialog extends JDialog {
     private CatalogueEntry newEntry;
 
     public EditItemDialog(CatalogueEntry catalogueEntry) {
-        setTitle("Edit game.Game/Accessory");
+        if (catalogueEntry != null) {
+            setTitle("Edit Game/Accessory");
+        } else {
+            setTitle("Add Game/Accessory");
+        }
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -63,6 +67,17 @@ public class EditItemDialog extends JDialog {
     }
 
     private void populateFields(CatalogueEntry catalogueEntry) {
+        if (catalogueEntry == null) {
+            var game = catalogueEntry.getGame();
+
+            quantitySpinner.setValue(0);
+            typeCombo.setSelectedIndex(0);
+            rarityCombo.setSelectedIndex(0);
+            pasteUpsCombo.setSelectedIndex(1); // make "no" the default
+            rawCostField.setText("0.00");
+            retailPriceField.setText("0.00");
+            return;
+        }
         var game = catalogueEntry.getGame();
 
         titleField.setText(catalogueEntry.getTitle());
