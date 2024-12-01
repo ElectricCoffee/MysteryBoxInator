@@ -1,5 +1,6 @@
 package mysteryBox
 
+import com.moandjiezana.toml.TomlWriter
 import config.Config
 import java.util.UUID
 
@@ -17,4 +18,6 @@ class MysteryBoxList() {
     fun addBoxes(boxes: Map<UUID, MysteryBox>) {
         mysteryBoxes.putAll(boxes)
     }
+
+    fun toToml(): String = TomlWriter().write(this)
 }

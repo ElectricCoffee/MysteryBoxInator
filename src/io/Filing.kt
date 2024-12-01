@@ -116,7 +116,7 @@ object Filing {
 
         ensureOutputDir(config)
 
-        val toml = TomlWriter().write(mysteryBoxList)
+        val toml = mysteryBoxList.toToml()
 
         Files.write(
             outputFile,
