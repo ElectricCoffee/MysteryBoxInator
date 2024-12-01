@@ -35,7 +35,7 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
         arrayOf(
             game.title,
             quantity.toString(),
-            game.gameCategory.toShortString(),
+            game.gameCategory.toHumanReadable().toShortString(),
             game.rarity.value.toString(),
             game.bggURL?.toString() ?: "",
             if (game.requiresPasteUps) "TRUE" else "FALSE",
@@ -50,8 +50,8 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
         return arrayOf(
             game.title,
             quantity.toString(),
-            game.gameCategory.toString(),
-            game.rarity.toString(),
+            game.gameCategory.toHumanReadable().toString(),
+            game.rarity.toHumanReadable().toString(),
             game.bggId ?: "N/A",
             if (game.requiresPasteUps) "Yes" else "No",
             NumUtils.asPrice(game.importCost),

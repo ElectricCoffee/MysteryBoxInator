@@ -1,3 +1,4 @@
+import com.moandjiezana.toml.Toml
 import common.Budget
 import common.GameCategory
 import common.GameRarity
@@ -23,39 +24,18 @@ class MysteryBoxTest {
         Assertions.assertTrue(box.items.count { it.rarity == GameRarity.MYTHIC } < 2, "There should be 0-1 mythic games in the box")
         Assertions.assertTrue(box.items.count() < 15, "There are 15 trick-takers below mythic rarity in the catalogue. at a value of 135 it should pick less than that")
     }
-    
-    @Test fun `can create a toml file of a mystery box`() {
-        val games = listOf(
-            Game("Niner", GameCategory.TRICK_TAKER, GameRarity.RARE, null, false, BigDecimal("12.99"), BigDecimal("24.99")),
-            Game("Fishing", GameCategory.TRICK_TAKER, GameRarity.UNCOMMON, null, false, BigDecimal("12.99"), BigDecimal("24.99")),
-            Game("Cho-Han Trick-Taking Game", GameCategory.TRICK_TAKER, GameRarity.COMMON, null, false, BigDecimal("13"), BigDecimal("25")),
-            Game("MAD", GameCategory.TRICK_TAKER, GameRarity.RARE, null, false, BigDecimal("16"), BigDecimal("26")),
-            Game("Prey", GameCategory.TRICK_TAKER, GameRarity.UNCOMMON, null, false, BigDecimal("16"), BigDecimal("26"))
-        )
 
-        val id = UUID.fromString("fba50200-33e5-44d9-8d87-f000a677bdd0")
-
-        val mysteryBox = MysteryBox(id, games, BigDecimal("135.00"), GameCategory.TRICK_TAKER, Budget.UnderBudget(BigDecimal("-0.059")), false)
-
-        val boxList = MysteryBoxList()
-        boxList.addBox(mysteryBox)
-
-        val actualString = boxList.toToml()
-
-        val expectedString = """
+    val tomlString = """
             [mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0]
+            id = "fba50200-33e5-44d9-8d87-f000a677bdd0"
             targetValue = 135.00
-            boxType = "Trick-Taker"
+            boxType = "TRICK_TAKER"
             sold = false
-
-            [mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.id]
-            mostSigBits = -313842399138462503
-            leastSigBits = -8248360306922242608
 
             [[mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.items]]
             title = "Niner"
-            gameCategory = "Trick-Taker"
-            rarity = "Rare (3)"
+            gameCategory = "TRICK_TAKER"
+            rarity = "RARE"
             requiresPasteUps = false
             importCost = 12.99
             retailValue = 24.99
@@ -63,8 +43,8 @@ class MysteryBoxTest {
 
             [[mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.items]]
             title = "Fishing"
-            gameCategory = "Trick-Taker"
-            rarity = "Uncommon (2)"
+            gameCategory = "TRICK_TAKER"
+            rarity = "UNCOMMON"
             requiresPasteUps = false
             importCost = 12.99
             retailValue = 24.99
@@ -72,8 +52,8 @@ class MysteryBoxTest {
 
             [[mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.items]]
             title = "Cho-Han Trick-Taking Game"
-            gameCategory = "Trick-Taker"
-            rarity = "Common (1)"
+            gameCategory = "TRICK_TAKER"
+            rarity = "COMMON"
             requiresPasteUps = false
             importCost = 13
             retailValue = 25
@@ -81,8 +61,8 @@ class MysteryBoxTest {
 
             [[mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.items]]
             title = "MAD"
-            gameCategory = "Trick-Taker"
-            rarity = "Rare (3)"
+            gameCategory = "TRICK_TAKER"
+            rarity = "RARE"
             requiresPasteUps = false
             importCost = 16
             retailValue = 26
@@ -90,8 +70,8 @@ class MysteryBoxTest {
 
             [[mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.items]]
             title = "Prey"
-            gameCategory = "Trick-Taker"
-            rarity = "Uncommon (2)"
+            gameCategory = "TRICK_TAKER"
+            rarity = "UNCOMMON"
             requiresPasteUps = false
             importCost = 16
             retailValue = 26
@@ -102,6 +82,29 @@ class MysteryBoxTest {
             
             """.trimIndent()
 
-        Assertions.assertEquals(expectedString, actualString, "Must match the generated toml data")
+    val games = listOf(
+        Game("Niner", GameCategory.TRICK_TAKER, GameRarity.RARE, null, false, BigDecimal("12.99"), BigDecimal("24.99")),
+        Game("Fishing", GameCategory.TRICK_TAKER, GameRarity.UNCOMMON, null, false, BigDecimal("12.99"), BigDecimal("24.99")),
+        Game("Cho-Han Trick-Taking Game", GameCategory.TRICK_TAKER, GameRarity.COMMON, null, false, BigDecimal("13"), BigDecimal("25")),
+        Game("MAD", GameCategory.TRICK_TAKER, GameRarity.RARE, null, false, BigDecimal("16"), BigDecimal("26")),
+        Game("Prey", GameCategory.TRICK_TAKER, GameRarity.UNCOMMON, null, false, BigDecimal("16"), BigDecimal("26"))
+    )
+
+    val id = "fba50200-33e5-44d9-8d87-f000a677bdd0"
+
+    val mysteryBox = MysteryBox(id, games, BigDecimal("135.00"), GameCategory.TRICK_TAKER, Budget(BigDecimal("-0.059")), false)
+
+    val boxList = MysteryBoxList(listOf(mysteryBox))
+    
+    @Test fun `can create a toml file of a mystery box`() {
+        val actualString = boxList.toToml()
+
+        Assertions.assertEquals(tomlString, actualString, "Must match the generated toml data")
+    }
+
+    @Test fun `can generate a mystery box list from toml`() {
+        val mbl = Assertions.assertDoesNotThrow<MysteryBoxList> { MysteryBoxList.fromToml(tomlString) }
+
+        Assertions.assertArrayEquals(games.toTypedArray(), mbl.mysteryBoxes[id]!!.items.toTypedArray(), "the two arrays must be equal")
     }
 }

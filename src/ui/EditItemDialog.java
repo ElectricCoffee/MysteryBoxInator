@@ -3,6 +3,8 @@ package ui;
 import catalogue.CatalogueEntry;
 import common.GameCategory;
 import common.GameRarity;
+import common.HrGameCategory;
+import common.HrGameRarity;
 import game.Game;
 import ui.util.ErrorDialog;
 
@@ -21,8 +23,8 @@ public class EditItemDialog extends JDialog {
     private JButton buttonCancel;
     private JTextField titleField;
     private JSpinner quantitySpinner;
-    private JComboBox<GameCategory> typeCombo;
-    private JComboBox<GameRarity> rarityCombo;
+    private JComboBox<HrGameCategory> typeCombo;
+    private JComboBox<HrGameRarity> rarityCombo;
     private JTextField urlField;
     private JComboBox<String> pasteUpsCombo;
     private JTextField rawCostField;
@@ -97,13 +99,13 @@ public class EditItemDialog extends JDialog {
 
     private void setupTypeCombo() {
         GameCategory.getEntries().forEach((e) -> {
-            typeCombo.addItem(e);
+            typeCombo.addItem(e.toHumanReadable());
         });
     }
 
     private void setupRarityCombo() {
         GameRarity.getEntries().forEach(e -> {
-            rarityCombo.addItem(e);
+            rarityCombo.addItem(e.toHumanReadable());
         });
     }
 
@@ -135,8 +137,8 @@ public class EditItemDialog extends JDialog {
 
             var game = new Game(
                     titleField.getText(),
-                    (GameCategory) Objects.requireNonNull(typeCombo.getSelectedItem()),
-                    (GameRarity) Objects.requireNonNull(rarityCombo.getSelectedItem()),
+                    ((HrGameCategory) Objects.requireNonNull(typeCombo.getSelectedItem())).getCategory(),
+                    ((HrGameRarity) Objects.requireNonNull(rarityCombo.getSelectedItem())).getRarity(),
                     url,
                     pasteUpsCombo.getSelectedIndex() == 0,
                     new BigDecimal(rawCostField.getText()),

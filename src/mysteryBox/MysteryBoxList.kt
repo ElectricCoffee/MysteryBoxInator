@@ -1,11 +1,15 @@
 package mysteryBox
 
+import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
 import config.Config
-import java.util.UUID
 
 class MysteryBoxList() {
-    val mysteryBoxes = mutableMapOf<UUID, MysteryBox>()
+    constructor(boxes: List<MysteryBox>) : this() {
+        addBoxes(boxes)
+    }
+
+    val mysteryBoxes = mutableMapOf<String, MysteryBox>()
 
     fun addBox(box: MysteryBox) {
         mysteryBoxes[box.id] = box
@@ -15,9 +19,15 @@ class MysteryBoxList() {
         boxes.forEach { addBox(it) }
     }
 
-    fun addBoxes(boxes: Map<UUID, MysteryBox>) {
+    fun addBoxes(boxes: Map<String, MysteryBox>) {
         mysteryBoxes.putAll(boxes)
     }
 
     fun toToml(): String = TomlWriter().write(this)
+
+    companion object {
+        fun fromToml(tomlString: String): MysteryBoxList {
+            return Toml().read(tomlString).to(MysteryBoxList::class.java)
+        }
+    }
 }

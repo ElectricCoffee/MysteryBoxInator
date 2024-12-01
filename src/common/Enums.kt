@@ -3,6 +3,7 @@ package common
 import errors.UnknownCategoryException
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.text.DecimalFormat
 
 /**
  * The type of game to be added to the mystery box
@@ -19,23 +20,7 @@ enum class GameCategory {
      */
     VARIETY;
 
-    override fun toString(): String {
-        return when (this.name) {
-            "ACCESSORY" -> "Accessory"
-            "TRICK_TAKER" -> "Trick-Taker"
-            "VARIETY" -> "Variety"
-            else -> this.name // default case just returns the raw name un-prettified.
-        }
-    }
-
-    fun toShortString(): String {
-        return when (this.name) {
-            "ACCESSORY" -> "A"
-            "TRICK_TAKER" -> "TT"
-            "VARIETY" -> "V"
-            else -> this.name // default case just returns the raw name un-prettified.
-        }
-    }
+    fun toHumanReadable(): HrGameCategory = HrGameCategory(this)
 
     companion object {
         fun fromString(string: String): GameCategory {
@@ -49,6 +34,29 @@ enum class GameCategory {
     }
 }
 
+/**
+ * Human Readable (hr) class wrapper to make serialization a bit easier.
+ */
+data class HrGameCategory(val category: GameCategory) {
+    override fun toString(): String {
+        return when (category.name) {
+            "ACCESSORY" -> "Accessory"
+            "TRICK_TAKER" -> "Trick-Taker"
+            "VARIETY" -> "Variety"
+            else -> category.name // default case just returns the raw name un-prettified.
+        }
+    }
+
+    fun toShortString(): String {
+        return when (category.name) {
+            "ACCESSORY" -> "A"
+            "TRICK_TAKER" -> "TT"
+            "VARIETY" -> "V"
+            else -> category.name // default case just returns the raw name un-prettified.
+        }
+    }
+}
+
 enum class ItemPickStatus {
     SUCCESS,
     FAILURE_NO_ITEMS,
@@ -56,21 +64,20 @@ enum class ItemPickStatus {
     FAILURE_NOTHING_AVAILABLE_AT_RAISED_BUDGET
 }
 
-sealed class Budget(val amount: BigDecimal) {
-    class OverBudget(amount: BigDecimal) : Budget(amount)
-    class UnderBudget(amount: BigDecimal) : Budget(amount)
-    data object OnBudget : Budget(BigDecimal.ZERO)
+data class Budget(val amount: BigDecimal) {
+    constructor() : this(BigDecimal.ZERO)
 
     fun amountAsPercentage(): BigDecimal {
         return amount * (100).toBigDecimal()
     }
 
     fun toPercentString(): String {
-        return when (this) {
-            is OverBudget -> "+${amountAsPercentage().setScale(2, RoundingMode.HALF_UP)}%"
-            is UnderBudget -> "${amountAsPercentage().setScale(2, RoundingMode.HALF_UP)}%"
-            is OnBudget -> "0%"
-        }
+        val format = DecimalFormat("+#,##0.00;-#,##0.00")
+        return format.format(amountAsPercentage().setScale(2, RoundingMode.HALF_UP))
+    }
+
+    companion object {
+        fun fromMoneySpent(moneySpent: BigDecimal, budget: BigDecimal) = Budget((moneySpent / budget) - BigDecimal(1))
     }
 }
 
@@ -98,19 +105,23 @@ enum class GameRarity(val value: Int) {
      */
     MYTHIC(4);
 
-    override fun toString(): String {
-        return when (this.name) {
-            "COMMON" -> "Common (${this.value})"
-            "UNCOMMON" -> "Uncommon (${this.value})"
-            "RARE" -> "Rare (${this.value})"
-            "MYTHIC" -> "Mythic (${this.value})"
-            else -> "${this.name} (${this.value})"
-        }
-    }
+    fun toHumanReadable() = HrGameRarity(this)
 
     companion object {
         fun fromInt(int: Int): GameRarity {
             return entries.first { it.value == int }
+        }
+    }
+}
+
+data class HrGameRarity(val rarity: GameRarity) {
+    override fun toString(): String {
+        return when (rarity.name) {
+            "COMMON" -> "Common (${rarity.value})"
+            "UNCOMMON" -> "Uncommon (${rarity.value})"
+            "RARE" -> "Rare (${rarity.value})"
+            "MYTHIC" -> "Mythic (${rarity.value})"
+            else -> "${rarity.name} (${rarity.value})"
         }
     }
 }
