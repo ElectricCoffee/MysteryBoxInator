@@ -59,6 +59,16 @@ class Catalogue(private val config: Config) {
         gamesList[title] = catalogueEntry
     }
 
+    fun updateQuantity(title: String, updater: (Int) -> Int): CatalogueEntry? {
+        val entry = getEntry(title)?.updateQuantity(updater)
+
+        if (entry != null) {
+            gamesList[title] = entry
+        }
+
+        return entry
+    }
+
     fun deleteEntry(title: String) {
         gamesList.remove(title)
     }

@@ -29,6 +29,10 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
 
     fun addGame(extra: Int = 1) = CatalogueEntry(game, quantity + extra)
 
+    fun updateQuantity(updater: (Int) -> Int): CatalogueEntry {
+        return CatalogueEntry(game, updater(quantity))
+    }
+
     /**
      * Creates the sort of array you want to see in the output csv
      */
