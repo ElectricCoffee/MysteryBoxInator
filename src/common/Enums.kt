@@ -64,6 +64,8 @@ enum class ItemPickStatus {
     FAILURE_NOTHING_AVAILABLE_AT_RAISED_BUDGET
 }
 
+// used to be an enum-like data-structure, but isn't anymore.
+// can't be arsed to move it.
 data class Budget(val amount: BigDecimal) {
     constructor() : this(BigDecimal.ZERO)
 
@@ -114,6 +116,9 @@ enum class GameRarity(val value: Int) {
     }
 }
 
+/**
+ * Human Readable (hr) class wrapper to make serialization a bit easier.
+ */
 data class HrGameRarity(val rarity: GameRarity) {
     override fun toString(): String {
         return when (rarity.name) {
