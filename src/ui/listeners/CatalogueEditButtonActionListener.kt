@@ -1,9 +1,10 @@
-package ui
+package ui.listeners
 
 import catalogue.Catalogue
 import catalogue.CatalogueEntry
 import config.Config
 import io.Filing.writeWorkingCopy
+import ui.EditItemDialog
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.util.Vector

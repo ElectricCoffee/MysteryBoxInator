@@ -4,6 +4,8 @@ import catalogue.Catalogue;
 import config.Config;
 import io.Filing;
 import mysteryBox.assembler.MysteryBoxAssemblerFactory;
+import ui.listeners.CatalogueEditButtonActionListener;
+import ui.listeners.CsvDropListener;
 import ui.menu.MenuBar;
 import ui.util.TableUtils;
 import ui.util.ErrorDialog;
@@ -12,8 +14,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.dnd.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.math.RoundingMode;
 

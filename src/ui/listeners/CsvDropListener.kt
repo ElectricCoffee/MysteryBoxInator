@@ -1,4 +1,4 @@
-package ui
+package ui.listeners
 
 import catalogue.Catalogue
 import catalogue.CsvLoadMode
