@@ -195,7 +195,7 @@ abstract class MysteryBoxAssemblerABC(protected val config: Config, private val 
     }
 
     init {
-        catalogue.gamesList.filter { it.value.quantity < 1 }.map { it.value.game }.forEach {
+        catalogue.gamesList.filter { it.value.quantity > 0 }.map { it.value.game }.forEach {
             when (it.gameCategory) {
                 GameCategory.ACCESSORY -> accessories.add(it)
                 GameCategory.TRICK_TAKER -> trickTakers.add(it)
