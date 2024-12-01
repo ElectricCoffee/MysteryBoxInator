@@ -3,6 +3,7 @@ package mysteryBox
 import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
 import config.Config
+import java.io.File
 
 class MysteryBoxList() {
     constructor(boxes: List<MysteryBox>) : this() {
@@ -28,6 +29,10 @@ class MysteryBoxList() {
     companion object {
         fun fromToml(tomlString: String): MysteryBoxList {
             return Toml().read(tomlString).to(MysteryBoxList::class.java)
+        }
+
+        fun fromToml(file: File): MysteryBoxList {
+            return Toml().read(file).to(MysteryBoxList::class.java)
         }
     }
 }

@@ -132,7 +132,7 @@ object Filing {
         val inputFile = mysteryBoxWorkingCopyFile(config)
 
         if (Files.exists(inputFile)) {
-            return Toml().read(inputFile.toFile()).to(MysteryBoxList::class.java)
+            return MysteryBoxList.fromToml(inputFile.toFile())
         }
 
         return MysteryBoxList()
