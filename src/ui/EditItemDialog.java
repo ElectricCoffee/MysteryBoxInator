@@ -144,6 +144,7 @@ public class EditItemDialog extends JDialog {
     public static CatalogueEntry openDialog(CatalogueEntry c) {
         EditItemDialog dialog = new EditItemDialog(c);
         dialog.pack();
+        dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
 
         return dialog.newEntry;
