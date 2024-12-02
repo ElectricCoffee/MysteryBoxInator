@@ -2,6 +2,7 @@ package ui.listeners
 
 import catalogue.Catalogue
 import config.Config
+import io.Filing
 import mysteryBox.MysteryBox
 import mysteryBox.MysteryBoxList
 import mysteryBox.assembler.MysteryBoxAssemblerFactory.create
@@ -39,6 +40,7 @@ class MysteryBoxGenerateButtonListener(
             catalogueDtm.dataVector[i] = newEntry.toTableVector()
         }
 
-
+        Filing.writeWorkingCopy(config, catalogue)
+        Filing.writeWorkingCopy(config, mysteryBoxList)
     }
 }
