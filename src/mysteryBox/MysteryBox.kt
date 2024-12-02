@@ -29,7 +29,7 @@ data class MysteryBox(val id: String, val items: List<Game>, val targetValue: Bi
             boxType.toHumanReadable().toString(),
             NumUtils.asPrice(totalRetailValue),
             NumUtils.asPrice(targetValue),
-            "Off by ${NumUtils.asPrice(targetValue - totalRetailValue)} (${budgetStatus.toPercentString()}%)",
+            "Off by ${NumUtils.asPrice((targetValue - totalRetailValue).abs())} (${budgetStatus.toPercentString()}%)",
             if (sold) "Yes" else "No"
         )
     }

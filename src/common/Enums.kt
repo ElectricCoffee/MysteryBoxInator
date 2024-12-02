@@ -1,6 +1,7 @@
 package common
 
 import errors.UnknownCategoryException
+import mysteryBox.MysteryBox
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -133,4 +134,10 @@ data class HrGameRarity(val rarity: GameRarity) {
             else -> "${rarity.name} (${rarity.value})"
         }
     }
+}
+
+sealed class GenerateFailedDialogResult() {
+    class Yes(val mb: MysteryBox) : GenerateFailedDialogResult()
+    data object No : GenerateFailedDialogResult()
+    data object TryAgain : GenerateFailedDialogResult()
 }
