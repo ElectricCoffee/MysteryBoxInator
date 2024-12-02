@@ -58,6 +58,10 @@ public class MainWindow extends JFrame {
                 TableUtils.populateCatalogueTable(config, catalogue, catalogueDtm);
             }
 
+            if (!mysteryBoxList.getMysteryBoxes().isEmpty()) {
+                TableUtils.populateMysteryBoxTable(config, mysteryBoxList, mysteryDtm);
+            }
+
             editButton.addActionListener(new CatalogueEditButtonActionListener(config, catalogue, productTable));
             generateMysteriesButton.addActionListener(new MysteryBoxGenerateButtonListener(config, catalogue, mysteryBoxList, catalogueDtm, mysteryDtm));
 

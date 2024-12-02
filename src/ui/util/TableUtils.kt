@@ -20,6 +20,7 @@ object TableUtils {
         Filing.writeWorkingCopy(config, catalogue)
     }
 
+    @JvmStatic
     fun populateMysteryBoxTable(config: Config, mysteryBoxes: MysteryBoxList, dtm: DefaultTableModel) {
         dtm.dataVector.clear()
         for (e in mysteryBoxes.mysteryBoxes.values) {
