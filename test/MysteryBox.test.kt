@@ -40,7 +40,6 @@ class MysteryBoxTest {
             requiresPasteUps = false
             importCost = 12.99
             retailValue = 24.99
-            safeBggUrl = ""
 
             [[mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.items]]
             title = "Fishing"
@@ -49,7 +48,6 @@ class MysteryBoxTest {
             requiresPasteUps = false
             importCost = 12.99
             retailValue = 24.99
-            safeBggUrl = ""
 
             [[mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.items]]
             title = "Cho-Han Trick-Taking Game"
@@ -58,7 +56,6 @@ class MysteryBoxTest {
             requiresPasteUps = false
             importCost = 13
             retailValue = 25
-            safeBggUrl = ""
 
             [[mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.items]]
             title = "MAD"
@@ -67,7 +64,6 @@ class MysteryBoxTest {
             requiresPasteUps = false
             importCost = 16
             retailValue = 26
-            safeBggUrl = ""
 
             [[mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.items]]
             title = "Prey"
@@ -76,7 +72,6 @@ class MysteryBoxTest {
             requiresPasteUps = false
             importCost = 16
             retailValue = 26
-            safeBggUrl = ""
 
             [mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.budgetStatus]
             amount = -0.059
