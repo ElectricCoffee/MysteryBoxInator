@@ -23,6 +23,7 @@ class MysteryBoxTest {
         Assertions.assertTrue(box.items.count { it.gameCategory == GameCategory.VARIETY } < 2, "There should be 0-1 variety games in this box")
         Assertions.assertTrue(box.items.count { it.rarity == GameRarity.MYTHIC } < 2, "There should be 0-1 mythic games in the box")
         Assertions.assertTrue(box.items.count() < 15, "There are 15 trick-takers below mythic rarity in the catalogue. at a value of 135 it should pick less than that")
+        Assertions.assertEquals(mysteryBox.items.sumOf { it.retailValue }, mysteryBox.totalValue, "the sum of the box values should be the same as the total value of the box")
     }
 
     val tomlString = """
