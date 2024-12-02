@@ -93,6 +93,10 @@ public class EditItemDialog extends JDialog {
     }
 
     private void setupQuantitySpinner() {
+        var model = new SpinnerNumberModel();
+        model.setMinimum(0);
+        quantitySpinner.setModel(model);
+
         var editor = (JSpinner.DefaultEditor)quantitySpinner.getEditor();
         editor.getTextField().setHorizontalAlignment(SwingConstants.LEFT);
     }
