@@ -4,7 +4,6 @@ import catalogue.Catalogue;
 import config.Config;
 import io.Filing;
 import mysteryBox.MysteryBoxList;
-import mysteryBox.assembler.MysteryBoxAssemblerFactory;
 import ui.listeners.CatalogueEditButtonActionListener;
 import ui.listeners.CsvDropListener;
 import ui.listeners.MysteryBoxGenerateButtonListener;
@@ -30,7 +29,7 @@ public class MainWindow extends JFrame {
     private JPanel catalogueTab;
     private JPanel mysteryBoxTab;
     private JButton editButton;
-    private JButton exportBtn;
+    private JButton soldButton;
     private JButton generateMysteriesButton;
 
     public MainWindow() {
@@ -44,7 +43,7 @@ public class MainWindow extends JFrame {
         try {
             Config config = Filing.createConfig();
             Catalogue catalogue = Filing.readWorkingCopy(config);
-            MysteryBoxList mysteryBoxList = new MysteryBoxList(); // TODO: replace with reading the working copy
+            MysteryBoxList mysteryBoxList = Filing.readMysteryBoxWorkingCopy(config);
             var catalogueDtm = configCatalogueTable(config, catalogue);
             var mysteryDtm = configMysteryBoxTable();
 
