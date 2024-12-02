@@ -3,9 +3,11 @@ package ui;
 import catalogue.Catalogue;
 import config.Config;
 import io.Filing;
+import mysteryBox.MysteryBoxList;
 import mysteryBox.assembler.MysteryBoxAssemblerFactory;
 import ui.listeners.CatalogueEditButtonActionListener;
 import ui.listeners.CsvDropListener;
+import ui.listeners.MysteryBoxGenerateButtonListener;
 import ui.menu.MenuBar;
 import ui.util.TableUtils;
 import ui.util.ErrorDialog;
@@ -42,6 +44,7 @@ public class MainWindow extends JFrame {
         try {
             Config config = Filing.createConfig();
             Catalogue catalogue = Filing.readWorkingCopy(config);
+            MysteryBoxList mysteryBoxList = new MysteryBoxList(); // TODO: replace with reading the working copy
             var catalogueDtm = configCatalogueTable(config, catalogue);
             var mysteryDtm = configMysteryBoxTable();
 
@@ -57,15 +60,7 @@ public class MainWindow extends JFrame {
             }
 
             editButton.addActionListener(new CatalogueEditButtonActionListener(config, catalogue, productTable));
-            generateMysteriesButton.addActionListener((e) -> {
-                var result = GenerateMysteryBoxDialog.openDialog(config, catalogue);
-                if (result == null) {
-                    return;
-                }
-                var assembler = MysteryBoxAssemblerFactory.create(config, catalogue, result);
-                var mysteryBox = assembler.generateBox();
-                mysteryDtm.addRow(mysteryBox.toTableArray());
-            });
+            generateMysteriesButton.addActionListener(new MysteryBoxGenerateButtonListener(config, catalogue, mysteryBoxList, catalogueDtm, mysteryDtm));
 
         } catch (IOException ioe) {
             new ErrorDialog(this).open(ioe.getMessage(), "File Error!");
