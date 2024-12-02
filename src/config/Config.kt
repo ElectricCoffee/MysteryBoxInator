@@ -92,7 +92,7 @@ val defaultConfigString = """
     |# The thresholds are how much the price can vary by in percents
     |[thresholds]
     |   upperBound = 10
-    |   lowerBound = 5
+    |   lowerBound = 10
     |   
     |[catalogue]
     |   # if true, the program will remove a product entry entirely when the stock reaches zero
