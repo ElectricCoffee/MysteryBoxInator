@@ -1,7 +1,7 @@
 package ui.listeners
 
 import catalogue.Catalogue
-import catalogue.CsvLoadMode
+import common.FileLoadMode
 import config.Config
 import ui.util.TableUtils
 import java.awt.datatransfer.DataFlavor
@@ -38,8 +38,8 @@ class CsvDropListener(private val parent: JFrame, private val config: Config, pr
                         // Get the file path and use it
                         val filePath = file.absolutePath
                         val loadMode = when(openDialog(filePath)) {
-                            0 -> CsvLoadMode.APPEND
-                            1 -> CsvLoadMode.OVERWRITE
+                            0 -> FileLoadMode.APPEND
+                            1 -> FileLoadMode.OVERWRITE
                             else -> break
                         }
                         catalogue.appendFromFile(Path(filePath), loadMode, startIndex = 1)

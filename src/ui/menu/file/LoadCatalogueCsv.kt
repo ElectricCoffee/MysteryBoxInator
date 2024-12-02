@@ -1,7 +1,7 @@
 package ui.menu.file
 
 import catalogue.Catalogue
-import catalogue.CsvLoadMode
+import common.FileLoadMode
 import config.Config
 import ui.CsvActionSelected
 import ui.CsvDialog
@@ -28,9 +28,9 @@ class LoadCatalogueCsv(private val config: Config, private val catalogue: Catalo
         val file = dialog.selectedFile
 
         if (result == CsvActionSelected.APPEND) {
-            catalogue.appendFromFile(file.toPath(), CsvLoadMode.APPEND, 1) // making this explicit here so it's clear it wasn't a mistake
+            catalogue.appendFromFile(file.toPath(), FileLoadMode.APPEND, 1) // making this explicit here so it's clear it wasn't a mistake
         } else if (result == CsvActionSelected.OVERWRITE) {
-            catalogue.appendFromFile(file.toPath(), CsvLoadMode.OVERWRITE, 1)
+            catalogue.appendFromFile(file.toPath(), FileLoadMode.OVERWRITE, 1)
         }
 
         TableUtils.populateCatalogueTable(config, catalogue, dtm)

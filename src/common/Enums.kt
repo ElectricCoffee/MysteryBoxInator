@@ -5,6 +5,10 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
+enum class FileLoadMode {
+    OVERWRITE, APPEND
+}
+
 /**
  * The type of game to be added to the mystery box
  */

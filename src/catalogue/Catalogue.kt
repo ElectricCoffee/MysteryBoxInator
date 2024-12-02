@@ -1,14 +1,11 @@
 package catalogue
 
+import common.FileLoadMode
 import config.Config
 import game.Game
 import java.math.BigDecimal
 import java.nio.file.Files
 import java.nio.file.Path
-
-enum class CsvLoadMode {
-    OVERWRITE, APPEND
-}
 
 class Catalogue(private val config: Config) {
     val gamesList = mutableMapOf<String, CatalogueEntry>();
@@ -79,17 +76,17 @@ class Catalogue(private val config: Config) {
     val countTotalInventory: Int
         get() = gamesList.values.sumOf { it.quantity }
 
-    fun appendFromFile(path: Path, loadMode: CsvLoadMode = CsvLoadMode.APPEND, startIndex: Int = 0) {
+    fun appendFromFile(path: Path, loadMode: FileLoadMode = FileLoadMode.APPEND, startIndex: Int = 0) {
         val content = Files.readAllLines(path)
         appendCsv(content, loadMode, startIndex)
     }
 
-    fun appendCsv(lines: List<String>, loadMode: CsvLoadMode = CsvLoadMode.APPEND, startIndex: Int = 0) {
+    fun appendCsv(lines: List<String>, loadMode: FileLoadMode = FileLoadMode.APPEND, startIndex: Int = 0) {
         val entries = lines
             .subList(startIndex, lines.size)
             .map { CatalogueEntry.fromCsvLine(config.io.csvDelimiter, it) }
 
-        if (loadMode == CsvLoadMode.OVERWRITE) {
+        if (loadMode == FileLoadMode.OVERWRITE) {
             gamesList.clear()
         }
 

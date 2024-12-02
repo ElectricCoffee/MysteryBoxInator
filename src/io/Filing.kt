@@ -1,9 +1,7 @@
 package io
 
 import catalogue.Catalogue
-import catalogue.CsvLoadMode
-import com.moandjiezana.toml.Toml
-import com.moandjiezana.toml.TomlWriter
+import common.FileLoadMode
 import config.Config
 import config.Config.Companion.fromFile
 import config.configFilePath
@@ -88,7 +86,7 @@ object Filing {
         val catalogue = Catalogue(config)
 
         if (Files.exists(inputFile)) {
-            catalogue.appendFromFile(inputFile, CsvLoadMode.OVERWRITE)
+            catalogue.appendFromFile(inputFile, FileLoadMode.OVERWRITE)
         }
 
         return catalogue
