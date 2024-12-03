@@ -97,7 +97,7 @@ public class GenerateMysteryBoxDialog extends JDialog {
         var excludeOption = excludeBox.getSelectedIndex() == 1;
 
         assert sizeOption != null;
-        output = new MysteryBoxDialogResult(sizeOption.getPrice(), typeOption, excludeOption);
+        output = new MysteryBoxDialogResult(sizeOption.getPrice(), sizeOption.getShortLabel(), typeOption, excludeOption);
 
         dispose();
     }

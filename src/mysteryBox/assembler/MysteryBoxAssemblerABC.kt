@@ -18,7 +18,12 @@ import kotlin.random.Random
 // these child classes have local variables that keep track of things like number of boxes pulled, the target price, and the thresholds
 
 // ABC short for Abstract Base Class
-abstract class MysteryBoxAssemblerABC(protected val config: Config, private val catalogue: Catalogue, protected val budget: BigDecimal) {
+abstract class MysteryBoxAssemblerABC(
+    protected val config: Config,
+    private val catalogue: Catalogue,
+    protected val budget: BigDecimal,
+    protected val shortLabel: String)
+{
     protected val accessories: MutableList<Game> = mutableListOf()
     protected val trickTakers: MutableList<Game> = mutableListOf()
     protected val varieties: MutableList<Game> = mutableListOf()

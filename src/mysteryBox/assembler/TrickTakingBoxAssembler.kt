@@ -8,8 +8,8 @@ import config.Config
 import mysteryBox.MysteryBox
 import java.math.BigDecimal
 
-class TrickTakingBoxAssembler(config: Config, catalogue: Catalogue, value: BigDecimal, excludeVariety: Boolean = false)
-    : MysteryBoxAssemblerABC(config, catalogue, value) {
+class TrickTakingBoxAssembler(config: Config, catalogue: Catalogue, value: BigDecimal, shortLabel: String, excludeVariety: Boolean = false)
+    : MysteryBoxAssemblerABC(config, catalogue, value, shortLabel) {
 
     init {
         hasPickedVariety = excludeVariety
@@ -46,6 +46,6 @@ class TrickTakingBoxAssembler(config: Config, catalogue: Catalogue, value: BigDe
             }
         }
 
-        return MysteryBox(pickedItems, budget, GameCategory.TRICK_TAKER, budgetStatus(), false)
+        return MysteryBox(pickedItems, budget, shortLabel, GameCategory.TRICK_TAKER, budgetStatus(), false)
     }
 }

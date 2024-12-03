@@ -16,7 +16,7 @@ class MysteryBoxTest {
     // todo: check various item picker logics
     @Test fun `can assemble a mystery box`() {
         val catalogue = ResourceHelper.getTestCatalogue()
-        val assembler = TrickTakingBoxAssembler(defaultConfig, catalogue, BigDecimal("135.00"))
+        val assembler = TrickTakingBoxAssembler(defaultConfig, catalogue, BigDecimal("135.00"), "MF")
         val box = assembler.generateBox()
 
         Assertions.assertEquals(box.boxType, GameCategory.TRICK_TAKER, "The box type should be Trick Taker")
@@ -30,6 +30,7 @@ class MysteryBoxTest {
             [mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0]
             id = "fba50200-33e5-44d9-8d87-f000a677bdd0"
             targetValue = 135.00
+            shortLabel = "MF"
             boxType = "TRICK_TAKER"
             packed = false
 
@@ -88,7 +89,7 @@ class MysteryBoxTest {
 
     val id = "fba50200-33e5-44d9-8d87-f000a677bdd0"
 
-    val mysteryBox = MysteryBox(id, games, BigDecimal("135.00"), GameCategory.TRICK_TAKER, Budget(BigDecimal("-0.059")), false)
+    val mysteryBox = MysteryBox(id, games, BigDecimal("135.00"), "MF", GameCategory.TRICK_TAKER, Budget(BigDecimal("-0.059")), false)
 
     val boxList = MysteryBoxList(listOf(mysteryBox))
     
