@@ -26,4 +26,8 @@ class MysteryBoxTableModel : DefaultTableModel(null, columns) {
             else -> super.getColumnClass(columnIndex)
         }
     }
+
+    override fun isCellEditable(row: Int, column: Int): Boolean {
+        return false
+    }
 }
