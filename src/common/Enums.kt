@@ -42,7 +42,7 @@ enum class GameCategory {
 /**
  * Human Readable (hr) class wrapper to make serialization a bit easier.
  */
-data class HrGameCategory(val category: GameCategory) {
+data class HrGameCategory(val category: GameCategory) : Comparable<HrGameCategory> {
     override fun toString(): String {
         return when (category.name) {
             "ACCESSORY" -> "Accessory"
@@ -60,6 +60,8 @@ data class HrGameCategory(val category: GameCategory) {
             else -> category.name // default case just returns the raw name un-prettified.
         }
     }
+
+    override fun compareTo(other: HrGameCategory): Int = category.compareTo(other.category)
 }
 
 enum class ItemPickStatus {
@@ -124,7 +126,7 @@ enum class GameRarity(val value: Int) {
 /**
  * Human Readable (hr) class wrapper to make serialization a bit easier.
  */
-data class HrGameRarity(val rarity: GameRarity) {
+data class HrGameRarity(val rarity: GameRarity) : Comparable<HrGameRarity> {
     override fun toString(): String {
         return when (rarity.name) {
             "COMMON" -> "Common (${rarity.value})"
@@ -134,6 +136,8 @@ data class HrGameRarity(val rarity: GameRarity) {
             else -> "${rarity.name} (${rarity.value})"
         }
     }
+
+    override fun compareTo(other: HrGameRarity): Int = rarity.compareTo(other.rarity)
 }
 
 sealed class GenerateFailedDialogResult() {
