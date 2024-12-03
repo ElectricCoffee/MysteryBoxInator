@@ -13,7 +13,8 @@ import javax.swing.table.DefaultTableModel
 
 class CatalogueEditButtonActionListener(private val config: Config, private val catalogue: Catalogue, private val productTable: JTable) : ActionListener {
     override fun actionPerformed(e: ActionEvent) {
-        val i: Int = productTable.selectedRow
+        val sr: Int = productTable.selectedRow
+        val i = productTable.convertRowIndexToModel(sr)
         val catalogueDtm = productTable.model as DefaultTableModel
         val title = catalogueDtm.getValueAt(i, 0) as String // the 0th column is the title
         val item: CatalogueEntry? = catalogue.getEntry(title)
