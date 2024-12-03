@@ -146,8 +146,10 @@ object Filing {
         val outputFile = Paths.get(outputDir + File.separator + "mystery-boxes-" + date + ".txt")
 
         val titles = mysteryBoxList.mysteryBoxes.values.map { box ->
-            val type = box.boxType.toHumanReadable().toString()
-            box.items.joinToString(",") { it.title }
+            val type = box.boxType.toHumanReadable().toShortString()
+            val size = box.shortLabel
+            val id = box.id.substring(0, 5)
+            "$size-$type-$id," + box.items.joinToString(",") { it.title }
         }
 
         return Files.write(outputFile, titles)
