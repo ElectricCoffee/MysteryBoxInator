@@ -31,7 +31,7 @@ class MysteryBoxTest {
             id = "fba50200-33e5-44d9-8d87-f000a677bdd0"
             targetValue = 135.00
             boxType = "TRICK_TAKER"
-            sold = false
+            packed = false
 
             [[mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.items]]
             title = "Niner"

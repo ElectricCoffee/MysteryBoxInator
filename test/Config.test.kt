@@ -22,10 +22,13 @@ class ConfigTest {
             |rare = 33.33
             |[mysteryBox.small]
             |price = 45
+            |shortLabel = "F"
             |[mysteryBox.large]
             |price = 135
+            |shortLabel = "MF"
             |[mysteryBox.medium]
             |price = 90
+            |shortLabel = "BF"
             |
         """.trimMargin()
 
@@ -39,8 +42,8 @@ class ConfigTest {
             |catalogue = { deleteProductWhenZeroInventory = true }
             |rarityRatio = { common = 10, uncommon = 20, rare = 70 }
             |[mysteryBox]
-            |foo = {price = 2.95, percentage = 50}
-            |bar = {price = 3.95, percentage = 50}
+            |foo = {price = 2.95, shortLabel = "F"}
+            |bar = {price = 3.95, shortLabel = "B"}
         """.trimMargin()
 
         val expected = Config(
@@ -49,8 +52,8 @@ class ConfigTest {
             CatalogueConfig(true),
             RarityRatio(10.0, 20.0, 70.0),
             mapOf(
-                "foo" to MysteryBoxAmount(BigDecimal("2.95")),
-                "bar" to MysteryBoxAmount(BigDecimal("3.95"))
+                "foo" to MysteryBoxAmount(BigDecimal("2.95"), "F"),
+                "bar" to MysteryBoxAmount(BigDecimal("3.95"), "B")
             )
         )
 

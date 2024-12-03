@@ -27,7 +27,7 @@ data class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecima
 
 data class IoConfig(val outputDirectory: String, val csvDelimiter: String)
 
-data class MysteryBoxAmount(val price: BigDecimal)
+data class MysteryBoxAmount(val price: BigDecimal, val shortLabel: String)
 
 data class RarityRatio(val common: Double, val uncommon: Double, val rare: Double) {
     val commonAsFraction: Double
@@ -107,12 +107,16 @@ val defaultConfigString = """
     |# You can create your own categories here. 
     |# They can be small, medium, large, whatever you want.
     |# The only requirement is that they have a price, and that each entry starts with "mysteryBox."
+    |# The shortLabel is what's used when exporting the mystery box
     |[mysteryBox.small]
     |   price = 45
+    |   shortLabel = "F"
     |[mysteryBox.medium]
     |   price = 90
+    |   shortLabel = "BF"
     |[mysteryBox.large]
     |   price = 135
+    |   shortLabel = "MF"
     |   
 """.trimMargin()
 
