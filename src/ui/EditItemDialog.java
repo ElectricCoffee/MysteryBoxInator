@@ -81,11 +81,11 @@ public class EditItemDialog extends JDialog {
             return;
         }
         var game = catalogueEntry.getGame();
-
+        System.out.println(game);
         titleField.setText(catalogueEntry.getTitle());
         quantitySpinner.setValue(catalogueEntry.getQuantity());
-        typeCombo.setSelectedItem(game.getGameCategory());
-        rarityCombo.setSelectedItem(game.getRarity());
+        typeCombo.setSelectedItem(new HrGameCategory(game.getGameCategory()));
+        rarityCombo.setSelectedItem(new HrGameRarity((game.getRarity())));
         urlField.setText(game.getSafeBggUrl());
         pasteUpsCombo.setSelectedIndex(game.getRequiresPasteUps() ? 0 : 1);
         rawCostField.setText(game.getImportCost().setScale(2, RoundingMode.HALF_UP).toString());
