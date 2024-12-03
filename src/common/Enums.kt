@@ -39,31 +39,6 @@ enum class GameCategory {
     }
 }
 
-/**
- * Human Readable (hr) class wrapper to make serialization a bit easier.
- */
-data class HrGameCategory(val category: GameCategory) : Comparable<HrGameCategory> {
-    override fun toString(): String {
-        return when (category.name) {
-            "ACCESSORY" -> "Accessory"
-            "TRICK_TAKER" -> "Trick-Taker"
-            "VARIETY" -> "Variety"
-            else -> category.name // default case just returns the raw name un-prettified.
-        }
-    }
-
-    fun toShortString(): String {
-        return when (category.name) {
-            "ACCESSORY" -> "A"
-            "TRICK_TAKER" -> "TT"
-            "VARIETY" -> "V"
-            else -> category.name // default case just returns the raw name un-prettified.
-        }
-    }
-
-    override fun compareTo(other: HrGameCategory): Int = category.compareTo(other.category)
-}
-
 enum class ItemPickStatus {
     SUCCESS,
     FAILURE_NO_ITEMS,
@@ -121,23 +96,6 @@ enum class GameRarity(val value: Int) {
             return entries.first { it.value == int }
         }
     }
-}
-
-/**
- * Human Readable (hr) class wrapper to make serialization a bit easier.
- */
-data class HrGameRarity(val rarity: GameRarity) : Comparable<HrGameRarity> {
-    override fun toString(): String {
-        return when (rarity.name) {
-            "COMMON" -> "Common (${rarity.value})"
-            "UNCOMMON" -> "Uncommon (${rarity.value})"
-            "RARE" -> "Rare (${rarity.value})"
-            "MYTHIC" -> "Mythic (${rarity.value})"
-            else -> "${rarity.name} (${rarity.value})"
-        }
-    }
-
-    override fun compareTo(other: HrGameRarity): Int = rarity.compareTo(other.rarity)
 }
 
 sealed class GenerateFailedDialogResult() {
