@@ -55,7 +55,7 @@ public class MainWindow extends JFrame {
             var catalogueDtm = configCatalogueTable(config, catalogue);
             var mysteryDtm = configMysteryBoxTable();
 
-            setJMenuBar(new MenuBar(config, catalogue, catalogueDtm));
+            setJMenuBar(new MenuBar(config, catalogue, mysteryBoxList, catalogueDtm));
 
             catalogueTable.setModel(catalogueDtm);
             mysteryBoxTable.setModel(mysteryDtm);

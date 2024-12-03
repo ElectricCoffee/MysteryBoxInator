@@ -135,4 +135,21 @@ object Filing {
 
         return MysteryBoxList()
     }
+
+    @JvmStatic
+    @Throws(IOException::class)
+    fun writeMysteryBoxes(config: Config, mysteryBoxList: MysteryBoxList): Path {
+        val outputDir = config.io.outputDirectory
+
+        val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH.mm.ss"))
+
+        val outputFile = Paths.get(outputDir + File.separator + "mystery-boxes-" + date + ".txt")
+
+        val titles = mysteryBoxList.mysteryBoxes.values.map { box ->
+            val type = box.boxType.toHumanReadable().toString()
+            box.items.joinToString(",") { it.title }
+        }
+
+        return Files.write(outputFile, titles)
+    }
 }

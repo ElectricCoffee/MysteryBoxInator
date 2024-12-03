@@ -9,6 +9,7 @@ import util.NumUtils
 import java.math.BigDecimal
 import java.util.*
 
+// TODO: add short label to mystery box
 data class MysteryBox(val id: String, val items: List<Game>, val targetValue: BigDecimal, val boxType: GameCategory, val budgetStatus: Budget = Budget(), val packed: Boolean = false) {
     constructor(items: List<Game>, targetValue: BigDecimal, boxType: GameCategory, budgetStatus: Budget, packed: Boolean)
             : this(UUID.randomUUID().toString(), items, targetValue, boxType, budgetStatus, packed)
