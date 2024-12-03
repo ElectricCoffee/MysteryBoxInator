@@ -13,7 +13,7 @@ private val columns = arrayOf<Any>(
     "Total Item Value", // 4
     "Box Price",        // 5
     "Price Deviance",   // 6
-    "Sold?"             // 7
+    "Packed?"           // 7
 )
 
 class MysteryBoxTableModel : DefaultTableModel(null, columns) {

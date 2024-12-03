@@ -34,7 +34,7 @@ public class MainWindow extends JFrame {
     private JPanel catalogueTab;
     private JPanel mysteryBoxTab;
     private JButton editButton;
-    private JButton soldButton;
+    private JButton packedButton;
     private JButton generateMysteriesButton;
     private JButton viewBoxButton;
 
@@ -46,7 +46,7 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null);
         editButton.setEnabled(false); // have it be grayed out at first
         viewBoxButton.setEnabled(false);
-        soldButton.setEnabled(false);
+        packedButton.setEnabled(false);
 
         try {
             Config config = Filing.createConfig();
@@ -106,7 +106,7 @@ public class MainWindow extends JFrame {
         mysteryBoxTable.getSelectionModel().addListSelectionListener(e -> {
             var isEmpty = mysteryBoxTable.getSelectionModel().isSelectionEmpty();
             viewBoxButton.setEnabled(!isEmpty);
-            soldButton.setEnabled(!isEmpty);
+            packedButton.setEnabled(!isEmpty);
         });
 
         mysteryBoxTable.addMouseListener(new MouseAdapter() {
@@ -119,9 +119,9 @@ public class MainWindow extends JFrame {
 
                 var isSold = (HrBoolean) mysteryBoxTable.getValueAt(row, 7); // 7 should be "Sold?"
                 if (isSold.getBoolean()) {
-                    soldButton.setText("Mark Unsold");
+                    packedButton.setText("Mark Unpacked");
                 } else {
-                    soldButton.setText("Mark Sold");
+                    packedButton.setText("Mark Packed");
                 }
             }
         });
