@@ -2,6 +2,7 @@ package common
 
 import errors.UnknownCategoryException
 import mysteryBox.MysteryBox
+import util.NumUtils
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -51,13 +52,8 @@ enum class ItemPickStatus {
 data class Budget(val amount: BigDecimal) {
     constructor() : this(BigDecimal.ZERO)
 
-    fun amountAsPercentage(): BigDecimal {
-        return amount * (100).toBigDecimal()
-    }
-
     fun toPercentString(): String {
-        val format = DecimalFormat("+#,##0.00;-#,##0.00")
-        return format.format(amountAsPercentage().setScale(2, RoundingMode.HALF_UP))
+        return NumUtils.asPercentageSigned(amount)
     }
 
     companion object {

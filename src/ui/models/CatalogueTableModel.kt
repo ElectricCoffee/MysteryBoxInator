@@ -6,7 +6,7 @@ import common.HrGameRarity
 import common.HrPrice
 import javax.swing.table.DefaultTableModel
 
-val columns = arrayOf<Any>(
+private val columns = arrayOf<Any>(
     "Name",         // 0
     "Quantity",     // 1
     "Type",         // 2

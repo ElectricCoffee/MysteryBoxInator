@@ -26,12 +26,12 @@ data class MysteryBox(val id: String, val items: List<Game>, val targetValue: Bi
 
         return arrayOf(
             id,
-            items.count(),
+            Integer.valueOf(items.count()),
             items.joinToString(", ") { it.title },
             boxType.toHumanReadable(),
             HrPrice(totalRetailValue),
             HrPrice(targetValue),
-            "Off by ${NumUtils.asPrice((targetValue - totalRetailValue).abs())} (${budgetStatus.toPercentString()}%)",
+            "Off by ${NumUtils.asPrice((targetValue - totalRetailValue).abs())} (${budgetStatus.toPercentString()})",
             HrBoolean(sold)
         )
     }
