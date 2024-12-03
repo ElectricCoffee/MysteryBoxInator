@@ -54,9 +54,9 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
     fun toTableArray(): Array<Any> {
         return arrayOf(
             game.title,
-            quantity.toString(),
-            game.gameCategory.toHumanReadable().toString(),
-            game.rarity.toHumanReadable().toString(),
+            Integer.valueOf(quantity),
+            game.gameCategory.toHumanReadable(),
+            game.rarity.toHumanReadable(),
             game.bggId ?: "N/A",
             if (game.requiresPasteUps) "Yes" else "No",
             NumUtils.asPrice(game.importCost),
