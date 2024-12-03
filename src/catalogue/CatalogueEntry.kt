@@ -3,6 +3,8 @@ package catalogue
 import game.Game
 import common.GameCategory
 import common.GameRarity
+import common.HrBoolean
+import common.HrPrice
 import errors.CsvParsingException
 import errors.UnknownPasteUpsException
 import util.NumUtils
@@ -58,11 +60,11 @@ data class CatalogueEntry(val game: Game, val quantity: Int = 1) {
             game.gameCategory.toHumanReadable(),
             game.rarity.toHumanReadable(),
             game.bggId ?: "N/A",
-            if (game.requiresPasteUps) "Yes" else "No",
-            NumUtils.asPrice(game.importCost),
-            NumUtils.asPrice(game.retailValue),
-            NumUtils.asPrice(game.profit),
-            NumUtils.asPrice(totalProfit),
+            HrBoolean(game.requiresPasteUps),
+            HrPrice(game.importCost),
+            HrPrice(game.retailValue),
+            HrPrice(game.profit),
+            HrPrice(totalProfit),
         )
     }
 

@@ -3,6 +3,8 @@ package mysteryBox
 import common.Budget
 import game.Game
 import common.GameCategory
+import common.HrBoolean
+import common.HrPrice
 import util.NumUtils
 import java.math.BigDecimal
 import java.util.*
@@ -23,14 +25,14 @@ data class MysteryBox(val id: String, val items: List<Game>, val targetValue: Bi
         val totalRetailValue = items.sumOf { it.retailValue }
 
         return arrayOf(
-            id.toString(),
+            id,
             items.count(),
             items.joinToString(", ") { it.title },
-            boxType.toHumanReadable().toString(),
-            NumUtils.asPrice(totalRetailValue),
-            NumUtils.asPrice(targetValue),
+            boxType.toHumanReadable(),
+            HrPrice(totalRetailValue),
+            HrPrice(targetValue),
             "Off by ${NumUtils.asPrice((targetValue - totalRetailValue).abs())} (${budgetStatus.toPercentString()}%)",
-            if (sold) "Yes" else "No"
+            HrBoolean(sold)
         )
     }
 }

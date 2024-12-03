@@ -1,20 +1,22 @@
 package ui.models
 
+import common.HrBoolean
 import common.HrGameCategory
 import common.HrGameRarity
+import common.HrPrice
 import javax.swing.table.DefaultTableModel
 
 val columns = arrayOf<Any>(
-    "Name",
-    "Quantity",
-    "Type",
-    "Rarity",
-    "BGG ID",
-    "Paste-Ups?",
-    "Raw Cost",
-    "Retail Price",
-    "Item Profit",
-    "Total Profit"
+    "Name",         // 0
+    "Quantity",     // 1
+    "Type",         // 2
+    "Rarity",       // 3
+    "BGG ID",       // 4
+    "Paste-Ups?",   // 5
+    "Raw Cost",     // 6
+    "Retail Price", // 7
+    "Item Profit",  // 8
+    "Total Profit"  // 9
 )
 
 class CatalogueTableModel : DefaultTableModel(null, columns) {
@@ -23,6 +25,8 @@ class CatalogueTableModel : DefaultTableModel(null, columns) {
             1 -> Integer::class.java
             2 -> HrGameCategory::class.java
             3 -> HrGameRarity::class.java
+            5 -> HrBoolean::class.java
+            6,7,8,9 -> HrPrice::class.java
             else -> super.getColumnClass(columnIndex)
         }
     }
