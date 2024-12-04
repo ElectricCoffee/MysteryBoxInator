@@ -2,7 +2,6 @@ package config
 
 import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
-import errors.ConfigValidationException
 import util.NumUtils
 import java.io.File
 import java.math.BigDecimal
