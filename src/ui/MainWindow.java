@@ -73,7 +73,7 @@ public class MainWindow extends JFrame {
             packedButton.addActionListener(new MysteryBoxPackedToggleListener(config, mysteryBoxTable, mysteryBoxList));
         } catch (IOException ioe) {
             new ErrorDialog(this).open(ioe.getMessage(), "File Error!");
-        } catch (Exception e) {
+        } catch (Exception | Error e) {
             new ErrorDialog(this).open(e.getMessage(), "Error!");
         }
     }
