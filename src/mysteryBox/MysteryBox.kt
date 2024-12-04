@@ -21,6 +21,8 @@ data class MysteryBox(
     constructor(items: List<Game>, targetValue: BigDecimal, shortLabel: String, boxType: GameCategory, budgetStatus: Budget, packed: Boolean)
             : this(UUID.randomUUID().toString(), items, targetValue, shortLabel, boxType, budgetStatus, packed)
 
+    val count get() = items.count()
+
     val totalValue: BigDecimal
         get() = items.sumOf { it.retailValue }
 
