@@ -41,6 +41,10 @@ data class MysteryBox(
         )
     }
 
+    fun toTableVector(): Vector<Any> {
+        return Vector(toTableArray().toList())
+    }
+
     /**
      * The box's prefix of the format SL-ST-uuid5, where
      * - SL is the short label defined in the config

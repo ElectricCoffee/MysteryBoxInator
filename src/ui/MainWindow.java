@@ -5,10 +5,7 @@ import common.HrBoolean;
 import config.Config;
 import io.Filing;
 import mysteryBox.MysteryBoxList;
-import ui.listeners.CatalogueEditButtonActionListener;
-import ui.listeners.CsvDropListener;
-import ui.listeners.MysteryBoxGenerateButtonListener;
-import ui.listeners.ViewMysteryBoxButtonListener;
+import ui.listeners.*;
 import ui.menu.MenuBar;
 import ui.models.CatalogueTableModel;
 import ui.models.MysteryBoxTableModel;
@@ -73,6 +70,7 @@ public class MainWindow extends JFrame {
             editButton.addActionListener(new CatalogueEditButtonActionListener(config, catalogue, catalogueTable));
             generateMysteriesButton.addActionListener(new MysteryBoxGenerateButtonListener(config, catalogue, mysteryBoxList, catalogueDtm, mysteryDtm));
             viewBoxButton.addActionListener(new ViewMysteryBoxButtonListener(mysteryBoxList, mysteryBoxTable));
+            packedButton.addActionListener(new MysteryBoxPackedToggleListener(config, mysteryBoxTable, mysteryBoxList));
         } catch (IOException ioe) {
             new ErrorDialog(this).open(ioe.getMessage(), "File Error!");
         } catch (Exception e) {
