@@ -55,7 +55,7 @@ class MysteryBoxGenerateButtonListener(
                 0 -> GenerateFailedDialogResult.Yes(mysteryBox)
                 1 -> GenerateFailedDialogResult.No
                 2 -> GenerateFailedDialogResult.TryAgain
-                else -> throw Error("Unknown result $res")
+                else -> throw Exception("Unknown result $res")
             }
         }
 
