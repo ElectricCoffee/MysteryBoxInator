@@ -47,12 +47,12 @@ public class GenerateMysteryBoxDialog extends JDialog {
     }
 
     private void setupSizeCombo(Config config) {
-        var mysteryBoxAmountMap = config.component5();
+        var mysteryBoxAmountMap = config.getMysteryBox();
 
         mysteryBoxAmountMap
                 .entrySet()
                 .stream()
-                .sorted(Comparator.comparing(a -> a.getValue().component1()))
+                .sorted(Comparator.comparing(a -> a.getValue().getPrice()))
                 .forEach((e) ->
             sizeCombo.addItem(new MysteryBoxDialogOption(e.getKey(), e.getValue()))
         );
