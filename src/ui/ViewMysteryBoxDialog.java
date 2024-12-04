@@ -16,7 +16,7 @@ public class ViewMysteryBoxDialog extends JDialog {
     private JLabel valueLabel;
 
     public ViewMysteryBoxDialog(MysteryBox mysteryBox) {
-        setTitle("Viewing Mystery Box #" + mysteryBox.getId().substring(0, 5));
+        setTitle("Viewing Mystery Box " + mysteryBox.getPrefix());
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
