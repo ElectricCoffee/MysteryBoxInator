@@ -2,6 +2,7 @@ package config
 
 import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
+import errors.ConfigValidationException
 import util.NumUtils
 import java.io.File
 import java.math.BigDecimal
@@ -9,7 +10,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 
-data class CatalogueConfig(val deleteProductWhenZeroInventory: Boolean)
+data class IoConfig(val outputDirectory: String, val csvDelimiter: String)
 
 data class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecimal) {
     /**
@@ -25,9 +26,7 @@ data class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecima
         get() = NumUtils.toFraction(upperBound)
 }
 
-data class IoConfig(val outputDirectory: String, val csvDelimiter: String)
-
-data class MysteryBoxAmount(val price: BigDecimal, val shortLabel: String)
+data class CatalogueConfig(val deleteProductWhenZeroInventory: Boolean)
 
 data class RarityRatio(val common: Double, val uncommon: Double, val rare: Double) {
     val commonAsFraction: Double
@@ -39,6 +38,8 @@ data class RarityRatio(val common: Double, val uncommon: Double, val rare: Doubl
     val rareAsFraction: Double
         get() = rare / 100
 }
+
+data class MysteryBoxAmount(val price: BigDecimal, val shortLabel: String)
 
 data class Config(
     val io: IoConfig,
@@ -106,6 +107,7 @@ val defaultConfigString = """
     |   
     |# You can create your own categories here. 
     |# They can be small, medium, large, whatever you want.
+    |# You can even change their names if you want to.
     |# The only requirement is that they have a price, and that each entry starts with "mysteryBox."
     |# The shortLabel is what's used when exporting the mystery box
     |[mysteryBox.small]
