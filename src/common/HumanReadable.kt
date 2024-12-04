@@ -64,3 +64,13 @@ data class HrPrice(val price: BigDecimal) : Comparable<HrPrice> {
 
     override fun compareTo(other: HrPrice): Int = price.compareTo(other.price)
 }
+
+data class HrId(val id: String) : Comparable<HrId> {
+    override fun toString(): String {
+        return id.substring(0, 5)
+    }
+
+    override fun compareTo(other: HrId): Int {
+        return id.compareTo(other.id)
+    }
+}
