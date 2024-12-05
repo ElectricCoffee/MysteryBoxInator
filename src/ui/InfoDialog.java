@@ -1,5 +1,7 @@
 package ui;
 
+import ui.util.ErrorDialog;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -41,7 +43,19 @@ public class InfoDialog extends JDialog {
 
         description.setPreferredSize(new Dimension(600, -1));
 
-        logos.setIcon(new ImageIcon(new ImageIcon("resources/logos.png").getImage().getScaledInstance(300, 169, Image.SCALE_SMOOTH)));
+//        var path = this.getClass().getResource("resources/logos.png");
+
+//        logos.setIcon(new ImageIcon(new ImageIcon("resources/logos.png").getImage().getScaledInstance(300, 169, Image.SCALE_SMOOTH)));
+
+        try {
+            var resource = getClass().getResource("/resources/logos.png");
+            if (resource == null) throw new Exception("Could not find image");
+            var image = new ImageIcon(resource).getImage();
+            var scaledImage = image.getScaledInstance(300, 169, Image.SCALE_SMOOTH);
+            logos.setIcon(new ImageIcon(scaledImage));
+        } catch (Exception e) {
+            new ErrorDialog(this).open(e.getMessage(), "Couldn't load image");
+        }
     }
 
     private void onOK() {
