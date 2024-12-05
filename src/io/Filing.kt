@@ -19,6 +19,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 object Filing {
+    fun getDateStamp(): String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH.mm.ss"))
+
     @JvmStatic
     @Throws(IOException::class)
     fun ensureConfigDir() {
@@ -60,9 +62,7 @@ object Filing {
     fun backupCatalogue(config: Config, catalogue: Catalogue) {
         val outputDir: Path = Paths.get(config.io.outputDirectory)
 
-        val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH.mm.ss"))
-
-        val outputFile = Paths.get(outputDir.toString() + File.separator + "catalogue-" + date + ".backup.csv")
+        val outputFile = Paths.get(outputDir.toString() + File.separator + "catalogue-" + getDateStamp() + ".backup.csv")
 
         ensureOutputDir(config)
 
@@ -142,14 +142,20 @@ object Filing {
     fun writeMysteryBoxes(config: Config, mysteryBoxList: MysteryBoxList): Path {
         val outputDir = config.io.outputDirectory
 
-        val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH.mm.ss"))
-
-        val outputFile = Paths.get(outputDir + File.separator + "mystery-boxes-" + date + ".txt")
+        val outputFile = Paths.get(outputDir + File.separator + "mystery-boxes-" + getDateStamp() + ".txt")
 
         val titles = mysteryBoxList.mysteryBoxes.values.map { box ->
             "${box.getPrefix()}," + box.items.joinToString(",") { it.title }
         }
 
         return Files.write(outputFile, titles)
+    }
+
+    @JvmStatic
+    @Throws(IOException::class)
+    fun backupMysteryBoxWorkingCopy(config: Config) {
+        val workingCopyPath = mysteryBoxWorkingCopyFile(config)
+        val newPath = config.io.outputDirectory + File.separator + "mystery-box.backup-" + getDateStamp() + ".toml"
+        workingCopyPath.toFile().renameTo(File(newPath))
     }
 }
