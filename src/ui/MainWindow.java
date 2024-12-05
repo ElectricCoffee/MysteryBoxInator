@@ -78,7 +78,7 @@ public class MainWindow extends JFrame {
             new ErrorDialog(this).open(cme.getLongMessage(), cme.getTitle());
             System.exit(1);
         } catch (Exception | Error e) {
-            new ErrorDialog(this).open(e.getMessage(), "Error!");
+            new ErrorDialog(this).open(e.getMessage(), "Something Went Wrong!");
         }
     }
 
