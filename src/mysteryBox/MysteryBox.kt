@@ -14,11 +14,11 @@ data class MysteryBox(
     val boxType: GameCategory,
     val budgetStatus: Budget = Budget(),
     val packed: Boolean = false,
-    val customerName: String = "",
-    val orderNumber: String = "",
+    val customerName: String? = "",
+    val orderNumber: String? = "",
 ) {
     constructor(items: List<Game>, targetValue: BigDecimal, shortLabel: String, boxType: GameCategory, budgetStatus: Budget)
-            : this(UUID.randomUUID().toString(), items, targetValue, shortLabel, boxType, budgetStatus)
+            : this(UUID.randomUUID().toString(), items, targetValue, shortLabel, boxType, budgetStatus, false, "", "")
 
     val count get() = items.count()
 
@@ -40,8 +40,8 @@ data class MysteryBox(
             HrPrice(targetValue),
             "Off by ${NumUtils.asPrice((targetValue - totalValue).abs())} (${budgetStatus.toPercentString()})",
             HrBoolean(packed),
-            customerName,
-            orderNumber
+            customerName ?: "",
+            orderNumber ?: ""
         )
     }
 
