@@ -1,7 +1,6 @@
 package ui;
 
 import catalogue.Catalogue;
-import common.HrBoolean;
 import config.Config;
 import errors.ConfigMissingException;
 import io.Filing;
@@ -18,8 +17,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.dnd.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 public class MainWindow extends JFrame {
@@ -33,7 +30,7 @@ public class MainWindow extends JFrame {
     private JPanel catalogueTab;
     private JPanel mysteryBoxTab;
     private JButton editButton;
-    private JButton packedButton;
+    private JButton editShippingInfoButton;
     private JButton generateMysteriesButton;
     private JButton viewBoxButton;
 
@@ -45,7 +42,7 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null);
         editButton.setEnabled(false); // have it be grayed out at first
         viewBoxButton.setEnabled(false);
-        packedButton.setEnabled(false);
+        editShippingInfoButton.setEnabled(false);
 
         try {
             Config config = Filing.createConfig();
@@ -71,7 +68,7 @@ public class MainWindow extends JFrame {
             editButton.addActionListener(new CatalogueEditButtonActionListener(config, catalogue, catalogueTable));
             generateMysteriesButton.addActionListener(new MysteryBoxGenerateButtonListener(config, catalogue, mysteryBoxList, catalogueDtm, mysteryDtm));
             viewBoxButton.addActionListener(new ViewMysteryBoxButtonListener(mysteryBoxList, mysteryBoxTable));
-            packedButton.addActionListener(new MysteryBoxPackedToggleListener(config, mysteryBoxTable, mysteryBoxList));
+            editShippingInfoButton.addActionListener(new EditShippingInfoListener(config, mysteryBoxList, mysteryBoxTable));
         } catch (IOException ioe) {
             new ErrorDialog(this).open(ioe.getMessage(), "File Error!");
         } catch (ConfigMissingException cme) {
@@ -109,24 +106,7 @@ public class MainWindow extends JFrame {
         mysteryBoxTable.getSelectionModel().addListSelectionListener(e -> {
             var isEmpty = mysteryBoxTable.getSelectionModel().isSelectionEmpty();
             viewBoxButton.setEnabled(!isEmpty);
-            packedButton.setEnabled(!isEmpty);
-        });
-
-        mysteryBoxTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                var row = mysteryBoxTable.rowAtPoint(e.getPoint());
-                if (row == -1) {
-                    return;
-                }
-
-                var isSold = (HrBoolean) mysteryBoxTable.getValueAt(row, 7); // 7 should be "Sold?"
-                if (isSold.getBoolean()) {
-                    packedButton.setText("Mark Unpacked");
-                } else {
-                    packedButton.setText("Mark Packed");
-                }
-            }
+            editShippingInfoButton.setEnabled(!isEmpty);
         });
 
         return dtm;

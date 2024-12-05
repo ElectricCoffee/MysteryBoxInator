@@ -33,6 +33,8 @@ class MysteryBoxTest {
             shortLabel = "MF"
             boxType = "TRICK_TAKER"
             packed = false
+            customerName = ""
+            orderNumber = ""
 
             [[mysteryBoxes.fba50200-33e5-44d9-8d87-f000a677bdd0.items]]
             title = "Niner"

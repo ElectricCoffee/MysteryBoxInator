@@ -1,4 +1,5 @@
 import config.*
+import errors.ConfigMissingException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -70,6 +71,6 @@ class ConfigTest {
             |bar = {price = 3.95, shortLabel = "B"}
         """.trimMargin()
 
-        Assertions.assertThrows(IllegalArgumentException::class.java, {Config.fromToml(config)})
+        Assertions.assertThrows(ConfigMissingException::class.java, {Config.fromToml(config)})
     }
 }

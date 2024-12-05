@@ -13,9 +13,9 @@ data class MysteryBox(
     val shortLabel: String,
     val boxType: GameCategory,
     val budgetStatus: Budget = Budget(),
-    var packed: Boolean = false,
-    var customerName: String = "",
-    var orderNumber: String = "",
+    val packed: Boolean = false,
+    val customerName: String = "",
+    val orderNumber: String = "",
 ) {
     constructor(items: List<Game>, targetValue: BigDecimal, shortLabel: String, boxType: GameCategory, budgetStatus: Budget)
             : this(UUID.randomUUID().toString(), items, targetValue, shortLabel, boxType, budgetStatus)
@@ -47,6 +47,10 @@ data class MysteryBox(
 
     fun toTableVector(): Vector<Any> {
         return Vector(toTableArray().toList())
+    }
+
+    fun updateShippingInfo(packed: Boolean, customerName: String, orderNumber: String): MysteryBox {
+        return MysteryBox(id, items, targetValue, shortLabel, boxType, budgetStatus, packed, customerName, orderNumber)
     }
 
     /**
