@@ -57,13 +57,11 @@ public class CsvDialog extends JDialog {
     }
 
     private void onAppend() {
-        // TODO: Use the file path to append data to the catalogue
         actionSelected = CsvActionSelected.APPEND;
         dispose();
     }
 
     private void onOverwrite() {
-        // TODO: Use the file path to replace the catalogue
         actionSelected = CsvActionSelected.OVERWRITE;
         dispose();
     }
