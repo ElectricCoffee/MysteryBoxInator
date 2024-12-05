@@ -47,7 +47,7 @@ class CsvDropListener(private val parent: JFrame, private val config: Config, pr
                     } else {
                         JOptionPane.showMessageDialog(
                             null,
-                            "Only PDF files are accepted.",
+                            "Only CSV files are accepted.",
                             "Incorrect file type",
                             JOptionPane.INFORMATION_MESSAGE
                         )
