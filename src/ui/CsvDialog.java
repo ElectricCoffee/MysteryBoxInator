@@ -3,6 +3,7 @@ package ui;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.Objects;
 
 public class CsvDialog extends JDialog {
     private JPanel contentPane;
@@ -53,7 +54,6 @@ public class CsvDialog extends JDialog {
         
         selectedFile = chooser.getSelectedFile();
         pathField.setText(selectedFile.getAbsolutePath());
-        System.out.println("Selected file: " + selectedFile.getAbsolutePath());
     }
 
     private void onAppend() {
@@ -81,6 +81,7 @@ public class CsvDialog extends JDialog {
     }
 
     public File getSelectedFile() {
-        return selectedFile;
+        // if the file wasn't loaded through normal means, use the text field instead
+        return Objects.requireNonNullElseGet(selectedFile, () -> new File(pathField.getText()));
     }
 }
