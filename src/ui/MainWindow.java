@@ -102,6 +102,8 @@ public class MainWindow extends JFrame {
     DefaultTableModel configMysteryBoxTable() {
         var dtm = new MysteryBoxTableModel();
 
+        mysteryBoxTable.setAutoCreateRowSorter(true);
+
         dtm.addTableModelListener((e) -> {}); // to be filled
         mysteryBoxTable.getSelectionModel().addListSelectionListener(e -> {
             var isEmpty = mysteryBoxTable.getSelectionModel().isSelectionEmpty();
