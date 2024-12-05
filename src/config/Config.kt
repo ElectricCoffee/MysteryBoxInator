@@ -2,6 +2,7 @@ package config
 
 import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
+import errors.ConfigMissingException
 import util.NumUtils
 import java.io.File
 import java.math.BigDecimal
@@ -50,12 +51,14 @@ data class Config(
     }
 
     companion object {
+        @Throws(ConfigMissingException::class)
         fun fromToml(toml: String): Config {
             val dirty = DirtyConfig.fromToml(toml)
 //            return Toml().read(toml).to(Config::class.java)
             return dirty.validate()
         }
 
+        @Throws(ConfigMissingException::class)
         fun fromFile(path: Path): Config {
 //            val content = Files.readAllLines(path).joinToString("\n")
 //            return fromToml(content)
@@ -83,7 +86,7 @@ val defaultConfigString = """
     |# - "io" which controls input-output stuff, like file paths and such and 
     |# - "mysteryBox", which sets the name for each of the box sizes you want, 
     |[io]
-    |   # By default this is the MysteryBoxInator folder inside your your home folder.
+    |   # By default this is the MysteryBoxInator folder inside your home folder.
     |   # On Windows the home folder is C:\Users\<username>\.
     |   # If you want it to be your desktop, add \Desktop to the end (within the quotes).
     |   outputDirectory = '''$defaultOutputDir'''

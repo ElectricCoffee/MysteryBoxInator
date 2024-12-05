@@ -3,6 +3,7 @@ package ui;
 import catalogue.Catalogue;
 import common.HrBoolean;
 import config.Config;
+import errors.ConfigMissingException;
 import io.Filing;
 import mysteryBox.MysteryBoxList;
 import ui.listeners.*;
@@ -73,6 +74,9 @@ public class MainWindow extends JFrame {
             packedButton.addActionListener(new MysteryBoxPackedToggleListener(config, mysteryBoxTable, mysteryBoxList));
         } catch (IOException ioe) {
             new ErrorDialog(this).open(ioe.getMessage(), "File Error!");
+        } catch (ConfigMissingException cme) {
+            new ErrorDialog(this).open(cme.getLongMessage(), cme.getTitle());
+            System.exit(1);
         } catch (Exception | Error e) {
             new ErrorDialog(this).open(e.getMessage(), "Error!");
         }

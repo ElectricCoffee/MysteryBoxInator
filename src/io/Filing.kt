@@ -7,6 +7,7 @@ import config.Config.Companion.fromFile
 import config.configFilePath
 import config.configFolderPath
 import config.defaultConfigString
+import errors.ConfigMissingException
 import mysteryBox.MysteryBoxList
 import java.io.File
 import java.io.IOException
@@ -39,7 +40,7 @@ object Filing {
     }
 
     @JvmStatic
-    @Throws(IOException::class)
+    @Throws(IOException::class, ConfigMissingException::class)
     fun createConfig(): Config {
         val configFile: Path = Paths.get(configFilePath)
 
