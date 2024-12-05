@@ -145,7 +145,9 @@ object Filing {
         val outputFile = Paths.get(outputDir + File.separator + "mystery-boxes-" + getDateStamp() + ".txt")
 
         val titles = mysteryBoxList.mysteryBoxes.values.map { box ->
-            "${box.getPrefix()}," + box.items.joinToString(",") { it.title }
+            "${box.getPrefix()}," +
+                    box.items.joinToString(",") { it.title } +
+                    ",${if (box.packed) "Packed" else "Not Packed"},${box.customerName},${box.orderNumber}"
         }
 
         return Files.write(outputFile, titles)
