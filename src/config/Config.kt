@@ -25,8 +25,6 @@ data class ThresholdConfig(val upperBound: BigDecimal, val lowerBound: BigDecima
         get() = NumUtils.toFraction(upperBound)
 }
 
-data class CatalogueConfig(val deleteProductWhenZeroInventory: Boolean)
-
 data class RarityRatio(val common: Double, val uncommon: Double, val rare: Double) {
     val commonAsFraction: Double
         get() = common / 100
@@ -43,7 +41,6 @@ data class MysteryBoxAmount(val price: BigDecimal, val shortLabel: String)
 data class Config(
     val io: IoConfig,
     val thresholds: ThresholdConfig,
-    val catalogue: CatalogueConfig,
     val rarityRatio: RarityRatio,
     val mysteryBox: Map<String, MysteryBoxAmount>
 ) {
@@ -54,12 +51,17 @@ data class Config(
 
     companion object {
         fun fromToml(toml: String): Config {
-            return Toml().read(toml).to(Config::class.java)
+            val dirty = DirtyConfig.fromToml(toml)
+//            return Toml().read(toml).to(Config::class.java)
+            return dirty.validate()
         }
 
         fun fromFile(path: Path): Config {
-            val content = Files.readAllLines(path).joinToString("\n")
-            return fromToml(content)
+//            val content = Files.readAllLines(path).joinToString("\n")
+//            return fromToml(content)
+
+            val dirty = DirtyConfig.fromFile(path)
+            return dirty.validate()
         }
     }
 }
@@ -93,10 +95,6 @@ val defaultConfigString = """
     |[thresholds]
     |   upperBound = 10
     |   lowerBound = 5
-    |   
-    |[catalogue]
-    |   # if true, the program will remove a product entry entirely when the stock reaches zero
-    |   deleteProductWhenZeroInventory = false
     |   
     |[rarityRatio]
     |   # sets the distribution of each of the various rarities. By default they're all at 33.33% (about 1/3)

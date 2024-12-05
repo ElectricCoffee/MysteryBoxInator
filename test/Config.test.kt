@@ -1,6 +1,8 @@
 import config.*
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.lang.IllegalArgumentException
 import java.math.BigDecimal
 
 class ConfigTest {
@@ -14,8 +16,6 @@ class ConfigTest {
             |[thresholds]
             |upperBound = 10
             |lowerBound = 5
-            |[catalogue]
-            |deleteProductWhenZeroInventory = false
             |[rarityRatio]
             |common = 33.33
             |uncommon = 33.33
@@ -39,7 +39,6 @@ class ConfigTest {
         val config = """
             |io = { outputDirectory = "~/foo", csvDelimiter = ";" }
             |thresholds = { upperBound = 10, lowerBound = 5 }
-            |catalogue = { deleteProductWhenZeroInventory = true }
             |rarityRatio = { common = 10, uncommon = 20, rare = 70 }
             |[mysteryBox]
             |foo = {price = 2.95, shortLabel = "F"}
@@ -49,7 +48,6 @@ class ConfigTest {
         val expected = Config(
             IoConfig("~/foo", ";"),
             ThresholdConfig(BigDecimal(10), BigDecimal(5)),
-            CatalogueConfig(true),
             RarityRatio(10.0, 20.0, 70.0),
             mapOf(
                 "foo" to MysteryBoxAmount(BigDecimal("2.95"), "F"),
@@ -60,5 +58,18 @@ class ConfigTest {
         val actual = Config.fromToml(config)
 
         assertEquals(expected, actual);
+    }
+
+    @Test fun `validation fails if properties are missing`() {
+        // rarity ratio is missing
+        val config = """
+            |io = { outputDirectory = "~/foo", csvDelimiter = ";" }
+            |thresholds = { upperBound = 10, lowerBound = 5 }
+            |[mysteryBox]
+            |foo = {price = 2.95, shortLabel = "F"}
+            |bar = {price = 3.95, shortLabel = "B"}
+        """.trimMargin()
+
+        Assertions.assertThrows(IllegalArgumentException::class.java, {Config.fromToml(config)})
     }
 }
