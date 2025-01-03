@@ -3,10 +3,12 @@ package ui.listeners
 import catalogue.Catalogue
 import common.FileLoadMode
 import config.Config
+import ui.util.ErrorDialog
 import ui.util.TableUtils
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.*
 import java.io.File
+import java.nio.charset.MalformedInputException
 import java.util.*
 import javax.swing.JFrame
 import javax.swing.JOptionPane
@@ -54,13 +56,15 @@ class CsvDropListener(private val parent: JFrame, private val config: Config, pr
                     }
                 }
             }
+        } catch (ex: MalformedInputException) {
+            if (ex.message?.contains("Input length") == true) {
+                ErrorDialog(parent).open("The provided file has incorrect encoding. Try removing diacritics", "Encoding Error")
+            } else {
+                ErrorDialog(parent).open(ex.message ?: "Unknown Error", ex.javaClass.canonicalName)
+            }
         } catch (ex: Exception) {
-            JOptionPane.showMessageDialog(
-                null,
-                ex.message,
-                ex.javaClass.canonicalName,
-                JOptionPane.ERROR_MESSAGE
-            )
+            println(ex)
+            ErrorDialog(parent).open(ex.message ?: "Unknown Error", ex.javaClass.canonicalName)
         } finally {
             dtde!!.dropComplete(true)
         }
