@@ -41,6 +41,8 @@ abstract class MysteryBoxAssemblerABC(
 
     protected val pickedItems = mutableListOf<Game>()
 
+    protected val pickedCount get() = pickedItems.count().toDouble()
+
     protected val moneyLeft: BigDecimal
         get() = budget - moneySpent
 
@@ -49,14 +51,23 @@ abstract class MysteryBoxAssemblerABC(
 
     // nb: is a number between 0 and 1
     private val pctCommon: Double
-        get() = pickedItems.count { it.rarity == GameRarity.COMMON }.toDouble() / pickedItems.count().toDouble()
+        get() {
+            if (pickedCount == 0.0) return 0.0
+            return pickedItems.count { it.rarity == GameRarity.COMMON }.toDouble() / pickedCount
+        }
 
     private val pctUncommon: Double
-        get() = pickedItems.count { it.rarity == GameRarity.UNCOMMON }.toDouble() / pickedItems.count().toDouble()
+        get() {
+            if (pickedCount == 0.0) return 0.0
+            return pickedItems.count { it.rarity == GameRarity.UNCOMMON }.toDouble() / pickedItems.count().toDouble()
+        }
 
     // nb: we're counting mythics as rare here
     private val pctRare: Double
-        get() = pickedItems.count { it.rarity == GameRarity.RARE || it.rarity == GameRarity.MYTHIC }.toDouble() / pickedItems.count().toDouble()
+        get() {
+            if (pickedCount == 0.0) return 0.0
+            return pickedItems.count { it.rarity == GameRarity.RARE || it.rarity == GameRarity.MYTHIC }.toDouble() / pickedCount
+        }
 
     private fun countCommon(games: List<Game>) = games.count { it.rarity == GameRarity.COMMON }
     private fun countUncommon(games: List<Game>) = games.count { it.rarity == GameRarity.UNCOMMON }
@@ -183,6 +194,9 @@ abstract class MysteryBoxAssemblerABC(
         val ratio = config.rarityRatio
         // if the count is 0, set the metric to +∞, else calculate the metric as normal
         fun calcMetric(counter: (g: List<Game>) -> Int, lst: List<Game>, calc: () -> Double) = if (counter(lst) > 0) calc() else Double.POSITIVE_INFINITY
+
+//        println(pickedItems)
+//        println("$pctCommon, $pctUncommon, $pctRare, $ratio")
 
         // nb: if the values are positive, it means we are above the desired ratio, and if negative it means we are under
         val common = Pair(GameRarity.COMMON, calcMetric(::countCommon, lst) { pctCommon - ratio.commonAsFraction })
