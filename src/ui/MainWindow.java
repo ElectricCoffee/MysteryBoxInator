@@ -35,7 +35,7 @@ public class MainWindow extends JFrame {
     private JButton viewBoxButton;
 
     public MainWindow() {
-        super("Mystery-Box-Inator");
+        super("Mystery-Box-Inator v.1.0.1");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);

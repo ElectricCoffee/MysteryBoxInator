@@ -38,7 +38,7 @@ public class InfoDialog extends JDialog {
                 "City Hare Studio is a small independent board game design studio based out of Aalborg, Denmark.<br>" +
                 "Travel-Games.co.uk is a small independent board game store based out of London, England.<br><br>" +
                 "The logos for City Hare Studio and Travel-Games.co.uk belong to the individual parties.<br>" +
-                "Copyright ©2024 City Hare Studio & Travel-Games.co.uk" +
+                "Copyright ©2024-2025 City Hare Studio & Travel-Games.co.uk" +
                 "</p></html>");
 
         description.setPreferredSize(new Dimension(600, -1));
